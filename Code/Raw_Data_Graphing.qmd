@@ -30,7 +30,7 @@ library("tidyverse")
 library("readxl")
 ```
 
-```{r}
+```{r} 
 # Import Raw Data sheet
 raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
 
@@ -51,7 +51,7 @@ raw_data |>
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:5) +
   labs(
-    title = "Distribution of Responses: Actions Taken to Help the GBR",
+    title = "Actions Taken to Help the GBR",
     x = "Rating (1-5)",
     y = "Number of Respondents"
   ) +
@@ -68,7 +68,7 @@ raw_data |>
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   labs(
-    title = "Distribution of Responses: Encourage Responsible Fishing Practices",
+    title = "Encourage Responsible Fishing Practices",
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -83,7 +83,7 @@ raw_data |>
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   labs(
-    title = "Distribution of Responses: Dispose of Rubish Properly",
+    title = "Dispose of Rubish Properly",
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -98,7 +98,7 @@ raw_data |>
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   labs(
-    title = "Distribution of Responses: Report Sightings on EoRA",
+    title = "Report Sightings on EoRA",
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -113,7 +113,7 @@ raw_data |>
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   labs(
-    title = "Distribution of Responses: Report Suspicious Activitiy to the Authorities",
+    title = "Report Suspicious Activitiy to the Authorities",
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -122,20 +122,361 @@ raw_data |>
 ```
 ### Question 19
 ```{r}
-# Histogram for Support for MPAs
+# Histogram for Support of MPAs
 raw_data |>
   filter(!is.na(inter_zoning)) |>
   ggplot(aes(x = inter_zoning)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   labs(
-    title = "Distribution of Responses: Support for MPAs ",
+    title = "Support of MPAs",
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
-
 ```
+
+```{r}
+# Histogram for Support of Fish Closures
+raw_data |>
+  filter(!is.na(inter_fishclosures)) |>
+  ggplot(aes(x = inter_fishclosures)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Seasonal Fish Closures",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Support of Culling CoTS
+raw_data |>
+  filter(!is.na(inter_culling)) |>
+  ggplot(aes(x = inter_culling)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Culling CoTS",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Support of Coral Restoration
+raw_data |>
+  filter(!is.na(inter_coralrestore)) |>
+  ggplot(aes(x = inter_coralrestore)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Coral Restoration",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for Support of Citizen Science Programs
+raw_data |>
+  filter(!is.na(inter_citizen)) |>
+  ggplot(aes(x = inter_citizen)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Citizen Science Programs",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for Support of Mangrove & Seagrass Restoration
+raw_data |>
+  filter(!is.na(inter_coastrestore)) |>
+  ggplot(aes(x = inter_coastrestore)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Coastal Restoration",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for Support of Island Restoration
+raw_data |>
+  filter(!is.na(inter_islandrestore)) |>
+  ggplot(aes(x = inter_islandrestore)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Island Restoration",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for Support of Increased Poaching Enforcement
+raw_data |>
+  filter(!is.na(inter_illfish)) |>
+  ggplot(aes(x = inter_illfish)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Increased Poaching Enforcement",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Support of Assisted Coral Adaptation
+raw_data |>
+  filter(!is.na(inter_coraladapt)) |>
+  ggplot(aes(x = inter_coraladapt)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Assisted Coral Adaptation",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Support of Improved Water Quality
+raw_data |>
+  filter(!is.na(inter_water)) |>
+  ggplot(aes(x = inter_water)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Improved Water Quality",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Support of Reduction in Plastics
+raw_data |>
+  filter(!is.na(inter_rubbish)) |>
+  ggplot(aes(x = inter_rubbish)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Improved Water Quality",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Support of Indigenous Rangers
+raw_data |>
+  filter(!is.na(inter_indig)) |>
+  ggplot(aes(x = inter_indig)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Indigenous Rangers",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Support of Responsible In-Water Recreation
+raw_data |>
+  filter(!is.na(inter_rec)) |>
+  ggplot(aes(x = inter_rec)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Responsible In-Water Recreation",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Support of Govt Climate Action
+raw_data |>
+  filter(!is.na(inter_carbon)) |>
+  ggplot(aes(x = inter_carbon)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Govt Climate Action",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for Support of Less Invasive Fishing Tech
+raw_data |>
+  filter(!is.na(inter_fishing)) |>
+  ggplot(aes(x = inter_fishing)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Support of Less Invasive Fishing Tech",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+### Question 23
+
+```{r}
+# Histogram for Understanding how GBR is Managed
+raw_data |>
+  filter(!is.na(dm_understanding)) |>
+  ggplot(aes(x = dm_understanding)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Confidence in Understanding how GBR is Managed",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Belief that GBR is Managed Fairly
+raw_data |>
+  filter(!is.na(dm_procfair)) |>
+  ggplot(aes(x = dm_procfair)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Belief that GBR is Managed Fairly",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Belief that GBR Management Costs are Fairly Distributed
+raw_data |>
+  filter(!is.na(dm_distfair)) |>
+  ggplot(aes(x = dm_distfair)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Belief that GBR Management Costs are Fairly Distributed",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for Belief that GBR Management Costs are Fairly Distributed
+raw_data |>
+  filter(!is.na(dm_distfair)) |>
+  ggplot(aes(x = dm_distfair)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Belief that GBR Management Costs are Fairly Distributed",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Belief that GBR Management Respects all Stakeholder Groups
+raw_data |>
+  filter(!is.na(dm_equity)) |>
+  ggplot(aes(x = dm_equity)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Belief that GBR Management Respects all Stakeholder Groups",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Belief that GBRMPA is Trustworthy
+raw_data |>
+  filter(!is.na(trust_dm)) |>
+  ggplot(aes(x = trust_dm)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Belief that GBRMPA is Trustworthy",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for Satisfaction in GBR Management
+raw_data |>
+  filter(!is.na(sat_mgmt)) |>
+  ggplot(aes(x = sat_mgmt)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Satisfaction in GBR Management",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Personal Benefit from GBR Management
+raw_data |>
+  filter(!is.na(benefit_mgmt)) |>
+  ggplot(aes(x = benefit_mgmt)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Personal Benefit from GBR Management",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for Belief that GBR Management is well Recognized
+raw_data |>
+  filter(!is.na(pride_mgmt)) |>
+  ggplot(aes(x = pride_mgmt)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Belief that GBR Management is Well Recognized",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+
 
 ## Environmental Attitudes
 
@@ -338,14 +679,14 @@ raw_data |>
 ### Question
 
 ```{r}
-# Swap "GBR_wellbeing" for other 1-10 column names 
+# S
 raw_data |>
   filter(!is.na(GBR_wellbeing)) |>
   ggplot(aes(x = GBR_wellbeing)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   labs(
-    title = "Distribution of Responses: GBR Wellbeing",
+    title = "GBR Wellbeing",
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
