@@ -1,0 +1,28 @@
+---
+title: "Raw_Data_Wrangling"
+author: "Ryan Waln"
+format: html
+editor: visual
+---
+
+## Introduction
+
+This file will explore the distribution of categories in the raw data through histograms to determine statistical tests to run on them after some data cleaning in a base R script.
+
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r}
+# Packages
+library(tidyverse)
+```
