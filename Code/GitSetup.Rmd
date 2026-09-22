@@ -1,0 +1,92 @@
+---
+title: "GitSetup"
+author: "Ryan Waln"
+date: "2026-09-22"
+output: html_document
+---
+## Introduction
+
+This file covers how to set up, enable, and troubleshoot Github
+
+```{r housekeeping, message=FALSE, warning=FALSE, include=FALSE, error = TRUE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r install packages, message=FALSE, warning=FALSE, include=FALSE}
+# install.packages("tidyverse") 
+# install.packages("knitr")
+# install.packages("usethis")
+```
+
+```{r library}
+library("tidyverse") 
+library("knitr")
+library(usethis)
+```
+
+## Github
+
+#### Github setup (run in console)
+```{r, error = TRUE}
+# Get git credentials
+#credentials::git_credential_ask()  
+
+# see Git status
+#usethis::git_sitrep()
+
+# force usb to be recognized as safe directory by opening up .gitconfig file
+usethis::edit_git_config()
+```
+
+## Ensure .gitconfig file has these lines of code:
+
+[user]
+	email = ryan.waln@aol.com
+	name = Ryan Waln
+[safe]
+	directory = E:/*
+	directory = D:/*
+
+```{r, error = TRUE}
+# Then restart R and run 
+usethis::git_sitrep() 
+
+# Additional troubleshooting below
+
+# set up credentials if git failed to load them
+usethis::use_git_config(
+  user.name = "Ryan Waln",
+  user.email = "ryan.waln@aol.com")
+
+# create Personal Access Token
+usethis::create_github_token() 
+
+# prompt to insert PAT
+gitcreds::gitcreds_set() 
+
+```
+
+## Workflow for github:
+#### Edit → Save → Stage → Commit → Pull → Push
+
+```{r, error = TRUE}
+#track current project locally (can also use Tools > Project Options … > Git/SVN, and set to Git)
+usethis::use_git() 
+
+# Have github start tracking files
+usethis::use_github() 
+```
+
+## Execute other r script such as workshop 1 R script (doesn't work with R markdown files)
+
+```{r, error = TRUE}
+source("../Code/Workshop_1.R")
+```
