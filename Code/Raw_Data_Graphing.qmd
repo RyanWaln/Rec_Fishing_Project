@@ -24,5 +24,21 @@ objects()
 
 ```{r}
 # Packages
-library(tidyverse)
+library("gert")
+library("usethis")
+library("here")
+library("tidyverse")
+library("readxl")
 ```
+
+```{r}
+# Import Raw Data sheet
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+
+raw_data
+```
+
+```{r}
+
+```
+
