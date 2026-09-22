@@ -5,10 +5,9 @@ format: html
 editor: visual
 ---
 
-## Introduction
+# Introduction
 
 This file will explore the distribution of categories in the raw data through histograms to determine statistical tests to run on them after some data cleaning in a base R script.
-
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
@@ -35,10 +34,320 @@ library("readxl")
 # Import Raw Data sheet
 raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
 
-raw_data
+##glimpse(raw_data)
+```
+
+# Histograms for distribution of responses
+
+## Sustainable Practice Support
+
+### Question 11
+
+```{r}
+# Histogram for actions taken to help the GBR
+raw_data |>
+  filter(!is.na(actions_helpGBR)) |>
+  ggplot(aes(x = actions_helpGBR)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:5) +
+  labs(
+    title = "Distribution of Responses: Actions Taken to Help the GBR",
+    x = "Rating (1-5)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+
+```
+
+### Question 14
+```{r}
+# Histogram for encouraging responsible fishing practices
+raw_data |>
+  filter(!is.na(GBRbp_advocacyfish)) |>
+  ggplot(aes(x = GBRbp_advocacyfish)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Encourage Responsible Fishing Practices",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+
+```
+```{r}
+# Histogram for disposing of rubbish properly
+raw_data |>
+  filter(!is.na(GBRbp_rubbish)) |>
+  ggplot(aes(x = GBRbp_rubbish)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Dispose of Rubish Properly",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+
+```
+```{r}
+# Histogram for reporting sightings on Eye of the Reef App
+raw_data |>
+  filter(!is.na(GBRbp_app)) |>
+  ggplot(aes(x = GBRbp_app)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Report Sightings on EoRA",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+
+```
+```{r}
+# Histogram for reporting suspicious activities to authorities
+raw_data |>
+  filter(!is.na(GBRbp_report)) |>
+  ggplot(aes(x = GBRbp_report)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Report Suspicious Activitiy to the Authorities",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+
+```
+### Question 19
+```{r}
+# Histogram for Support for MPAs
+raw_data |>
+  filter(!is.na(inter_zoning)) |>
+  ggplot(aes(x = inter_zoning)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Support for MPAs ",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+
+```
+
+## Environmental Attitudes
+
+### Question 15
+
+```{r}
+# Histogram for value of biodiversity the GBR provides
+raw_data |>
+  filter(!is.na(values_biodiversity)) |>
+  ggplot(aes(x = values_biodiversity)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value of GBR Biodiversity",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
 ```
 
 ```{r}
-
+# Histogram for value of GBR existing despite no personal benefits
+raw_data |>
+  filter(!is.na(values_exist)) |>
+  ggplot(aes(x = values_exist)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value of GBR Existing Despite no Personal Benefit",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
 ```
 
+```{r}
+# Histogram for value of passing down traditions related to GBR
+raw_data |>
+  filter(!is.na(values_bequest)) |>
+  ggplot(aes(x = values_bequest)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value of passing down GBR Traditions",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for value of Tourism
+raw_data |>
+  filter(!is.na(values_icon)) |>
+  ggplot(aes(x = values_icon)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value of GBR Tourism",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for value of World Heritage Status
+raw_data |>
+  filter(!is.na(values_recognition)) |>
+  ggplot(aes(x = values_recognition)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value of GBR World Heritage Status",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for value of GBR providing Seafood
+raw_data |>
+  filter(!is.na(values_provision)) |>
+  ggplot(aes(x = values_provision)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value of Seafood from GBR",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for value of educational opportunities from GBR
+raw_data |>
+  filter(!is.na(values_science)) |>
+  ggplot(aes(x = values_science)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value Educational Opportunities from GBR",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for value of Traditional Owner Heritage
+raw_data |>
+  filter(!is.na(values_indigenous)) |>
+  ggplot(aes(x = values_indigenous)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value Traditional Owner Heritage of GBR",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for value of Maritime Heritage
+raw_data |>
+  filter(!is.na(values_heritage)) |>
+  ggplot(aes(x = values_heritage)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value GBR Maritime Heritage",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Histogram for value of GBR Spiritual/Artistic Inspiration
+raw_data |>
+  filter(!is.na(values_spiritual)) |>
+  ggplot(aes(x = values_spiritual)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value GBR Spirtual/Artistic Inspiration",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for value of GBR supporting local economy
+raw_data |>
+  filter(!is.na(values_economy)) |>
+  ggplot(aes(x = values_economy)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value GBR supporting local economy",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for value of GBR Recreation
+raw_data |>
+  filter(!is.na(values_recreation)) |>
+  ggplot(aes(x = values_recreation)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value GBR Recreation",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for value of GBR providing opportunities to be in nature
+raw_data |>
+  filter(!is.na(values_ture)) |>
+  ggplot(aes(x = values_ture)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: Value GBR providing opportunities to be in nature",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+
+## Misinformation
+
+### Question
+
+```{r}
+# Swap "GBR_wellbeing" for other 1-10 column names 
+raw_data |>
+  filter(!is.na(GBR_wellbeing)) |>
+  ggplot(aes(x = GBR_wellbeing)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Distribution of Responses: GBR Wellbeing",
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
