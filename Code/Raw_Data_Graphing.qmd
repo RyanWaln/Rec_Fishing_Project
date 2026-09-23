@@ -155,7 +155,7 @@ raw_data |>
   
   # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
-    title = str_wrap("Marine Park zoning to restrict certain activities (e.g. fishing, collecting) in some areas of the GBR", width = 50),
+    title = str_wrap("Marine Park zoning to restrict certain activities (e.g. fishing, collecting) in some areas of the GBR", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -181,7 +181,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Seasonal closures for certain fish species (e.g., closures during spawning)", width = 50),
+    title = str_wrap("Seasonal closures for certain fish species (e.g., closures during spawning)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -206,7 +206,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Culling Crown of Thorns Starfish (a sea star that feeds on coral) to protect corals on reefs", width = 50),
+    title = str_wrap("Culling Crown of Thorns Starfish (a sea star that feeds on coral) to protect corals on reefs", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -215,13 +215,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Coral Restoration
-raw_data |>
-  filter(!is.na(inter_coralrestore)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_coralrestore), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_coralrestore)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Coral Restoration",
+    title = str_wrap("Coral restoration (i.e., assisted propagation or ‘gardening’ of corals) to replenish damaged reefs", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -230,13 +240,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Citizen Science Programs
-raw_data |>
-  filter(!is.na(inter_citizen)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_citizen), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_citizen)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Citizen Science Programs",
+    title = str_wrap("Community and citizen science programs that involve local people in reef monitoring and clean-ups", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -245,28 +265,49 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Mangrove & Seagrass Restoration
-raw_data |>
-  filter(!is.na(inter_coastrestore)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_coastrestore), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_coastrestore)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Coastal Restoration",
+    title = str_wrap("Coastal and inshore restoration (e.g., mangroves, seagrass)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ```{r}
 # Histogram for Support of Island Restoration
-raw_data |>
-  filter(!is.na(inter_islandrestore)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_islandrestore), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_islandrestore)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Island Restoration",
+    title = str_wrap("Island rehabilitation and restoration", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -275,13 +316,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Increased Poaching Enforcement
-raw_data |>
-  filter(!is.na(inter_illfish)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_illfish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_illfish)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Increased Poaching Enforcement",
+    title = str_wrap("Surveillance and enforcement to reduce illegal fishing (e.g., poaching in protected Marine Park zones)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -290,13 +341,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Assisted Coral Adaptation
-raw_data |>
-  filter(!is.na(inter_coraladapt)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_coraladapt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_coraladapt)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Assisted Coral Adaptation",
+    title = str_wrap("Assisted coral adaptation to increase tolerance to rising sea temperatures (e.g., through selective breeding of coral)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -305,13 +366,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Improved Water Quality
-raw_data |>
-  filter(!is.na(inter_water)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_water), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_water)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Improved Water Quality",
+    title = str_wrap("Improved land management to reduce sediments and nutrients flowing into the sea", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -320,13 +391,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Reduction in Plastics
-raw_data |>
-  filter(!is.na(inter_rubbish)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_rubbish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_rubbish)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Improved Water Quality",
+    title = str_wrap("Efforts to reduce rubbish and plastics from urban areas entering GBR waters", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -335,13 +416,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Indigenous Rangers
-raw_data |>
-  filter(!is.na(inter_indig)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_indig), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_indig)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Indigenous Rangers",
+    title = str_wrap("Providing support for Indigenous Traditional Owner co-management of the GBR (e.g., Indigenous Rangers, training programs)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -350,13 +441,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Responsible In-Water Recreation
-raw_data |>
-  filter(!is.na(inter_rec)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_rec), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_rec)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Responsible In-Water Recreation",
+    title = str_wrap(" Efforts to improve on-water practices by recreational users and tourists (e.g., reducing coral damage from anchors and human contact)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -365,13 +466,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Govt Climate Action
-raw_data |>
-  filter(!is.na(inter_carbon)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_carbon), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_carbon)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Govt Climate Action",
+    title = str_wrap(" Government and industry initiatives to reduce carbon emissions and tackle climate change", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -380,13 +491,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Less Invasive Fishing Tech
-raw_data |>
-  filter(!is.na(inter_fishing)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_fishing), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_fishing)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Less Invasive Fishing Tech",
+    title = str_wrap("Development of new equipment (fishing gear) for commercial fishers to reduce risks to non-target species (e.g., threatened and protected animals)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
