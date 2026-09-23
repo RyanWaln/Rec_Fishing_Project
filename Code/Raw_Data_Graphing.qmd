@@ -7,7 +7,7 @@ editor: visual
 
 # Introduction
 
-This file will explore the distribution of categories in the raw data through histograms to determine statistical tests to run on them after some data cleaning in a base R script.
+This file will explore the distribution of responses by fishers and non fishers in the raw data through histograms to determine statistical tests to run on them as well as different typologies to create based on the distributions.
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
@@ -126,31 +126,62 @@ raw_data |>
 ```
 
 ### Question 19
-
 ```{r}
 # Histogram for Support of MPAs
-raw_data |>
-  filter(!is.na(inter_zoning)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+  
+  # Plot Data
   ggplot(aes(x = inter_zoning)) +
+  
+  # Set spacing and color scheme
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  
+  # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:10) +
+  
+  # Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
-    title = "Support of MPAs",
+    title = str_wrap("Marine Park zoning to restrict certain activities (e.g. fishing, collecting) in some areas of the GBR", width = 50),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
 ```
 
+
 ```{r}
 # Histogram for Support of Fish Closures
-raw_data |>
-  filter(!is.na(inter_fishclosures)) |>
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_fishclosures), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_fishclosures)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Seasonal Fish Closures",
+    title = str_wrap("Seasonal closures for certain fish species (e.g., closures during spawning)", width = 50),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -159,13 +190,23 @@ raw_data |>
 
 ```{r}
 # Histogram for Support of Culling CoTS
-raw_data |>
-  filter(!is.na(inter_culling)) |>
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(inter_culling), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = inter_culling)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Support of Culling CoTS",
+    title = str_wrap("Culling Crown of Thorns Starfish (a sea star that feeds on coral) to protect corals on reefs", width = 50),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
