@@ -30,7 +30,7 @@ library("tidyverse")
 library("readxl")
 ```
 
-```{r} 
+```{r}
 # Import Raw Data sheet
 raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
 
@@ -60,6 +60,7 @@ raw_data |>
 ```
 
 ### Question 14
+
 ```{r}
 # Histogram for encouraging responsible fishing practices
 raw_data |>
@@ -75,6 +76,7 @@ raw_data |>
   theme_minimal()
 
 ```
+
 ```{r}
 # Histogram for disposing of rubbish properly
 raw_data |>
@@ -90,6 +92,7 @@ raw_data |>
   theme_minimal()
 
 ```
+
 ```{r}
 # Histogram for reporting sightings on Eye of the Reef App
 raw_data |>
@@ -105,6 +108,7 @@ raw_data |>
   theme_minimal()
 
 ```
+
 ```{r}
 # Histogram for reporting suspicious activities to authorities
 raw_data |>
@@ -120,7 +124,9 @@ raw_data |>
   theme_minimal()
 
 ```
+
 ### Question 19
+
 ```{r}
 # Histogram for Support of MPAs
 raw_data |>
@@ -180,6 +186,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for Support of Citizen Science Programs
 raw_data |>
@@ -194,6 +201,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for Support of Mangrove & Seagrass Restoration
 raw_data |>
@@ -208,6 +216,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for Support of Island Restoration
 raw_data |>
@@ -222,6 +231,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for Support of Increased Poaching Enforcement
 raw_data |>
@@ -326,6 +336,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for Support of Less Invasive Fishing Tech
 raw_data |>
@@ -387,6 +398,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for Belief that GBR Management Costs are Fairly Distributed
 raw_data |>
@@ -431,6 +443,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for Satisfaction in GBR Management
 raw_data |>
@@ -475,8 +488,6 @@ raw_data |>
   ) +
   theme_minimal()
 ```
-
-
 
 ## Environmental Attitudes
 
@@ -541,6 +552,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for value of World Heritage Status
 raw_data |>
@@ -555,6 +567,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for value of GBR providing Seafood
 raw_data |>
@@ -569,6 +582,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for value of educational opportunities from GBR
 raw_data |>
@@ -613,6 +627,7 @@ raw_data |>
   ) +
   theme_minimal()
 ```
+
 ```{r}
 # Histogram for value of GBR Spiritual/Artistic Inspiration
 raw_data |>
@@ -673,22 +688,28 @@ raw_data |>
   theme_minimal()
 ```
 
-
 ## Misinformation
 
-### Question
+### Question 18
 
 ```{r}
-# S
+# Histogram for certainty that climate change is a threat to the GBR
 raw_data |>
-  filter(!is.na(GBR_wellbeing)) |>
-  ggplot(aes(x = GBR_wellbeing)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:10) +
-  labs(
-    title = "GBR Wellbeing",
-    x = "Rating (1-10)",
-    y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  filter(!is.na(cc_belief)) |>
+  ggplot(aes(x = cc_belief, fill = factor(cc_belief))) +
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  scale_x_continuous(breaks = 1:6) +
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 6),
+    labels = c(
+      "1 = Threat that needs immediate action",
+      "2 = Threat but doesn't need immediate action ",
+      "3 = Need more evidence to form an opinion",
+      "4 = Not a threat",
+      "5 = No view",
+      "6 = Don't believe in climate change"
+    )
+  )
 ```
+
