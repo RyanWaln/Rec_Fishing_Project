@@ -54,8 +54,7 @@ raw_data |>
     title = "Actions Taken to Help the GBR",
     x = "Rating (1-5)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  )
 ```
 
 ### Question 14
@@ -92,9 +91,7 @@ raw_data |>
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Encourage other people to practice responsible fishing (i.e., no fishing in green zones, throw back undersized fish or female mud crabs, follow bag limits)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -118,9 +115,7 @@ raw_data |>
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Dispose of food scraps and rubbish appropriately (i.e., in a rubbish bin on shore, not overboard)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -144,8 +139,7 @@ raw_data |>
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Report sightings of unusual or interesting marine life using the ‘Eye on the Reef’ sightings network app)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  )
 ```
 
 ```{r}
@@ -169,9 +163,7 @@ raw_data |>
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Report suspicious activity to the authorities (e.g., fishing in no-take or ‘green’ zones, dumping rubbish)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ### Question 19
@@ -208,8 +200,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Marine Park zoning to restrict certain activities (e.g. fishing, collecting) in some areas of the GBR", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -233,8 +224,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Seasonal closures for certain fish species (e.g., closures during spawning)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -258,8 +248,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Culling Crown of Thorns Starfish (a sea star that feeds on coral) to protect corals on reefs", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -283,8 +272,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Coral restoration (i.e., assisted propagation or ‘gardening’ of corals) to replenish damaged reefs", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -308,8 +296,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Community and citizen science programs that involve local people in reef monitoring and clean-ups", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -333,9 +320,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Coastal and inshore restoration (e.g., mangroves, seagrass)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -359,8 +344,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Island rehabilitation and restoration", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -384,8 +368,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Surveillance and enforcement to reduce illegal fishing (e.g., poaching in protected Marine Park zones)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -409,8 +392,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Assisted coral adaptation to increase tolerance to rising sea temperatures (e.g., through selective breeding of coral)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -434,8 +416,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Improved land management to reduce sediments and nutrients flowing into the sea", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -459,8 +440,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Efforts to reduce rubbish and plastics from urban areas entering GBR waters", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -484,8 +464,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Providing support for Indigenous Traditional Owner co-management of the GBR (e.g., Indigenous Rangers, training programs)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  )
 ```
 
 ```{r}
@@ -509,8 +488,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Efforts to improve on-water practices by recreational users and tourists (e.g., reducing coral damage from anchors and human contact)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  )
 ```
 
 ```{r}
@@ -534,8 +512,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Government and industry initiatives to reduce carbon emissions and tackle climate change", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  )
 ```
 
 ```{r}
@@ -559,8 +536,7 @@ raw_data |>
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Development of new equipment (fishing gear) for commercial fishers to reduce risks to non-target species (e.g., threatened and protected animals)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  )
 ```
 
 ### Question 23
@@ -586,9 +562,7 @@ raw_data |>
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I have a good understanding of how the GBR is managed", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -612,9 +586,7 @@ raw_data |>
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I think that decisions about managing the GBR are made in a fair way", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -638,9 +610,7 @@ raw_data |>
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I think that the benefits and costs of managing the GBR are distributed fairly across different groups of people (e.g., GBR residents, tourist operators, fishers)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -663,9 +633,7 @@ raw_data |>
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I have a good understanding of how the GBR is managed", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -689,9 +657,7 @@ raw_data |>
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I believe that all relevant people and groups are recognised and respected in decision-making about GBR management", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -715,9 +681,7 @@ raw_data |>
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I believe that GBR decision-makers (e.g., the Great Barrier Reef Marine Park Authority) are trustworthy", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -741,9 +705,7 @@ raw_data |>
     title = str_wrap("Overall, I feel satisfied with how the GBR is managed", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -767,9 +729,7 @@ raw_data |>
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I personally benefit from actions taken to manage the GBR", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ```{r}
@@ -793,9 +753,7 @@ raw_data |>
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I believe the GBR is widely recognised as well managed", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
-
+  ) 
 ```
 
 ## Environmental Attitudes
@@ -823,8 +781,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR supports a variety of marine life, such as fish and corals", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -848,8 +805,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The fact that the GBR exists, even if I don’t use or benefit from it", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -873,8 +829,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides a place where people can continue to pass down wisdom, traditions, and a way of life", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -898,8 +853,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR attracts people from all over the world", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -923,8 +877,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR is recognised nationally and internationally for its iconic status (e.g., World Heritage Area)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  )
 ```
 
 ```{r}
@@ -948,8 +901,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides fresh seafood", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -973,8 +925,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: People can learn about the environment through GBR educational, research, and monitoring activities", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -998,8 +949,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR has rich Traditional Owner Heritage", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -1023,8 +973,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR has historic maritime heritage (e.g., shipwrecks)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -1048,8 +997,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides spiritual meaning and/or artistic inspiration to people", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -1073,8 +1021,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR supports the local economy", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -1098,8 +1045,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides a place for people to connect socially with other people", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -1123,8 +1069,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides opportunities for people to engage in recreational activities and tourism", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ```{r}
@@ -1148,8 +1093,7 @@ raw_data |>
     title = str_wrap("How much do you value the following aspect of the GBR: I believe the GBR is widely recognised as well managed", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
-  ) +
-  theme_minimal()
+  ) 
 ```
 
 ## Misinformation
@@ -1199,5 +1143,10 @@ raw_data |>
       "3 = Need more evidence to form an opinion",
       "4 = Not a threat",
       "5 = No view",
-      "6 = Don't believe in climate change"))
+      "6 = Don't believe in climate change")) +
+  labs(
+    title = str_wrap("Which of the following statements best describes your beliefs about climate change and the Great Barrier Reef (GBR)?", width = 70),
+    x = "Rating (1-6)",
+    y = "Number of Respondents"
+  ) 
 ```
