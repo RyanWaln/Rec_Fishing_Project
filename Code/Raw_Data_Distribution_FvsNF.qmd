@@ -44,17 +44,53 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
 ### Question 11
 
 ```{r}
+#| fig-width: 10
+#| fig-height: 6
+
 # Histogram for actions taken to help the GBR
-raw_data |>
-  filter(!is.na(actions_helpGBR)) |>
-  ggplot(aes(x = actions_helpGBR)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+
+# Filter NA values and sort by fisher status
+raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  
+  # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data - x and fill now both reference actions_helpGBR (this was the bug)
+  ggplot(aes(x = actions_helpGBR, fill = factor(actions_helpGBR))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:5) +
+  
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 5),
+    labels = c(
+      "1 = Yes, as part of a formal or organised group/program",
+      "2 = Yes, independently (on my own or as part of an informal group)",
+      "3 = Yes, a mix of both",
+      "4 = No",
+      "5 = Unsure")) +
+  
+  # Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
-    title = "Actions Taken to Help the GBR",
-    x = "Rating (1-5)",
+    title = str_wrap("In the last 12 months, have you undertaken any actions to help protect the Great Barrier Reef (GBR; which includes mainland beaches, bays, creeks, islands, open waters, and coral reefs)?", width = 70),
+    x = "Responses (1-5)",
     y = "Number of Respondents"
-  )
+  ) 
 ```
 
 ### Question 14
@@ -1145,7 +1181,7 @@ raw_data |>
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
     title = str_wrap("Which of the following statements best describes your beliefs about climate change and the Great Barrier Reef (GBR)?", width = 70),
-    x = "Rating (1-6)",
+    x = "Responses (1-6)",
     y = "Number of Respondents"
   ) 
 ```
