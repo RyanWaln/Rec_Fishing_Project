@@ -575,6 +575,273 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   )
 ```
 
+### Question 21
+
+```{r}
+# Histogram for Belief that most people try to reduce impacts
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(desc_norm), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = desc_norm)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements: I think that most people in my local area try to reduce any impacts they might have on the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Belief that local areas have responsibility to reduce impact
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(shared_resp), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = shared_resp)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements: I believe it is the responsibility of everyone in my local area to reduce their impacts on the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Belief in moral obligation to reduce impact
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(moral_oblig), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = moral_oblig)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements:  I feel morally obligated (i.e., a sense of duty) to reduce any impacts I might personally have on the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Belief that one can't make a personal difference in improving the GBR's health
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(pers_diff), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = pers_diff)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements:  I feel that I cannot make a personal difference in improving the health of the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Belief in good understanding of things one can do to help the GBR
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(procedural_knowl), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = procedural_knowl)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements: I have a good understanding of the things I can do to help the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for claim that one would change their daily life if it helped the GBR
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(general_motivation), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = general_motivation)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements: I would be willing to make an effort to do something differently in my daily life, if it helped the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for support of current management rules on use and access to GBR
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(support_rules), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = support_rules)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements: I support the current rules and regulations that affect access and use of the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Belief that society has a moral obligation to protect the GBR
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(society_oblig), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = society_oblig)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements: I believe society has a moral obligation (i.e., a duty) to protect the GBR for future generations", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Belief in social expectation to reduce impacts in local area
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(injunc_norm), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = injunc_norm)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements: In my local area, there is a strong social expectation for people to minimise their impacts on the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Belief that caring for the GBR is part of identity
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(steward_identity), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = steward_identity)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements: Taking actions to look after the GBR is important to the way that I think of myself as a person", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Belief that actions taken to help GBR are recognized by management
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(steward_respect), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = steward_respect)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate your level of agreement with the following statements: The actions I take to look after the GBR are recognised and respected by GBR management", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+
 ### Question 23
 
 ```{r}
