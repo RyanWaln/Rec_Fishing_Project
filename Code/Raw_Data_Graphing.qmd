@@ -9,8 +9,6 @@ editor: visual
 
 This file will explore the distribution of responses by fishers and non fishers in the raw data through histograms to determine statistical tests to run on them as well as different typologies to create based on the distributions.
  
- Test
- 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
 knitr::opts_chunk$set(
@@ -58,20 +56,40 @@ raw_data |>
     y = "Number of Respondents"
   ) +
   theme_minimal()
-
 ```
 
 ### Question 14
 
 ```{r}
 # Histogram for encouraging responsible fishing practices
-raw_data |>
-  filter(!is.na(GBRbp_advocacyfish)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(GBRbp_advocacyfish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = GBRbp_advocacyfish)) +
+  
+  # Set spacing and color scheme
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  
+  # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:10) +
+  
+  # Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
-    title = "Encourage Responsible Fishing Practices",
+    title = str_wrap("When you visit the GBR how often do you preform the following actions: Encourage other people to practice responsible fishing (i.e., no fishing in green zones, throw back undersized fish or female mud crabs, follow bag limits)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -81,13 +99,23 @@ raw_data |>
 
 ```{r}
 # Histogram for disposing of rubbish properly
-raw_data |>
-  filter(!is.na(GBRbp_rubbish)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(GBRbp_rubbish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = GBRbp_rubbish)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Dispose of Rubish Properly",
+    title = str_wrap("When you visit the GBR how often do you preform the following actions: Dispose of food scraps and rubbish appropriately (i.e., in a rubbish bin on shore, not overboard)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -97,29 +125,48 @@ raw_data |>
 
 ```{r}
 # Histogram for reporting sightings on Eye of the Reef App
-raw_data |>
-  filter(!is.na(GBRbp_app)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(GBRbp_app), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = GBRbp_app)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Report Sightings on EoRA",
+    title = str_wrap("When you visit the GBR how often do you preform the following actions: Report sightings of unusual or interesting marine life using the ‘Eye on the Reef’ sightings network app)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
-
 ```
 
 ```{r}
 # Histogram for reporting suspicious activities to authorities
-raw_data |>
-  filter(!is.na(GBRbp_report)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(GBRbp_report), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = GBRbp_report)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Report Suspicious Activitiy to the Authorities",
+    title = str_wrap("When you visit the GBR how often do you preform the following actions: Report suspicious activity to the authorities (e.g., fishing in no-take or ‘green’ zones, dumping rubbish)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -158,7 +205,7 @@ raw_data |>
   
   # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
-    title = str_wrap("Marine Park zoning to restrict certain activities (e.g. fishing, collecting) in some areas of the GBR", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Marine Park zoning to restrict certain activities (e.g. fishing, collecting) in some areas of the GBR", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -183,7 +230,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Seasonal closures for certain fish species (e.g., closures during spawning)", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Seasonal closures for certain fish species (e.g., closures during spawning)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -208,7 +255,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Culling Crown of Thorns Starfish (a sea star that feeds on coral) to protect corals on reefs", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Culling Crown of Thorns Starfish (a sea star that feeds on coral) to protect corals on reefs", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -233,7 +280,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Coral restoration (i.e., assisted propagation or ‘gardening’ of corals) to replenish damaged reefs", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Coral restoration (i.e., assisted propagation or ‘gardening’ of corals) to replenish damaged reefs", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -258,7 +305,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Community and citizen science programs that involve local people in reef monitoring and clean-ups", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Community and citizen science programs that involve local people in reef monitoring and clean-ups", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -283,7 +330,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Coastal and inshore restoration (e.g., mangroves, seagrass)", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Coastal and inshore restoration (e.g., mangroves, seagrass)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -309,7 +356,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Island rehabilitation and restoration", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Island rehabilitation and restoration", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -334,7 +381,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Surveillance and enforcement to reduce illegal fishing (e.g., poaching in protected Marine Park zones)", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Surveillance and enforcement to reduce illegal fishing (e.g., poaching in protected Marine Park zones)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -359,7 +406,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Assisted coral adaptation to increase tolerance to rising sea temperatures (e.g., through selective breeding of coral)", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Assisted coral adaptation to increase tolerance to rising sea temperatures (e.g., through selective breeding of coral)", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -384,7 +431,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Improved land management to reduce sediments and nutrients flowing into the sea", width = 70),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Improved land management to reduce sediments and nutrients flowing into the sea", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -409,7 +456,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Efforts to reduce rubbish and plastics from urban areas entering GBR waters", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Efforts to reduce rubbish and plastics from urban areas entering GBR waters", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -434,7 +481,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Providing support for Indigenous Traditional Owner co-management of the GBR (e.g., Indigenous Rangers, training programs)", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Providing support for Indigenous Traditional Owner co-management of the GBR (e.g., Indigenous Rangers, training programs)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -459,7 +506,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap(" Efforts to improve on-water practices by recreational users and tourists (e.g., reducing coral damage from anchors and human contact)", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Efforts to improve on-water practices by recreational users and tourists (e.g., reducing coral damage from anchors and human contact)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -484,7 +531,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap(" Government and industry initiatives to reduce carbon emissions and tackle climate change", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Government and industry initiatives to reduce carbon emissions and tackle climate change", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -509,7 +556,7 @@ raw_data |>
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Development of new equipment (fishing gear) for commercial fishers to reduce risks to non-target species (e.g., threatened and protected animals)", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Development of new equipment (fishing gear) for commercial fishers to reduce risks to non-target species (e.g., threatened and protected animals)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -520,137 +567,235 @@ raw_data |>
 
 ```{r}
 # Histogram for Understanding how GBR is Managed
-raw_data |>
-  filter(!is.na(dm_understanding)) |>
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(dm_understanding), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = dm_understanding)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Confidence in Understanding how GBR is Managed",
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I have a good understanding of how the GBR is managed", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ```{r}
 # Histogram for Belief that GBR is Managed Fairly
-raw_data |>
-  filter(!is.na(dm_procfair)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(dm_procfair), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = dm_procfair)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Belief that GBR is Managed Fairly",
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I think that decisions about managing the GBR are made in a fair way", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ```{r}
 # Histogram for Belief that GBR Management Costs are Fairly Distributed
-raw_data |>
-  filter(!is.na(dm_distfair)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(dm_distfair), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = dm_distfair)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Belief that GBR Management Costs are Fairly Distributed",
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I think that the benefits and costs of managing the GBR are distributed fairly across different groups of people (e.g., GBR residents, tourist operators, fishers)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ```{r}
 # Histogram for Belief that GBR Management Costs are Fairly Distributed
-raw_data |>
-  filter(!is.na(dm_distfair)) |>
-  ggplot(aes(x = dm_distfair)) +
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(dm_understanding), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = dm_understanding)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Belief that GBR Management Costs are Fairly Distributed",
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I have a good understanding of how the GBR is managed", width = 80),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ```{r}
 # Histogram for Belief that GBR Management Respects all Stakeholder Groups
-raw_data |>
-  filter(!is.na(dm_equity)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(dm_equity), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = dm_equity)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Belief that GBR Management Respects all Stakeholder Groups",
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I believe that all relevant people and groups are recognised and respected in decision-making about GBR management", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ```{r}
 # Histogram for Belief that GBRMPA is Trustworthy
-raw_data |>
-  filter(!is.na(trust_dm)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_dm), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = trust_dm)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Belief that GBRMPA is Trustworthy",
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I believe that GBR decision-makers (e.g., the Great Barrier Reef Marine Park Authority) are trustworthy", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ```{r}
 # Histogram for Satisfaction in GBR Management
-raw_data |>
-  filter(!is.na(sat_mgmt)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(sat_mgmt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = sat_mgmt)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Satisfaction in GBR Management",
+    title = str_wrap("Overall, I feel satisfied with how the GBR is managed", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ```{r}
 # Histogram for Personal Benefit from GBR Management
-raw_data |>
-  filter(!is.na(benefit_mgmt)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(benefit_mgmt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = benefit_mgmt)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Personal Benefit from GBR Management",
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I personally benefit from actions taken to manage the GBR", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ```{r}
 # Histogram for Belief that GBR Management is well Recognized
-raw_data |>
-  filter(!is.na(pride_mgmt)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(pride_mgmt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = pride_mgmt)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Belief that GBR Management is Well Recognized",
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I believe the GBR is widely recognised as well managed", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
   theme_minimal()
+
 ```
 
 ## Environmental Attitudes
@@ -659,13 +804,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of biodiversity the GBR provides
-raw_data |>
-  filter(!is.na(values_biodiversity)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_biodiversity), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_biodiversity)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value of GBR Biodiversity",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR supports a variety of marine life, such as fish and corals", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -674,13 +829,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of GBR existing despite no personal benefits
-raw_data |>
-  filter(!is.na(values_exist)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_exist), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_exist)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value of GBR Existing Despite no Personal Benefit",
+    title = str_wrap("How much do you value the following aspect of the GBR: The fact that the GBR exists, even if I don’t use or benefit from it", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -689,13 +854,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of passing down traditions related to GBR
-raw_data |>
-  filter(!is.na(values_bequest)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_bequest), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_bequest)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value of passing down GBR Traditions",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides a place where people can continue to pass down wisdom, traditions, and a way of life", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -704,13 +879,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of Tourism
-raw_data |>
-  filter(!is.na(values_icon)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_icon), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_icon)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value of GBR Tourism",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR attracts people from all over the world", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -719,13 +904,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of World Heritage Status
-raw_data |>
-  filter(!is.na(values_recognition)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_recognition), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_recognition)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value of GBR World Heritage Status",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR is recognised nationally and internationally for its iconic status (e.g., World Heritage Area)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -734,13 +929,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of GBR providing Seafood
-raw_data |>
-  filter(!is.na(values_provision)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_provision), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_provision)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value of Seafood from GBR",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides fresh seafood", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -749,13 +954,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of educational opportunities from GBR
-raw_data |>
-  filter(!is.na(values_science)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_science), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_science)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value Educational Opportunities from GBR",
+    title = str_wrap("How much do you value the following aspect of the GBR: People can learn about the environment through GBR educational, research, and monitoring activities", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -764,13 +979,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of Traditional Owner Heritage
-raw_data |>
-  filter(!is.na(values_indigenous)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_indigenous), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_indigenous)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value Traditional Owner Heritage of GBR",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR has rich Traditional Owner Heritage", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -779,13 +1004,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of Maritime Heritage
-raw_data |>
-  filter(!is.na(values_heritage)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_heritage), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_heritage)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value GBR Maritime Heritage",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR has historic maritime heritage (e.g., shipwrecks)", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -794,13 +1029,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of GBR Spiritual/Artistic Inspiration
-raw_data |>
-  filter(!is.na(values_spiritual)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_spiritual), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_spiritual)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value GBR Spirtual/Artistic Inspiration",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides spiritual meaning and/or artistic inspiration to people", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -809,13 +1054,48 @@ raw_data |>
 
 ```{r}
 # Histogram for value of GBR supporting local economy
-raw_data |>
-  filter(!is.na(values_economy)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_economy), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_economy)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value GBR supporting local economy",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR supports the local economy", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Histogram for value of GBR providing social opportunities 
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_social), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = values_social)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides a place for people to connect socially with other people", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -824,13 +1104,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of GBR Recreation
-raw_data |>
-  filter(!is.na(values_recreation)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_recreation), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_recreation)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value GBR Recreation",
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides opportunities for people to engage in recreational activities and tourism", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -839,13 +1129,23 @@ raw_data |>
 
 ```{r}
 # Histogram for value of GBR providing opportunities to be in nature
-raw_data |>
-  filter(!is.na(values_ture)) |>
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(values_ture), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
   ggplot(aes(x = values_ture)) +
   geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = "Distribution of Responses: Value GBR providing opportunities to be in nature",
+    title = str_wrap("How much do you value the following aspect of the GBR: I believe the GBR is widely recognised as well managed", width = 70),
     x = "Rating (1-10)",
     y = "Number of Respondents"
   ) +
@@ -872,7 +1172,32 @@ raw_data |>
       "3 = Need more evidence to form an opinion",
       "4 = Not a threat",
       "5 = No view",
-      "6 = Don't believe in climate change"
-    )
-  )
+      "6 = Don't believe in climate change"))
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(cc_belief), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = cc_belief, fill = factor(cc_belief))) +
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  scale_x_continuous(breaks = 1:6) +
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 6),
+    labels = c(
+      "1 = Threat that needs immediate action",
+      "2 = Threat but doesn't need immediate action ",
+      "3 = Need more evidence to form an opinion",
+      "4 = Not a threat",
+      "5 = No view",
+      "6 = Don't believe in climate change"))
 ```
