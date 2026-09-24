@@ -8,7 +8,9 @@ editor: visual
 # Introduction
 
 This file will explore the distribution of responses by fishers and non fishers in the raw data through histograms to determine statistical tests to run on them as well as different typologies to create based on the distributions.
-
+ 
+ Test
+ 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
 knitr::opts_chunk$set(
@@ -126,6 +128,7 @@ raw_data |>
 ```
 
 ### Question 19
+
 ```{r}
 # Histogram for Support of MPAs
 
@@ -161,7 +164,6 @@ raw_data |>
   ) +
   theme_minimal()
 ```
-
 
 ```{r}
 # Histogram for Support of Fish Closures
@@ -874,4 +876,3 @@ raw_data |>
     )
   )
 ```
-
