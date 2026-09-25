@@ -44,7 +44,7 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
 ### Question 11
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for actions taken to help the GBR
@@ -62,14 +62,15 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
 
-  # Plot Data - x and fill now both reference actions_helpGBR (this was the bug)
+  # Plot Data 
   ggplot(aes(x = actions_helpGBR, fill = factor(actions_helpGBR))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:5) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
   # Create Legend for Responses
   scale_fill_manual(
@@ -89,7 +90,7 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   labs(
     title = str_wrap("In the last 12 months, have you undertaken any actions to help protect the Great Barrier Reef (GBR; which includes mainland beaches, bays, creeks, islands, open waters, and coral reefs)?", width = 70),
     x = "Responses (1-5)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -114,10 +115,11 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   ggplot(aes(x = GBRbp_advocacyfish)) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
   # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -126,7 +128,7 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Encourage other people to practice responsible fishing (i.e., no fishing in green zones, throw back undersized fish or female mud crabs, follow bag limits)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -144,13 +146,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = GBRbp_rubbish)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Dispose of food scraps and rubbish appropriately (i.e., in a rubbish bin on shore, not overboard)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -168,13 +171,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = GBRbp_app)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Report sightings of unusual or interesting marine life using the ‘Eye on the Reef’ sightings network app)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -192,13 +196,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = GBRbp_report)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Report suspicious activity to the authorities (e.g., fishing in no-take or ‘green’ zones, dumping rubbish)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -245,7 +250,6 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   )
 ```
 
-
 ```{r}
 # Histogram for Support of Fish Closures
 
@@ -260,13 +264,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_fishclosures)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Seasonal closures for certain fish species (e.g., closures during spawning)", width = 80),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -284,13 +289,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_culling)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Culling Crown of Thorns Starfish (a sea star that feeds on coral) to protect corals on reefs", width = 80),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -308,13 +314,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_coralrestore)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Coral restoration (i.e., assisted propagation or ‘gardening’ of corals) to replenish damaged reefs", width = 80),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -332,13 +339,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_citizen)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Community and citizen science programs that involve local people in reef monitoring and clean-ups", width = 80),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -356,13 +364,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_coastrestore)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Coastal and inshore restoration (e.g., mangroves, seagrass)", width = 80),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -380,13 +389,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_islandrestore)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Island rehabilitation and restoration", width = 80),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -404,13 +414,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_illfish)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Surveillance and enforcement to reduce illegal fishing (e.g., poaching in protected Marine Park zones)", width = 80),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -428,13 +439,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_coraladapt)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Assisted coral adaptation to increase tolerance to rising sea temperatures (e.g., through selective breeding of coral)", width = 80),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -452,13 +464,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_water)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Improved land management to reduce sediments and nutrients flowing into the sea", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -476,13 +489,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_rubbish)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Efforts to reduce rubbish and plastics from urban areas entering GBR waters", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -500,13 +514,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_indig)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Providing support for Indigenous Traditional Owner co-management of the GBR (e.g., Indigenous Rangers, training programs)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -524,13 +539,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_rec)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Efforts to improve on-water practices by recreational users and tourists (e.g., reducing coral damage from anchors and human contact)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -548,13 +564,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_carbon)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Government and industry initiatives to reduce carbon emissions and tackle climate change", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -572,13 +589,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = inter_fishing)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Development of new equipment (fishing gear) for commercial fishers to reduce risks to non-target species (e.g., threatened and protected animals)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -598,13 +616,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = desc_norm)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I think that most people in my local area try to reduce any impacts they might have on the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -622,13 +641,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = shared_resp)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I believe it is the responsibility of everyone in my local area to reduce their impacts on the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -646,13 +666,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = moral_oblig)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements:  I feel morally obligated (i.e., a sense of duty) to reduce any impacts I might personally have on the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -670,13 +691,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = pers_diff)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements:  I feel that I cannot make a personal difference in improving the health of the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -694,13 +716,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = procedural_knowl)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I have a good understanding of the things I can do to help the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -718,13 +741,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = general_motivation)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I would be willing to make an effort to do something differently in my daily life, if it helped the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -742,13 +766,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = support_rules)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I support the current rules and regulations that affect access and use of the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -766,13 +791,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = society_oblig)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I believe society has a moral obligation (i.e., a duty) to protect the GBR for future generations", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -790,13 +816,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = injunc_norm)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: In my local area, there is a strong social expectation for people to minimise their impacts on the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -814,13 +841,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = steward_identity)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: Taking actions to look after the GBR is important to the way that I think of myself as a person", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -838,13 +866,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = steward_respect)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: The actions I take to look after the GBR are recognised and respected by GBR management", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -864,13 +893,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = dm_understanding)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I have a good understanding of how the GBR is managed", width = 70),
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I have a good understanding of how the GBR is managed", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -888,13 +918,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = dm_procfair)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I think that decisions about managing the GBR are made in a fair way", width = 70),
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I think that decisions about managing the GBR are made in a fair way", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -912,36 +943,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = dm_distfair)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I think that the benefits and costs of managing the GBR are distributed fairly across different groups of people (e.g., GBR residents, tourist operators, fishers)", width = 70),
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I think that the benefits and costs of managing the GBR are distributed fairly across different groups of people (e.g., GBR residents, tourist operators, fishers)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
-  ) 
-```
-
-```{r}
-# Histogram for Belief that GBR Management Costs are Fairly Distributed
-# Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(dm_understanding), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
-  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
-  group_by(Are_you_a_Rec_Fisher) |>
-  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
-  ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = dm_understanding)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:10) +
-  facet_wrap(~ group_label, scales = "free_y") +
-  labs(
-    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I have a good understanding of how the GBR is managed", width = 80),
-    x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -959,13 +968,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = dm_equity)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I believe that all relevant people and groups are recognised and respected in decision-making about GBR management", width = 70),
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I believe that all relevant people and groups are recognised and respected in decision-making about GBR management", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -983,13 +993,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = trust_dm)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I believe that GBR decision-makers (e.g., the Great Barrier Reef Marine Park Authority) are trustworthy", width = 70),
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I believe that GBR decision-makers (e.g., the Great Barrier Reef Marine Park Authority) are trustworthy", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1007,13 +1018,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = sat_mgmt)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Overall, I feel satisfied with how the GBR is managed", width = 70),
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: Overall, I feel satisfied with how the GBR is managed", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1031,13 +1043,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = benefit_mgmt)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment: I personally benefit from actions taken to manage the GBR", width = 70),
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I personally benefit from actions taken to manage the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1055,13 +1068,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = pride_mgmt)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the statment:  I believe the GBR is widely recognised as well managed", width = 70),
+    title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I believe the GBR is widely recognised as well managed", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1081,13 +1095,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = priority_fish)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Healthy fish populations", width = 70),
     x = "Rating (1-3)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1105,13 +1120,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = priority_lowimpact)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important:  Low impact on non-target species (e.g., avoid using fishing equipment that catches threatened and protected animals)", width = 70),
     x = "Rating (1-3)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1129,13 +1145,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = priority_TO)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important:  Commercial opportunities for Traditional Owners", width = 70),
     x = "Rating (1-3)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1143,7 +1160,7 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 # Histogram for Prioritizing Local Supply of Seafood 
 
  # Filter NA values and sort by fisher status
-  raw_data1 |> filter(!is.na(priority_supply), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(priority_supply), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -1153,13 +1170,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = priority_supply)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Local supply of seafood for local communities and seafood businesses", width = 70),
     x = "Rating (1-3)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1167,7 +1185,7 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 # Histogram for Prioritizing Jobs for Local Commercial Fishers 
 
  # Filter NA values and sort by fisher status
-  raw_data1 |> filter(!is.na(priority_jobs), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(priority_jobs), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -1177,13 +1195,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = priority_jobs)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Jobs for local commercial fishers", width = 70),
     x = "Rating (1-3)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1191,7 +1210,7 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 # Histogram for Prioritizing low impact on Recreational Fishing
 
  # Filter NA values and sort by fisher status
-  raw_data1 |> filter(!is.na(priority_recfishing), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(priority_recfishing), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -1201,13 +1220,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = priority_recfishing)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Low impact on recreational fishing opportunities", width = 70),
     x = "Rating (1-3)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1229,13 +1249,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_biodiversity)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR supports a variety of marine life, such as fish and corals", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1253,13 +1274,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_exist)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The fact that the GBR exists, even if I don’t use or benefit from it", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1277,13 +1299,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_bequest)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides a place where people can continue to pass down wisdom, traditions, and a way of life", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1301,13 +1324,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_icon)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR attracts people from all over the world", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1325,13 +1349,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_recognition)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR is recognised nationally and internationally for its iconic status (e.g., World Heritage Area)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -1349,13 +1374,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_provision)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides fresh seafood", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1373,13 +1399,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_science)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: People can learn about the environment through GBR educational, research, and monitoring activities", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1397,13 +1424,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_indigenous)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR has rich Traditional Owner Heritage", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1421,13 +1449,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_heritage)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR has historic maritime heritage (e.g., shipwrecks)", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1445,13 +1474,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_spiritual)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides spiritual meaning and/or artistic inspiration to people", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1469,13 +1499,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_economy)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR supports the local economy", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1493,13 +1524,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_social)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides a place for people to connect socially with other people", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1517,13 +1549,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_recreation)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides opportunities for people to engage in recreational activities and tourism", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1541,13 +1574,14 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 
   # Plot Data
   ggplot(aes(x = values_ture)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: I believe the GBR is widely recognised as well managed", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -1574,10 +1608,8 @@ raw_data <- raw_data |>
 #glimpse(raw_data)
 ```
 
-
-
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of CoTS as threat to GBR
@@ -1600,10 +1632,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_cots, fill = factor(threat_cots))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -1625,12 +1658,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Crown of thorns starfish (a sea star that feeds on coral)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of illegal fishing as threat to GBR
@@ -1651,10 +1684,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_fishing, fill = factor(threat_fishing))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -1676,12 +1710,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Illegal fishing practices (e.g., exceeding bag limits, poaching in no-take zones))", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of terrestrial runoff as threat to GBR
@@ -1702,10 +1736,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_runoff, fill = factor(threat_runoff))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -1725,14 +1760,14 @@ raw_data <- raw_data |>
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
-    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Land-based runoff (containing sediment, fertiliser, pesticides, etc.))", width = 70),
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Land-based runoff (containing sediment, fertiliser, pesticides, etc.)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of rubbish and debris as threat to GBR
@@ -1753,10 +1788,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_rubbish, fill = factor(threat_rubbish))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -1778,12 +1814,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Rubbish and marine debris)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of Climate Change as threat to GBR
@@ -1804,10 +1840,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_cc, fill = factor(threat_cc))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -1829,12 +1866,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Climate change)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of Tourism as threat to GBR
@@ -1855,10 +1892,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_tourism, fill = factor(threat_tourism))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -1880,12 +1918,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Tourism)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of Coastal Development as threat to GBR
@@ -1906,10 +1944,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_devt, fill = factor(threat_devt))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -1931,12 +1970,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR:  Coastal development and land clearing)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of Ports and shipping as threat to GBR
@@ -1957,10 +1996,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_ports, fill = factor(threat_ports))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -1982,12 +2022,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Ports and shipping)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of mining as threat to GBR
@@ -2008,10 +2048,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_mining, fill = factor(threat_mining))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -2033,12 +2074,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Mining)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of population growth as threat to GBR
@@ -2059,10 +2100,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_popn, fill = factor(threat_popn))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -2084,12 +2126,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Population growth)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of governance as threat to GBR
@@ -2110,10 +2152,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_mgmt, fill = factor(threat_mgmt))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -2135,15 +2178,15 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Governance (i.e., management of the GBR))", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
-# Histogram for rating of sever weather as threat to GBR
+# Histogram for rating of severe weather as threat to GBR
 
   # Filter NA values and sort by fisher status
   raw_data |> filter(!is.na(threat_weather), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
@@ -2161,10 +2204,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_weather, fill = factor(threat_weather))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -2186,12 +2230,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Severe weather events (e.g., cyclones, storms, flooding))", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of marine heatwaves as threat to GBR
@@ -2212,10 +2256,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_heatwaves, fill = factor(threat_heatwaves))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -2237,12 +2282,12 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Marine heatwaves)", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for rating of coral bleaching as threat to GBR
@@ -2263,10 +2308,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = threat_bleaching, fill = factor(threat_bleaching))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
     
   # Create Legend for Responses
@@ -2288,61 +2334,9 @@ raw_data <- raw_data |>
   labs(
     title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Coral bleaching", width = 70),
     x = "Responses",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
-
-```{r}
-#| fig-width: 10
-#| fig-height: 6
-
-# Histogram for rating of CoTS as threat to GBR
-
-  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_cots), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
-  
-  # Mutate data to add labels to fisher status for graphs
-  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
- # Add loop to count sample size for each fisher status group and add to facet label
-  group_by(Are_you_a_Rec_Fisher) |>
-  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
-  ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = threat_cots, fill = factor(threat_cots))) +
-  
-  # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
-  
-  # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:6) +
-  
-    
-  # Create Legend for Responses
-  scale_fill_manual(
-    name = "Rating",
-    values = rep("steelblue", 6),
-    labels = c(
-      "1 = Doesn't represent a threat at all",
-      "2 = A minor threat",
-      "3 = A moderate threat",
-      "4 = A serious threat",
-      "5 = Extremely serious threat",
-      "6 = I don't know")) +
-  
-# Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
-  
- # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
-  labs(
-    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Crown of thorns starfish (a sea star that feeds on coral)", width = 70),
-    x = "Responses",
-    y = "Number of Respondents"
-  ) 
-```
-
 ### Question 28
 
 ```{r}
@@ -2359,13 +2353,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = impact_desire)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined, living in the GBR region would become undesirable to me", width = 70),
+    title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined, living in the GBR region would become undesirable to me", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -2383,13 +2378,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = impact_fince)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined, my financial situation would be negatively affected", width = 70),
+    title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined, my financial situation would be negatively affected", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -2407,13 +2403,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = impact_lifestyle)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined, my lifestyle would be negatively affected", width = 70),
+    title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined, my lifestyle would be negatively affected", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -2431,13 +2428,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = impact_wellbeing)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined,my physical and/or mental wellbeing would be negatively affected", width = 70),
+    title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined,my physical and/or mental wellbeing would be negatively affected", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -2455,13 +2453,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = impact_grief)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined, I would feel a sense of grief or loss", width = 70),
+    title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined, I would feel a sense of grief or loss", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   ) 
 ```
 
@@ -2470,7 +2469,7 @@ raw_data <- raw_data |>
 ### Question 18
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 12
 #| fig-height: 6
 
 # Histogram for certainty that climate change is a threat to the GBR
@@ -2491,10 +2490,11 @@ raw_data <- raw_data |>
   ggplot(aes(x = cc_belief, fill = factor(cc_belief))) +
   
   # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
   # Create Legend for Responses
   scale_fill_manual(
@@ -2514,36 +2514,388 @@ raw_data <- raw_data |>
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
     title = str_wrap("Which of the following statements best describes your beliefs about climate change and the Great Barrier Reef (GBR)?", width = 70),
-    x = "Responses (1-6)",
-    y = "Number of Respondents"
+    x = "Responses",
+    y = "Percentage of Respondents"
   ) 
 ```
 
-### Question 29
+### Question 29 (not finished)
+
 ```{r}
-# Mutate data labels for I don't know category
-raw_data <- raw_data |>
-  mutate(threat_cots = if_else(threat_cots == 9, 6, threat_cots)) |>
-  mutate(threat_fishing = if_else(threat_fishing == 9, 6, threat_fishing)) |>
-  mutate(threat_runoff = if_else(threat_runoff == 9, 6, threat_runoff)) |>
-  mutate(threat_rubbish = if_else(threat_rubbish == 9, 6, threat_rubbish)) |>
-  mutate(threat_cc = if_else(threat_cc == 9, 6, threat_cc)) |>
-  mutate(threat_tourism = if_else(threat_tourism == 9, 6, threat_tourism)) |>
-  mutate(threat_devt = if_else(threat_devt == 9, 6, threat_devt)) |>
-  mutate(threat_ports = if_else(threat_ports == 9, 6, threat_ports)) |>
-  mutate(threat_mining = if_else(threat_mining == 9, 6, threat_mining)) |>
-  mutate(threat_popn = if_else(threat_popn == 9, 6, threat_popn)) |>
-  mutate(threat_mgmt = if_else(threat_mgmt == 9, 6, threat_mgmt)) |>
-  mutate(threat_weather = if_else(threat_weather == 9, 6, threat_weather)) |>
-  mutate(threat_heatwaves = if_else(threat_heatwaves == 9, 6, threat_heatwaves)) |>
-  mutate(threat_bleaching = if_else(threat_bleaching == 9, 6, threat_bleaching)) 
-  
-#glimpse(raw_data)
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Australian Government over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_ausgov)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
 ```
 
 ### Question 34
-
-
 
 ### Question 35
 
@@ -2561,13 +2913,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = hope)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: All things considered, I feel hopeful about the future of the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -2585,13 +2938,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = sad)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: I feel sad when I think about the outlook for the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -2609,13 +2963,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = aesthetics)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: The aesthetic beauty (i.e., natural beauty) of the GBR is outstanding", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -2633,13 +2988,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = GBRh_overall)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: Overall, I think the GBR is currently in good health", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -2657,13 +3013,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = trust_reefscience)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: I trust the science about GBR health", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
 
@@ -2681,16 +3038,14 @@ raw_data <- raw_data |>
 
   # Plot Data
   ggplot(aes(x = reef_fatigue)) +
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements:  I am tired of hearing stories about degradation of the GBR in the media", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
+    y = "Percentage of Respondents"
   )
 ```
-
-
-
 
