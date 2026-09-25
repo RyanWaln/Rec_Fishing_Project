@@ -1059,6 +1059,153 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   ) 
 ```
 
+
+### Question 33
+
+```{r}
+# Histogram for Prioritizing Healthy Fish Populations 
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(priority_fish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = priority_fish)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:3) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Healthy fish populations", width = 70),
+    x = "Rating (1-3)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Prioritizing less Bycatch 
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(priority_lowimpact), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = priority_lowimpact)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:3) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important:  Low impact on non-target species (e.g., avoid using fishing equipment that catches threatened and protected animals)", width = 70),
+    x = "Rating (1-3)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Prioritizing Commercial opportunities for Traditional Owners 
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(priority_TO), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = priority_TO)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:3) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important:  Commercial opportunities for Traditional Owners", width = 70),
+    x = "Rating (1-3)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Prioritizing Local Supply of Seafood 
+
+ # Filter NA values and sort by fisher status
+  raw_data1 |> filter(!is.na(priority_supply), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = priority_supply)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:3) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Local supply of seafood for local communities and seafood businesses", width = 70),
+    x = "Rating (1-3)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Prioritizing Jobs for Local Commercial Fishers 
+
+ # Filter NA values and sort by fisher status
+  raw_data1 |> filter(!is.na(priority_jobs), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = priority_jobs)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:3) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Jobs for local commercial fishers", width = 70),
+    x = "Rating (1-3)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for Prioritizing low impact on Recreational Fishing
+
+ # Filter NA values and sort by fisher status
+  raw_data1 |> filter(!is.na(priority_recfishing), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = priority_recfishing)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:3) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Low impact on recreational fishing opportunities", width = 70),
+    x = "Rating (1-3)",
+    y = "Number of Respondents"
+  ) 
+```
+
 ## Environmental Attitudes
 
 ### Question 15
@@ -1399,6 +1546,899 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   ) 
 ```
 
+### Question 17
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of CoTS as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_cots), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_cots, fill = factor(threat_cots))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Crown of thorns starfish (a sea star that feeds on coral)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of illegal fishing as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_fishing), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_fishing, fill = factor(threat_fishing))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Illegal fishing practices (e.g., exceeding bag limits, poaching in no-take zones))", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of terrestrial runoff as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_runoff), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_runoff, fill = factor(threat_runoff))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Land-based runoff (containing sediment, fertiliser, pesticides, etc.))", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of rubbish and debris as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_rubbish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_rubbish, fill = factor(threat_rubbish))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Rubbish and marine debris)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of Climate Change as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_cc), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_cc, fill = factor(threat_cc))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Climate change)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of Tourism as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_tourism), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_tourism, fill = factor(threat_tourism))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Tourism)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of Coastal Development as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_devt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_devt, fill = factor(threat_devt))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR:  Coastal development and land clearing)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of Ports and shipping as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_ports), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_ports, fill = factor(threat_ports))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Ports and shipping)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of mining as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_mining), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_mining, fill = factor(threat_mining))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Mining)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of population growth as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_popn), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_popn, fill = factor(threat_popn))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Population growth)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of governance as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_mgmt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_mgmt, fill = factor(threat_mgmt))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Governance (i.e., management of the GBR))", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of sever weather as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_weather), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_weather, fill = factor(threat_weather))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Severe weather events (e.g., cyclones, storms, flooding))", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of marine heatwaves as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_heatwaves), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_heatwaves, fill = factor(threat_heatwaves))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Marine heatwaves)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of coral bleaching as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_bleaching), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_bleaching, fill = factor(threat_bleaching))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Coral bleaching", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+# Histogram for rating of CoTS as threat to GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(threat_cots), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = threat_cots, fill = factor(threat_cots))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:9) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 9),
+    labels = c(
+      "1 = Doesn't represent a threat at all",
+      "2 = A minor threat",
+      "3 = A moderate threat",
+      "4 = A serious threat",
+      "5 = Extremely serious threat",
+      "9 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("Rate the extent to which the following issue represents a threat to the GBR: Crown of thorns starfish (a sea star that feeds on coral)", width = 70),
+    x = "Responses",
+    y = "Number of Respondents"
+  ) 
+```
+
+### Question 28 
+
+```{r}
+# Histogram for desire to live in region if GBR declined
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(impact_desire), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = impact_desire)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined, living in the GBR region would become undesirable to me", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for financial situation if GBR declined
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(impact_fince), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = impact_fince)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined, my financial situation would be negatively affected", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+
+```{r}
+# Histogram for impact on lifestyle if GBR declined
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(impact_lifestyle), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = impact_lifestyle)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined, my lifestyle would be negatively affected", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+
+```{r}
+# Histogram for physical/mental health decline if GBR declined
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(impact_wellbeing), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = impact_wellbeing)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined,my physical and/or mental wellbeing would be negatively affected", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+
+```{r}
+# Histogram for sense of grief if GBR declined
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(impact_grief), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = impact_grief)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Rate you agreement with the following satements: If the health of the GBR significantly declined, I would feel a sense of grief or loss", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  ) 
+```
+
+
 ## Misinformation
 
 ### Question 18
@@ -1452,3 +2492,153 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
     y = "Number of Respondents"
   ) 
 ```
+
+### Question 29
+
+
+### Question 34
+
+```{r}
+# Histogram for hope towards the future of the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(hope), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = hope)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: All things considered, I feel hopeful about the future of the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  )
+```
+```{r}
+# Histogram for sadness on GBR outlook
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(sad), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = sad)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: I feel sad when I think about the outlook for the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  )
+```
+
+```{r}
+# Histogram for rating of beauty of the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(aesthetics), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = aesthetics)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: The aesthetic beauty (i.e., natural beauty) of the GBR is outstanding", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  )
+```
+
+```{r}
+# Histogram for ratings of GBR health
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(GBRh_overall), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = GBRh_overall)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: Overall, I think the GBR is currently in good health", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  )
+```
+
+```{r}
+# Histogram for trust in science of GBR health
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_reefscience), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_reefscience)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: I trust the science about GBR health", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  )
+```
+
+```{r}
+# Histogram for tiredness of GBR degradation stories
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(reef_fatigue), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = reef_fatigue)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements:  I am tired of hearing stories about degradation of the GBR in the media", width = 70),
+    x = "Rating (1-10)",
+    y = "Number of Respondents"
+  )
+```
+
+### Question 35
