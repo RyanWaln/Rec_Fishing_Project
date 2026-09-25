@@ -8,7 +8,7 @@ editor: visual
 # Introduction
 
 This file will explore the distribution of responses by fishers and non fishers in the raw data through histograms to determine statistical tests to run on them as well as different typologies to create based on the distributions.
- 
+
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
 knitr::opts_chunk$set(
@@ -222,22 +222,29 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   # Plot Data
   ggplot(aes(x = inter_zoning)) +
   
-  # Set spacing and color scheme
-  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  # Convert raw count into percentage of respondents 
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)),
+                 
+  # Set spacing and color scheme               
+  binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   
   # Set axis breaks to match the rating scale
   scale_x_continuous(breaks = 1:10) +
+  
+  # Format the y-axis labels 
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
   # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
   
   # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
-    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Marine Park zoning to restrict certain activities (e.g. fishing, collecting) in some areas of the GBR", width = 80),
+    title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Marine Park zoning to restrict certain activities (e.g. fishing, collecting) in some areas of the GBR", width = 70),
     x = "Rating (1-10)",
-    y = "Number of Respondents"
-  ) 
+    y = "Percentage of Respondents"  
+  )
 ```
+
 
 ```{r}
 # Histogram for Support of Fish Closures
@@ -841,7 +848,6 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   ) 
 ```
 
-
 ### Question 23
 
 ```{r}
@@ -1058,7 +1064,6 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
     y = "Number of Respondents"
   ) 
 ```
-
 
 ### Question 33
 
@@ -1549,6 +1554,29 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 ### Question 17
 
 ```{r}
+# Mutate data labels for I don't know category
+raw_data <- raw_data |>
+  mutate(threat_cots = if_else(threat_cots == 9, 6, threat_cots)) |>
+  mutate(threat_fishing = if_else(threat_fishing == 9, 6, threat_fishing)) |>
+  mutate(threat_runoff = if_else(threat_runoff == 9, 6, threat_runoff)) |>
+  mutate(threat_rubbish = if_else(threat_rubbish == 9, 6, threat_rubbish)) |>
+  mutate(threat_cc = if_else(threat_cc == 9, 6, threat_cc)) |>
+  mutate(threat_tourism = if_else(threat_tourism == 9, 6, threat_tourism)) |>
+  mutate(threat_devt = if_else(threat_devt == 9, 6, threat_devt)) |>
+  mutate(threat_ports = if_else(threat_ports == 9, 6, threat_ports)) |>
+  mutate(threat_mining = if_else(threat_mining == 9, 6, threat_mining)) |>
+  mutate(threat_popn = if_else(threat_popn == 9, 6, threat_popn)) |>
+  mutate(threat_mgmt = if_else(threat_mgmt == 9, 6, threat_mgmt)) |>
+  mutate(threat_weather = if_else(threat_weather == 9, 6, threat_weather)) |>
+  mutate(threat_heatwaves = if_else(threat_heatwaves == 9, 6, threat_heatwaves)) |>
+  mutate(threat_bleaching = if_else(threat_bleaching == 9, 6, threat_bleaching)) 
+  
+#glimpse(raw_data)
+```
+
+
+
+```{r}
 #| fig-width: 10
 #| fig-height: 6
 
@@ -1565,6 +1593,8 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
+    
+ 
 
   # Plot Data
   ggplot(aes(x = threat_cots, fill = factor(threat_cots))) +
@@ -1573,20 +1603,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -1624,20 +1654,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -1675,20 +1705,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -1726,20 +1756,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -1777,20 +1807,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -1828,20 +1858,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -1879,20 +1909,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -1930,20 +1960,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -1981,20 +2011,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -2032,20 +2062,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -2083,20 +2113,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -2134,20 +2164,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -2185,20 +2215,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -2236,20 +2266,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -2287,20 +2317,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   geom_histogram(binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:6) +
   
     
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 9),
+    values = rep("steelblue", 6),
     labels = c(
       "1 = Doesn't represent a threat at all",
       "2 = A minor threat",
       "3 = A moderate threat",
       "4 = A serious threat",
       "5 = Extremely serious threat",
-      "9 = I don't know")) +
+      "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
@@ -2313,7 +2343,7 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   ) 
 ```
 
-### Question 28 
+### Question 28
 
 ```{r}
 # Histogram for desire to live in region if GBR declined
@@ -2363,7 +2393,6 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   ) 
 ```
 
-
 ```{r}
 # Histogram for impact on lifestyle if GBR declined
 
@@ -2387,7 +2416,6 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
     y = "Number of Respondents"
   ) 
 ```
-
 
 ```{r}
 # Histogram for physical/mental health decline if GBR declined
@@ -2413,7 +2441,6 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   ) 
 ```
 
-
 ```{r}
 # Histogram for sense of grief if GBR declined
 
@@ -2437,7 +2464,6 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
     y = "Number of Respondents"
   ) 
 ```
-
 
 ## Misinformation
 
@@ -2494,9 +2520,32 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 ```
 
 ### Question 29
-
+```{r}
+# Mutate data labels for I don't know category
+raw_data <- raw_data |>
+  mutate(threat_cots = if_else(threat_cots == 9, 6, threat_cots)) |>
+  mutate(threat_fishing = if_else(threat_fishing == 9, 6, threat_fishing)) |>
+  mutate(threat_runoff = if_else(threat_runoff == 9, 6, threat_runoff)) |>
+  mutate(threat_rubbish = if_else(threat_rubbish == 9, 6, threat_rubbish)) |>
+  mutate(threat_cc = if_else(threat_cc == 9, 6, threat_cc)) |>
+  mutate(threat_tourism = if_else(threat_tourism == 9, 6, threat_tourism)) |>
+  mutate(threat_devt = if_else(threat_devt == 9, 6, threat_devt)) |>
+  mutate(threat_ports = if_else(threat_ports == 9, 6, threat_ports)) |>
+  mutate(threat_mining = if_else(threat_mining == 9, 6, threat_mining)) |>
+  mutate(threat_popn = if_else(threat_popn == 9, 6, threat_popn)) |>
+  mutate(threat_mgmt = if_else(threat_mgmt == 9, 6, threat_mgmt)) |>
+  mutate(threat_weather = if_else(threat_weather == 9, 6, threat_weather)) |>
+  mutate(threat_heatwaves = if_else(threat_heatwaves == 9, 6, threat_heatwaves)) |>
+  mutate(threat_bleaching = if_else(threat_bleaching == 9, 6, threat_bleaching)) 
+  
+#glimpse(raw_data)
+```
 
 ### Question 34
+
+
+
+### Question 35
 
 ```{r}
 # Histogram for hope towards the future of the GBR
@@ -2521,6 +2570,7 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
     y = "Number of Respondents"
   )
 ```
+
 ```{r}
 # Histogram for sadness on GBR outlook
 
@@ -2641,4 +2691,6 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   )
 ```
 
-### Question 35
+
+
+
