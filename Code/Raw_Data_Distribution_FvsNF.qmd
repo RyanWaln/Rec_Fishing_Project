@@ -97,6 +97,18 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
 ### Question 14
 
 ```{r}
+# Mutate data labels for I don't know category
+raw_data <- raw_data |>
+  mutate(GBRbp_advocacyfish = if_else(GBRbp_advocacyfish == 9, 6, GBRbp_advocacyfish)) |>
+  mutate(GBRbp_rubbish = if_else(GBRbp_rubbish == 9, 6, GBRbp_rubbish)) |>
+  mutate(GBRbp_app = if_else(GBRbp_app == 9, 6, GBRbp_app)) |>
+  mutate(GBRbp_report = if_else(GBRbp_report == 9, 6, GBRbp_report))
+
+#glimpse(raw_data)
+```
+
+
+```{r}
 # Histogram for encouraging responsible fishing practices
 
 # Filter NA values and sort by fisher status
@@ -111,23 +123,36 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
 
-  # Plot Data
-  ggplot(aes(x = GBRbp_advocacyfish)) +
+ # Plot Data
+  ggplot(aes(x = GBRbp_advocacyfish, fill = factor(GBRbp_advocacyfish))) +
   
   # Set spacing and color scheme
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
   
   # Set axis breaks to match the rating scale
-  scale_x_continuous(breaks = 1:10) +
+  scale_x_continuous(breaks = 1:6) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
-  # Facet wrap to separate by fisher status and set free y-axis scaling
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 6),
+    labels = c(
+      "1 = Never",
+      "2 = Rarely",
+      "3 = Some of the time",
+      "4 = Most of the time", 
+      "5 = All the time", 
+      "6 = Not Applicable")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
   facet_wrap(~ group_label, scales = "free_y") +
   
-  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Encourage other people to practice responsible fishing (i.e., no fishing in green zones, throw back undersized fish or female mud crabs, follow bag limits)", width = 70),
-    x = "Rating (1-10)",
+    x = "Responses",
     y = "Percentage of Respondents"
   ) 
 ```
@@ -144,15 +169,26 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
 
-  # Plot Data
-  ggplot(aes(x = GBRbp_rubbish)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:10) +
+ 
+ # Plot Data
+  ggplot(aes(x = GBRbp_rubbish, fill = factor(GBRbp_rubbish))) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
+  scale_x_continuous(breaks = 1:6) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 6),
+    labels = c(
+      "1 = Never",
+      "2 = Rarely",
+      "3 = Some of the time",
+      "4 = Most of the time", 
+      "5 = All the time", 
+      "6 = Not Applicable")) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Dispose of food scraps and rubbish appropriately (i.e., in a rubbish bin on shore, not overboard)", width = 70),
-    x = "Rating (1-10)",
+    x = "Responses",
     y = "Percentage of Respondents"
   ) 
 ```
@@ -170,10 +206,20 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = GBRbp_app)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:10) +
+   ggplot(aes(x = GBRbp_app, fill = factor(GBRbp_app))) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
+  scale_x_continuous(breaks = 1:6) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 6),
+    labels = c(
+      "1 = Never",
+      "2 = Rarely",
+      "3 = Some of the time",
+      "4 = Most of the time", 
+      "5 = All the time", 
+      "6 = Not Applicable")) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Report sightings of unusual or interesting marine life using the ‘Eye on the Reef’ sightings network app)", width = 70),
@@ -195,14 +241,24 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = GBRbp_report)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:10) +
+   ggplot(aes(x = GBRbp_report, fill = factor(GBRbp_report))) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
+  scale_x_continuous(breaks = 1:6) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 6),
+    labels = c(
+      "1 = Never",
+      "2 = Rarely",
+      "3 = Some of the time",
+      "4 = Most of the time", 
+      "5 = All the time", 
+      "6 = Not Applicable")) +
+   facet_wrap(~ group_label, scales = "free_y") +
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Report suspicious activity to the authorities (e.g., fishing in no-take or ‘green’ zones, dumping rubbish)", width = 70),
-    x = "Rating (1-10)",
+    x = "Responses",
     y = "Percentage of Respondents"
   ) 
 ```
