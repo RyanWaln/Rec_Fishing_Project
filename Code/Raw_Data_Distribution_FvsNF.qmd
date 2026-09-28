@@ -84,7 +84,7 @@ raw_data |> filter(!is.na(actions_helpGBR), Are_you_a_Rec_Fisher %in% c("Y", "N"
       "5 = Unsure")) +
   
   # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
   # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -106,7 +106,6 @@ raw_data <- raw_data |>
 
 #glimpse(raw_data)
 ```
-
 
 ```{r}
 # Histogram for encouraging responsible fishing practices
@@ -147,7 +146,7 @@ raw_data <- raw_data |>
       "6 = Not Applicable")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -185,7 +184,7 @@ raw_data <- raw_data |>
       "4 = Most of the time", 
       "5 = All the time", 
       "6 = Not Applicable")) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Dispose of food scraps and rubbish appropriately (i.e., in a rubbish bin on shore, not overboard)", width = 70),
     x = "Responses",
@@ -220,7 +219,7 @@ raw_data <- raw_data |>
       "4 = Most of the time", 
       "5 = All the time", 
       "6 = Not Applicable")) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Report sightings of unusual or interesting marine life using the ‘Eye on the Reef’ sightings network app)", width = 70),
     x = "Rating (1-10)",
@@ -255,7 +254,7 @@ raw_data <- raw_data |>
       "4 = Most of the time", 
       "5 = All the time", 
       "6 = Not Applicable")) +
-   facet_wrap(~ group_label, scales = "free_y") +
+   facet_wrap(~ group_label) +
   labs(
     title = str_wrap("When you visit the GBR how often do you preform the following actions: Report suspicious activity to the authorities (e.g., fishing in no-take or ‘green’ zones, dumping rubbish)", width = 70),
     x = "Responses",
@@ -296,7 +295,7 @@ raw_data <- raw_data |>
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   
   # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
   # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -323,7 +322,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Seasonal closures for certain fish species (e.g., closures during spawning)", width = 80),
     x = "Rating (1-10)",
@@ -348,7 +347,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Culling Crown of Thorns Starfish (a sea star that feeds on coral) to protect corals on reefs", width = 80),
     x = "Rating (1-10)",
@@ -373,7 +372,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Coral restoration (i.e., assisted propagation or ‘gardening’ of corals) to replenish damaged reefs", width = 80),
     x = "Rating (1-10)",
@@ -398,7 +397,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Community and citizen science programs that involve local people in reef monitoring and clean-ups", width = 80),
     x = "Rating (1-10)",
@@ -423,7 +422,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Coastal and inshore restoration (e.g., mangroves, seagrass)", width = 80),
     x = "Rating (1-10)",
@@ -448,7 +447,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Island rehabilitation and restoration", width = 80),
     x = "Rating (1-10)",
@@ -473,7 +472,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Surveillance and enforcement to reduce illegal fishing (e.g., poaching in protected Marine Park zones)", width = 80),
     x = "Rating (1-10)",
@@ -498,7 +497,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Assisted coral adaptation to increase tolerance to rising sea temperatures (e.g., through selective breeding of coral)", width = 80),
     x = "Rating (1-10)",
@@ -523,7 +522,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Improved land management to reduce sediments and nutrients flowing into the sea", width = 70),
     x = "Rating (1-10)",
@@ -548,7 +547,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Efforts to reduce rubbish and plastics from urban areas entering GBR waters", width = 70),
     x = "Rating (1-10)",
@@ -573,7 +572,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Providing support for Indigenous Traditional Owner co-management of the GBR (e.g., Indigenous Rangers, training programs)", width = 70),
     x = "Rating (1-10)",
@@ -598,7 +597,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Efforts to improve on-water practices by recreational users and tourists (e.g., reducing coral damage from anchors and human contact)", width = 70),
     x = "Rating (1-10)",
@@ -623,7 +622,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Government and industry initiatives to reduce carbon emissions and tackle climate change", width = 70),
     x = "Rating (1-10)",
@@ -648,7 +647,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning the protection and managment of the GBR, how important do you consider: Development of new equipment (fishing gear) for commercial fishers to reduce risks to non-target species (e.g., threatened and protected animals)", width = 70),
     x = "Rating (1-10)",
@@ -675,7 +674,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I think that most people in my local area try to reduce any impacts they might have on the GBR", width = 70),
     x = "Rating (1-10)",
@@ -700,7 +699,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I believe it is the responsibility of everyone in my local area to reduce their impacts on the GBR", width = 70),
     x = "Rating (1-10)",
@@ -725,7 +724,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements:  I feel morally obligated (i.e., a sense of duty) to reduce any impacts I might personally have on the GBR", width = 70),
     x = "Rating (1-10)",
@@ -750,7 +749,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements:  I feel that I cannot make a personal difference in improving the health of the GBR", width = 70),
     x = "Rating (1-10)",
@@ -775,7 +774,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I have a good understanding of the things I can do to help the GBR", width = 70),
     x = "Rating (1-10)",
@@ -800,7 +799,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I would be willing to make an effort to do something differently in my daily life, if it helped the GBR", width = 70),
     x = "Rating (1-10)",
@@ -825,7 +824,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I support the current rules and regulations that affect access and use of the GBR", width = 70),
     x = "Rating (1-10)",
@@ -850,7 +849,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: I believe society has a moral obligation (i.e., a duty) to protect the GBR for future generations", width = 70),
     x = "Rating (1-10)",
@@ -875,7 +874,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: In my local area, there is a strong social expectation for people to minimise their impacts on the GBR", width = 70),
     x = "Rating (1-10)",
@@ -900,7 +899,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: Taking actions to look after the GBR is important to the way that I think of myself as a person", width = 70),
     x = "Rating (1-10)",
@@ -925,7 +924,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your level of agreement with the following statements: The actions I take to look after the GBR are recognised and respected by GBR management", width = 70),
     x = "Rating (1-10)",
@@ -952,7 +951,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I have a good understanding of how the GBR is managed", width = 70),
     x = "Rating (1-10)",
@@ -977,7 +976,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I think that decisions about managing the GBR are made in a fair way", width = 70),
     x = "Rating (1-10)",
@@ -1002,7 +1001,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I think that the benefits and costs of managing the GBR are distributed fairly across different groups of people (e.g., GBR residents, tourist operators, fishers)", width = 70),
     x = "Rating (1-10)",
@@ -1027,7 +1026,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I believe that all relevant people and groups are recognised and respected in decision-making about GBR management", width = 70),
     x = "Rating (1-10)",
@@ -1052,7 +1051,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I believe that GBR decision-makers (e.g., the Great Barrier Reef Marine Park Authority) are trustworthy", width = 70),
     x = "Rating (1-10)",
@@ -1077,7 +1076,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: Overall, I feel satisfied with how the GBR is managed", width = 70),
     x = "Rating (1-10)",
@@ -1102,7 +1101,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I personally benefit from actions taken to manage the GBR", width = 70),
     x = "Rating (1-10)",
@@ -1127,7 +1126,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning managment of the GBR, rate your level of agreement with the following statement: I believe the GBR is widely recognised as well managed", width = 70),
     x = "Rating (1-10)",
@@ -1154,7 +1153,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Healthy fish populations", width = 70),
     x = "Rating (1-3)",
@@ -1179,7 +1178,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important:  Low impact on non-target species (e.g., avoid using fishing equipment that catches threatened and protected animals)", width = 70),
     x = "Rating (1-3)",
@@ -1204,7 +1203,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important:  Commercial opportunities for Traditional Owners", width = 70),
     x = "Rating (1-3)",
@@ -1229,7 +1228,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Local supply of seafood for local communities and seafood businesses", width = 70),
     x = "Rating (1-3)",
@@ -1254,7 +1253,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Jobs for local commercial fishers", width = 70),
     x = "Rating (1-3)",
@@ -1279,7 +1278,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:3) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Low impact on recreational fishing opportunities", width = 70),
     x = "Rating (1-3)",
@@ -1308,7 +1307,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR supports a variety of marine life, such as fish and corals", width = 70),
     x = "Rating (1-10)",
@@ -1333,7 +1332,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The fact that the GBR exists, even if I don’t use or benefit from it", width = 70),
     x = "Rating (1-10)",
@@ -1358,7 +1357,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides a place where people can continue to pass down wisdom, traditions, and a way of life", width = 70),
     x = "Rating (1-10)",
@@ -1383,7 +1382,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR attracts people from all over the world", width = 70),
     x = "Rating (1-10)",
@@ -1408,7 +1407,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR is recognised nationally and internationally for its iconic status (e.g., World Heritage Area)", width = 70),
     x = "Rating (1-10)",
@@ -1433,7 +1432,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides fresh seafood", width = 70),
     x = "Rating (1-10)",
@@ -1458,7 +1457,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: People can learn about the environment through GBR educational, research, and monitoring activities", width = 70),
     x = "Rating (1-10)",
@@ -1483,7 +1482,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR has rich Traditional Owner Heritage", width = 70),
     x = "Rating (1-10)",
@@ -1508,7 +1507,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR has historic maritime heritage (e.g., shipwrecks)", width = 70),
     x = "Rating (1-10)",
@@ -1533,7 +1532,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides spiritual meaning and/or artistic inspiration to people", width = 70),
     x = "Rating (1-10)",
@@ -1558,7 +1557,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR supports the local economy", width = 70),
     x = "Rating (1-10)",
@@ -1583,7 +1582,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides a place for people to connect socially with other people", width = 70),
     x = "Rating (1-10)",
@@ -1608,7 +1607,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides opportunities for people to engage in recreational activities and tourism", width = 70),
     x = "Rating (1-10)",
@@ -1633,7 +1632,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("How much do you value the following aspect of the GBR: I believe the GBR is widely recognised as well managed", width = 70),
     x = "Rating (1-10)",
@@ -1708,7 +1707,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -1760,7 +1759,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -1812,7 +1811,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -1864,7 +1863,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -1916,7 +1915,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -1968,7 +1967,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2020,7 +2019,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2072,7 +2071,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2124,7 +2123,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2176,7 +2175,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2228,7 +2227,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2280,7 +2279,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2332,7 +2331,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2384,7 +2383,7 @@ raw_data <- raw_data |>
       "6 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2413,7 +2412,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined, living in the GBR region would become undesirable to me", width = 70),
     x = "Rating (1-10)",
@@ -2438,7 +2437,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined, my financial situation would be negatively affected", width = 70),
     x = "Rating (1-10)",
@@ -2463,7 +2462,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined, my lifestyle would be negatively affected", width = 70),
     x = "Rating (1-10)",
@@ -2488,7 +2487,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined,my physical and/or mental wellbeing would be negatively affected", width = 70),
     x = "Rating (1-10)",
@@ -2513,7 +2512,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Rate your agreement with the following satements: If the health of the GBR significantly declined, I would feel a sense of grief or loss", width = 70),
     x = "Rating (1-10)",
@@ -2566,7 +2565,7 @@ raw_data <- raw_data |>
       "6 = Don't believe in climate change")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2595,7 +2594,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
     x = "Rating (1-10)",
@@ -2620,7 +2619,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Reef Trust", width = 70),
     x = "Rating (1-10)",
@@ -2645,7 +2644,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Queensland Government", width = 70),
     x = "Rating (1-10)",
@@ -2670,7 +2669,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Queensland Reef Water Quality Program", width = 70),
     x = "Rating (1-10)",
@@ -2695,7 +2694,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: My local council", width = 70),
     x = "Rating (1-10)",
@@ -2720,7 +2719,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: My close friends & family", width = 70),
     x = "Rating (1-10)",
@@ -2745,7 +2744,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: My work colleagues", width = 70),
     x = "Rating (1-10)",
@@ -2770,7 +2769,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Great Barrier Reef Marine Park Authority", width = 70),
     x = "Rating (1-10)",
@@ -2795,7 +2794,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Scientists from research institutions (e.g., CSIRO, Universities, Australian Institute of Marine Science)", width = 70),
     x = "Rating (1-10)",
@@ -2820,7 +2819,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Environmental non-governmental organisations (e.g., Australian Conservation Foundation, Regional Report Card Partnerships)", width = 70),
     x = "Rating (1-10)",
@@ -2845,7 +2844,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Newspaper journalists", width = 70),
     x = "Rating (1-10)",
@@ -2870,7 +2869,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Television news journalists", width = 70),
     x = "Rating (1-10)",
@@ -2895,7 +2894,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Citizen science and community groups in the GBR (e.g. Reef Check, Coral Watch)", width = 70),
     x = "Rating (1-10)",
@@ -2920,7 +2919,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Social media commentators (e.g., Facebook, X, Tik Tok, YouTube, blogs etc.)", width = 70),
     x = "Rating (1-10)",
@@ -2972,7 +2971,7 @@ raw_data <- raw_data |>
       "4 = I don't know")) +
   
 # Facet wrap to separate by fisher status and set free y-axis scaling
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
@@ -2981,7 +2980,6 @@ raw_data <- raw_data |>
     y = "Percentage of Respondents"
   ) 
 ```
-
 
 ### Question 35
 
@@ -3002,7 +3000,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: All things considered, I feel hopeful about the future of the GBR", width = 70),
     x = "Rating (1-10)",
@@ -3027,7 +3025,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: I feel sad when I think about the outlook for the GBR", width = 70),
     x = "Rating (1-10)",
@@ -3052,7 +3050,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: The aesthetic beauty (i.e., natural beauty) of the GBR is outstanding", width = 70),
     x = "Rating (1-10)",
@@ -3077,7 +3075,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: Overall, I think the GBR is currently in good health", width = 70),
     x = "Rating (1-10)",
@@ -3102,7 +3100,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements: I trust the science about GBR health", width = 70),
     x = "Rating (1-10)",
@@ -3127,7 +3125,7 @@ raw_data <- raw_data |>
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
+  facet_wrap(~ group_label) +
   labs(
     title = str_wrap("Considering the condition of the GBR, rate your level of agreement with the following statements:  I am tired of hearing stories about degradation of the GBR in the media", width = 70),
     x = "Rating (1-10)",
