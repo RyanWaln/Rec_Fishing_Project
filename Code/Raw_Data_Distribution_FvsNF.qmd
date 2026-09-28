@@ -2337,6 +2337,7 @@ raw_data <- raw_data |>
     y = "Percentage of Respondents"
   ) 
 ```
+
 ### Question 28
 
 ```{r}
@@ -2519,56 +2520,7 @@ raw_data <- raw_data |>
   ) 
 ```
 
-### Question 29 (not finished)
-
-```{r}
-# Histogram for trust in Australian Government over the GBR
-
-# Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
-  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
-  group_by(Are_you_a_Rec_Fisher) |>
-  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
-  ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:10) +
-  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
-  labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
-    x = "Rating (1-10)",
-    y = "Percentage of Respondents"
-  ) 
-```
-```{r}
-# Histogram for trust in Australian Government over the GBR
-
-# Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
-  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
-  group_by(Are_you_a_Rec_Fisher) |>
-  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
-  ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:10) +
-  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label, scales = "free_y") +
-  labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
-    x = "Rating (1-10)",
-    y = "Percentage of Respondents"
-  ) 
-```
+### Question 29
 
 ```{r}
 # Histogram for trust in Australian Government over the GBR
@@ -2596,10 +2548,10 @@ raw_data <- raw_data |>
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in The Reef Trust over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_reeftrust), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2608,23 +2560,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_reeftrust)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Reef Trust", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in The Queensland Government over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_qldgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2633,23 +2585,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_qldgov)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Queensland Government", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in The Queensland Reef Water Quality Program over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_rwqp), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2658,23 +2610,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_rwqp)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Queensland Reef Water Quality Program", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in My local council over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_council), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2683,23 +2635,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_council)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: My local council", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in My close friends & family
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_family), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2708,23 +2660,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_family)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: My close friends & family", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in My work colleagues
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_colleagues), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2733,23 +2685,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_colleagues)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: My work colleagues", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in The Great Barrier Reef Marine Park Authority
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_gbrmpa), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2758,23 +2710,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_gbrmpa)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Great Barrier Reef Marine Park Authority", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in Scientists 
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_science), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2783,23 +2735,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_science)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Scientists from research institutions (e.g., CSIRO, Universities, Australian Institute of Marine Science)", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in NGOs
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_ausngo), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2808,23 +2760,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_ausngo)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Environmental non-governmental organisations (e.g., Australian Conservation Foundation, Regional Report Card Partnerships)", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in Newspaper journalists over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_paper), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2833,23 +2785,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_paper)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Newspaper journalists", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in Television news journalists over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_tv), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2858,23 +2810,23 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_tv)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Television news journalists", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ```{r}
-# Histogram for trust in Australian Government over the GBR
+# Histogram for trust in Citizen science and community groups in the GBR (e.g. Reef Check, Coral Watch) over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_citizen), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
@@ -2883,19 +2835,97 @@ raw_data <- raw_data |>
   ungroup() |>
 
   # Plot Data
-  ggplot(aes(x = trust_ausgov)) +
+  ggplot(aes(x = trust_citizen)) +
   geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label, scales = "free_y") +
   labs(
-    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: The Australian Government", width = 70),
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Citizen science and community groups in the GBR (e.g. Reef Check, Coral Watch)", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for trust in Social media commentators over the GBR
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(trust_socials), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = trust_socials)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label, scales = "free_y") +
+  labs(
+    title = str_wrap("Considering the information you receive on the GBR, rate how much you trust: Social media commentators (e.g., Facebook, X, Tik Tok, YouTube, blogs etc.)", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
 ```
 
 ### Question 34
+
+```{r}
+#| fig-width: 12
+#| fig-height: 6
+
+# Histogram for belief on health of GBR
+
+  # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(GBRh_change), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher",
+                                        "N" = "Non-Fisher")) |>
+ # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+    
+ 
+
+  # Plot Data
+  ggplot(aes(x = GBRh_change, fill = factor(GBRh_change))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:4) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 4),
+    labels = c(
+      "1 = Declining",
+      "2 = Staying the same",
+      "3 = Improving",
+      "4 = I don't know")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label, scales = "free_y") +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap(" I think the health of the Great Barrier Reef (GBR; which includes mainland beaches, bays, creeks, islands, open waters, and coral reefs) is…", width = 70),
+    x = "Responses",
+    y = "Percentage of Respondents"
+  ) 
+```
+
 
 ### Question 35
 
@@ -3048,4 +3078,3 @@ raw_data <- raw_data |>
     y = "Percentage of Respondents"
   )
 ```
-
