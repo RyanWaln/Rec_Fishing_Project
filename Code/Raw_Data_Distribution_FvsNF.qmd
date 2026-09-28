@@ -1536,7 +1536,7 @@ raw_data |> filter(Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   facet_wrap(~ group_label) +
   labs(
-    title = str_wrap("How much do you value the following aspect of the GBR: I believe the GBR is widely recognised as well managed", width = 70),
+    title = str_wrap("How much do you value the following aspect of the GBR: The GBR provides opportunities for people to experience, appreciate, and interact with nature", width = 70),
     x = "Rating (1-10)",
     y = "Percentage of Respondents"
   ) 
@@ -1545,7 +1545,7 @@ raw_data |> filter(Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
 ### Question 17
 
 ```{r}
-# Mutate data labels for I don't know category
+# Mutate data labels for I don't know category (change 9 to 6 for graph)
 raw_data <- raw_data |>
   mutate(threat_cots = if_else(threat_cots == 9, 6, threat_cots)) |>
   mutate(threat_fishing = if_else(threat_fishing == 9, 6, threat_fishing)) |>
