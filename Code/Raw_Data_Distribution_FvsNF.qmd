@@ -1137,151 +1137,53 @@ raw_data <- raw_data |>
 ### Question 33
 
 ```{r}
-# Histogram for Prioritizing Healthy Fish Populations 
+#| fig-width: 12
+#| fig-height: 6
 
- # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(priority_fish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+# Stacked Bar Chart for opinions on top priorities for managing commercial fishing
+
+# Filter NA values and sort by fisher status
+raw_data |> filter(Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                         "Y" = "Recreational Fisher",
                                         "N" = "Non-Fisher")) |>
+  
+  # Keep respondents who ranked at least one priority
+  filter(if_any(starts_with("priority_"), ~ !is.na(.))) |>
   group_by(Are_you_a_Rec_Fisher) |>
+  
+  # Calculate sample size per group
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = priority_fish)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:3) +
+  
+  # Pivot priority columns into one category column and one rank column
+  pivot_longer(cols = starts_with("priority_"),
+               names_to = "priority_category",
+               values_to = "rank") |>
+  filter(!is.na(rank)) |>
+  
+  # Mutate raw column names into category labels
+  mutate(priority_category = recode(priority_category,
+    "priority_fish" = "Sustainable/Healthy fish stocks",
+    "priority_lowimpact" = "Low-impact fishing methods",
+    "priority_TO" = "Traditional Owner rights",
+    "priority_supply" = "Seafood supply",
+    "priority_jobs" = "Commercial Fishing jobs",
+    "priority_recfishing" = "No impact on recreational fishing")) |>
+  
+ # Plot Data - one bar per category, stacked by rank (1, 2, or 3)
+  ggplot(aes(x = priority_category, fill = factor(rank))) +
+  geom_bar(aes(y = after_stat(count / sum(count) * 100)), position = "stack", color = "white") +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  scale_fill_manual(
+    name = "Rank",
+    values = c("1" = "#08306b", "2" = "#4292c6", "3" = "#c6dbef"),
+    labels = c("1 = Most important", "2 = Second priority", "3 = Third priority")) +
   facet_wrap(~ group_label) +
+  coord_flip() +
   labs(
-    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Healthy fish populations", width = 70),
-    x = "Rating (1-3)",
-    y = "Percentage of Respondents"
-  ) 
-```
-
-```{r}
-# Histogram for Prioritizing less Bycatch 
-
- # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(priority_lowimpact), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
-  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
-  group_by(Are_you_a_Rec_Fisher) |>
-  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
-  ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = priority_lowimpact)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:3) +
-  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label) +
-  labs(
-    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important:  Low impact on non-target species (e.g., avoid using fishing equipment that catches threatened and protected animals)", width = 70),
-    x = "Rating (1-3)",
-    y = "Percentage of Respondents"
-  ) 
-```
-
-```{r}
-# Histogram for Prioritizing Commercial opportunities for Traditional Owners 
-
- # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(priority_TO), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
-  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
-  group_by(Are_you_a_Rec_Fisher) |>
-  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
-  ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = priority_TO)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:3) +
-  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label) +
-  labs(
-    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important:  Commercial opportunities for Traditional Owners", width = 70),
-    x = "Rating (1-3)",
-    y = "Percentage of Respondents"
-  ) 
-```
-
-```{r}
-# Histogram for Prioritizing Local Supply of Seafood 
-
- # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(priority_supply), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
-  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
-  group_by(Are_you_a_Rec_Fisher) |>
-  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
-  ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = priority_supply)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:3) +
-  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label) +
-  labs(
-    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Local supply of seafood for local communities and seafood businesses", width = 70),
-    x = "Rating (1-3)",
-    y = "Percentage of Respondents"
-  ) 
-```
-
-```{r}
-# Histogram for Prioritizing Jobs for Local Commercial Fishers 
-
- # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(priority_jobs), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
-  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
-  group_by(Are_you_a_Rec_Fisher) |>
-  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
-  ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = priority_jobs)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:3) +
-  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label) +
-  labs(
-    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Jobs for local commercial fishers", width = 70),
-    x = "Rating (1-3)",
-    y = "Percentage of Respondents"
-  ) 
-```
-
-```{r}
-# Histogram for Prioritizing low impact on Recreational Fishing
-
- # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(priority_recfishing), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
-  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
-  group_by(Are_you_a_Rec_Fisher) |>
-  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
-  ungroup() |>
-
-  # Plot Data
-  ggplot(aes(x = priority_recfishing)) +
-  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
-  scale_x_continuous(breaks = 1:3) +
-  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  facet_wrap(~ group_label) +
-  labs(
-    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities? Select your top 3 choices in order of importance with 1 being the most important: Low impact on recreational fishing opportunities", width = 70),
-    x = "Rating (1-3)",
+    title = str_wrap("Concerning commercial fishing in the GBR which of the following objectives should be the highest priorities?", width = 60),
+    x = "Priority Category",
     y = "Percentage of Respondents"
   ) 
 ```
