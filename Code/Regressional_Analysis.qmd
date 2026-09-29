@@ -1,0 +1,47 @@
+---
+title: "Rec_Fish_Regression"
+author: "Ryan Waln"
+format: html
+editor: visual
+---
+
+# Introduction
+
+This file is used to conduct regressional analysis on the survey responses of Recreational fishers from the SELTMP in 2025 to determine if 
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r}
+# Packages
+library("gert")
+library("usethis")
+library("here")
+library("tidyverse")
+library("readxl")
+library("ordinal")
+```
+
+```{r}
+# Import Raw Data sheet
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+
+##glimpse(raw_data)
+```
+
+
+```{r}
+# Regression test 1
+
+l
+```
+
