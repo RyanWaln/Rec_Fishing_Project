@@ -70,34 +70,23 @@ summary(ord_model)
 
 # Predicted probability of each rating, by fisher status
 ```{r}
-emm_prob <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | inter_zoning, mode = "prob")
+# see how both fisher status affect ratings and asymp integer (if 1 is included, likely not significant)
+basic_probs <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | inter_zoning, mode = "prob")
 summary(emm_prob)
 ```
 
+```{r}
+# see p values and difference in estimates (effect of non fisher status on rating)
+basic_probs |> pairs()
+```
+
+
 # Plot probability of each rating with confidence intervals
 ```{r}
-emmip(ord_model, Are_you_a_Rec_Fisher ~ inter_zoning, mode = "prob", CIs = TRUE) +
+emmip(ord_model, Are_you_a_Rec_Fisher ~ inter_zoning, mode = "prob", dodge = .5, CIs = TRUE) +
   labs(title = "Predicted Probability of Each MPA Support Rating by Fisher Status",
        x = "Rating (1-10)", y = "Predicted Probability") +
   theme_minimal()
-```
-
-# Risk ratios comparing fisher groups
-```{r}
-emm_latent <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher, mode = "latent")
-odds_ratio_table <- pairs(emm_latent, reverse = TRUE) |>
-  summary(infer = TRUE) |>
-  mutate(odds_ratio = exp(estimate),
-         OR_lower   = exp(asymp.LCL),
-         OR_upper   = exp(asymp.UCL))
-odds_ratio_table
-
-# True risk ratios (ratio of raw probabilities) per rating category, since
-risk_ratio_table <- summary(emm_prob) |>
-  dplyr::select(Are_you_a_Rec_Fisher, inter_zoning, prob) |>                # NOTE: rms conflicts with dplyr (select)
-  pivot_wider(names_from = Are_you_a_Rec_Fisher, values_from = prob) |>
-  mutate(risk_ratio = `Recreational Fisher` / `Non-Fisher`)
-risk_ratio_table
 ```
 
 # Cumulative probability
