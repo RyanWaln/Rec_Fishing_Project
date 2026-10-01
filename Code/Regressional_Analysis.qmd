@@ -29,6 +29,10 @@ library("here")
 library("tidyverse")
 library("readxl")
 library("ordinal")
+library("MASS")
+library("rcompanion")
+library("emmeans")
+library("rms")
 ```
 
 ```{r}
@@ -38,10 +42,84 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
 ##glimpse(raw_data)
 ```
 
-
 ```{r}
-# Regression test 1
-
-l
+# Filter Data 
+MPAs_data <- raw_data |>
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(
+    Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                   "Y" = "Recreational Fisher",
+                                   "N" = "Non-Fisher"),
+    inter_zoning = factor(inter_zoning, ordered = TRUE)
+  )
 ```
+
+# Test the proportional odds assumption
+```{r}
+MPAs_data <- MPAs_data |>
+  mutate(Fisher_numeric = ifelse(Are_you_a_Rec_Fisher == "Recreational Fisher", 1, 0))
+
+plot.xmean.ordinaly(inter_zoning ~ Fisher_numeric, data = MPAs_data, cr = TRUE)
+```
+
+# Run ordinal model
+```{r}
+ord_model <- clm(inter_zoning ~ Are_you_a_Rec_Fisher, data = MPAs_data, link = "logit")
+summary(ord_model)
+```
+
+# Predicted probability of each rating, by fisher status
+```{r}
+emm_prob <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | inter_zoning, mode = "prob")
+summary(emm_prob)
+```
+
+# Plot probability of each rating with confidence intervals
+```{r}
+emmip(ord_model, Are_you_a_Rec_Fisher ~ inter_zoning, mode = "prob", CIs = TRUE) +
+  labs(title = "Predicted Probability of Each MPA Support Rating by Fisher Status",
+       x = "Rating (1-10)", y = "Predicted Probability") +
+  theme_minimal()
+```
+
+# Risk ratios comparing fisher groups
+```{r}
+emm_latent <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher, mode = "latent")
+odds_ratio_table <- pairs(emm_latent, reverse = TRUE) |>
+  summary(infer = TRUE) |>
+  mutate(odds_ratio = exp(estimate),
+         OR_lower   = exp(asymp.LCL),
+         OR_upper   = exp(asymp.UCL))
+odds_ratio_table
+
+# True risk ratios (ratio of raw probabilities) per rating category, since
+risk_ratio_table <- summary(emm_prob) |>
+  dplyr::select(Are_you_a_Rec_Fisher, inter_zoning, prob) |>                # NOTE: rms conflicts with dplyr (select)
+  pivot_wider(names_from = Are_you_a_Rec_Fisher, values_from = prob) |>
+  mutate(risk_ratio = `Recreational Fisher` / `Non-Fisher`)
+risk_ratio_table
+```
+
+# Cumulative probability
+```{r}
+emm_cum <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | cut, mode = "cum.prob")
+summary(emm_cum)
+
+emmip(ord_model, Are_you_a_Rec_Fisher ~ cut, mode = "cum.prob", CIs = TRUE) +
+  labs(title = "Cumulative Probability (rating is equal to or less than X) by Fisher Status",
+       x = "Rating Threshold", y = "Probability") +
+  theme_minimal()
+```
+
+# Exceedance probability
+```{r}
+emm_exc <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | cut, mode = "exc.prob")
+summary(emm_exc)
+
+emmip(ord_model, Are_you_a_Rec_Fisher ~ cut, mode = "exc.prob", CIs = TRUE) +
+  labs(title = "Exceedance Probability (rating is greater than X) by Fisher Status",
+       x = "Rating (1-10)", y = "Probability") +
+  theme_minimal()
+```
+
 
