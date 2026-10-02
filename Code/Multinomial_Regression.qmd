@@ -6,7 +6,7 @@ editor: visual
 ---
 # Introduction
 
-This file is used to conduct multinomial regressional analysis on the survey responses of Recreational fishers from the SELTMP in 2025 to determine if
+This file is used to conduct multinomial regressional analysis on the survey responses of Recreational fishers from the SELTMP in 2025
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
@@ -38,50 +38,46 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
 ##glimpse(raw_data)
 ```
 
-
 ```{r}
+emm_options(df = Inf) #Force every summary/test/CI below to use df = Inf (normal distribution)
 
-#Force every summary/test/CI below to use df = Inf (normal distribution)
-emm_options(df = Inf)
-
-# Filter
+# Filter data for fisher status
 MPAs_data_nom <- raw_data |>
   filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
   mutate(
     Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
                                    "Y" = "Recreational Fisher",
                                    "N" = "Non-Fisher"),
-    inter_zoning = factor(inter_zoning, ordered = FALSE)  
-  )
-
-# ============================================================
-# STEP 1: Run multinomial logistic regression model
-# ============================================================
+    inter_zoning = factor(inter_zoning, ordered = FALSE))  #Set to false for multinomial regression
+```
+  
+  
+## Run multinomial logistic regression model  
+```{r}
 multi_model <- multinom(inter_zoning ~ Are_you_a_Rec_Fisher, data = MPAs_data_nom)
 summary(multi_model)
 
-# multinom() doesn't report p-values by default - compute them manually
-# using the asymptotic normal (Z) approach, consistent with df = Inf above
+# Since multinom() doesn't report p-values, will need to compute them manually
 z_vals <- summary(multi_model)$coefficients / summary(multi_model)$standard.errors
 p_vals <- 2 * (1 - pnorm(abs(z_vals)))
 p_vals
+```
 
-# ============================================================
-# STEP 2: Predict probability of each rating, by fisher status
-# ============================================================
+## Predict probability of each rating, by fisher status
+```{r}
 emm_prob_nom <- emmeans(multi_model, ~ Are_you_a_Rec_Fisher | inter_zoning, mode = "prob")
 summary(emm_prob_nom)
+```
 
-# ==================================================================
-# STEP 3: Plot probability of each rating with confidence intervals
-# ==================================================================
+## Plot probability of each rating with confidence intervals
+```{r}
 emmip(multi_model, Are_you_a_Rec_Fisher ~ inter_zoning, mode = "prob", dodge = .5, CIs = TRUE) +
        labs(title = str_wrap("Predicted Probability of Each MPA Support Rating by Fisher Status (Multinomial)" , width = 30), 
        x = "Rating (1-10)", y = "Predicted Probability") 
+```
 
-# ============================================================
-# STEP 4: Calculate risk ratios per rating category
-# ============================================================
+## Calculate risk ratios per rating category
+```{r}
 risk_ratio_table_nom <- summary(emm_prob_nom) |>
   dplyr::select(Are_you_a_Rec_Fisher, inter_zoning, prob) |>
   pivot_wider(names_from = Are_you_a_Rec_Fisher, values_from = prob) |>
