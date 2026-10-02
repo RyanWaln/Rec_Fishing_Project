@@ -1,0 +1,93 @@
+---
+title: "Multinomial_Regression"
+author: "Ryan Waln"
+format: html
+editor: visual
+---
+# Introduction
+
+This file is used to conduct multinomial regressional analysis on the survey responses of Recreational fishers from the SELTMP in 2025 to determine if
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r}
+# Packages
+library("gert")
+library("usethis")
+library("here")
+library("tidyverse")
+library("readxl")
+library("emmeans")
+library("nnet")
+```
+
+```{r}
+# Import Raw Data sheet
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+
+##glimpse(raw_data)
+```
+
+
+```{r}
+
+#Force every summary/test/CI below to use df = Inf (normal distribution)
+emm_options(df = Inf)
+
+# Filter
+MPAs_data_nom <- raw_data |>
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  mutate(
+    Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                   "Y" = "Recreational Fisher",
+                                   "N" = "Non-Fisher"),
+    inter_zoning = factor(inter_zoning, ordered = FALSE)  
+  )
+
+# ============================================================
+# STEP 1: Run multinomial logistic regression model
+# ============================================================
+multi_model <- multinom(inter_zoning ~ Are_you_a_Rec_Fisher, data = MPAs_data_nom)
+summary(multi_model)
+
+# multinom() doesn't report p-values by default - compute them manually
+# using the asymptotic normal (Z) approach, consistent with df = Inf above
+z_vals <- summary(multi_model)$coefficients / summary(multi_model)$standard.errors
+p_vals <- 2 * (1 - pnorm(abs(z_vals)))
+p_vals
+
+# ============================================================
+# STEP 2: Predict probability of each rating, by fisher status
+# ============================================================
+emm_prob_nom <- emmeans(multi_model, ~ Are_you_a_Rec_Fisher | inter_zoning, mode = "prob")
+summary(emm_prob_nom)
+
+# ==================================================================
+# STEP 3: Plot probability of each rating with confidence intervals
+# ==================================================================
+emmip(multi_model, Are_you_a_Rec_Fisher ~ inter_zoning, mode = "prob", dodge = .5, CIs = TRUE) +
+       labs(title = str_wrap("Predicted Probability of Each MPA Support Rating by Fisher Status (Multinomial)" , width = 30), 
+       x = "Rating (1-10)", y = "Predicted Probability") 
+
+# ============================================================
+# STEP 4: Calculate risk ratios per rating category
+# ============================================================
+risk_ratio_table_nom <- summary(emm_prob_nom) |>
+  dplyr::select(Are_you_a_Rec_Fisher, inter_zoning, prob) |>
+  pivot_wider(names_from = Are_you_a_Rec_Fisher, values_from = prob) |>
+  mutate(risk_ratio = `Recreational Fisher` / `Non-Fisher`)
+risk_ratio_table_nom
+```
+
+
+

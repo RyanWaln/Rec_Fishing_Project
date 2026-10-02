@@ -7,7 +7,7 @@ editor: visual
 
 # Introduction
 
-This file is used to conduct regressional analysis on the survey responses of Recreational fishers from the SELTMP in 2025 to determine if 
+This file is used to conduct regressional analysis on the survey responses of Recreational fishers from the SELTMP in 2025 to determine if
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
@@ -54,7 +54,8 @@ MPAs_data <- raw_data |>
   )
 ```
 
-# Test the proportional odds assumption
+## Test the proportional odds assumption
+
 ```{r}
 MPAs_data <- MPAs_data |>
   mutate(Fisher_numeric = ifelse(Are_you_a_Rec_Fisher == "Recreational Fisher", 1, 0))
@@ -62,17 +63,19 @@ MPAs_data <- MPAs_data |>
 plot.xmean.ordinaly(inter_zoning ~ Fisher_numeric, data = MPAs_data, cr = TRUE)
 ```
 
-# Run ordinal model
+## Run ordinal regression model
+
 ```{r}
 ord_model <- clm(inter_zoning ~ Are_you_a_Rec_Fisher, data = MPAs_data, link = "logit")
 summary(ord_model)
 ```
 
-# Predicted probability of each rating, by fisher status
+## Predicted probability of each rating, by fisher status
+
 ```{r}
 # see how both fisher status affect ratings and asymp integer (if 1 is included, likely not significant)
 basic_probs <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | inter_zoning, mode = "prob")
-summary(emm_prob)
+summary(basic_probs)
 ```
 
 ```{r}
@@ -80,35 +83,33 @@ summary(emm_prob)
 basic_probs |> pairs()
 ```
 
+## Plot probability of each rating with confidence intervals
 
-# Plot probability of each rating with confidence intervals
 ```{r}
 emmip(ord_model, Are_you_a_Rec_Fisher ~ inter_zoning, mode = "prob", dodge = .5, CIs = TRUE) +
-  labs(title = "Predicted Probability of Each MPA Support Rating by Fisher Status",
-       x = "Rating (1-10)", y = "Predicted Probability") +
-  theme_minimal()
+  labs(title = str_wrap("Predicted Probability of each MPA Support Rating by Fisher Status" , width = 30),
+       x = "Rating (1-10)", y = "Predicted Probability")
 ```
 
-# Cumulative probability
+## Cumulative probability
+
 ```{r}
 emm_cum <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | cut, mode = "cum.prob")
 summary(emm_cum)
 
 emmip(ord_model, Are_you_a_Rec_Fisher ~ cut, mode = "cum.prob", CIs = TRUE) +
-  labs(title = "Cumulative Probability (rating is equal to or less than X) by Fisher Status",
-       x = "Rating Threshold", y = "Probability") +
-  theme_minimal()
+       labs(title = str_wrap("Cumulative Probability (rating is equal to or less than X) by Fisher Status" , width = 30),
+       x = "Rating Threshold", y = "Probability") 
 ```
 
-# Exceedance probability
+## Exceedance probability
+
 ```{r}
 emm_exc <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | cut, mode = "exc.prob")
 summary(emm_exc)
 
 emmip(ord_model, Are_you_a_Rec_Fisher ~ cut, mode = "exc.prob", CIs = TRUE) +
-  labs(title = "Exceedance Probability (rating is greater than X) by Fisher Status",
-       x = "Rating (1-10)", y = "Probability") +
-  theme_minimal()
+       labs(title = str_wrap("Exceedance Probability (rating is greater than X) by Fisher Status" , width = 30), 
+       x = "Rating (1-10)", y = "Probability") 
 ```
-
 
