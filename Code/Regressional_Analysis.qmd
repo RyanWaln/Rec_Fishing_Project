@@ -51,7 +51,7 @@ fisher_data <- raw_data |>
 # Set up variable to run regression against
 fisher_data <- fisher_data |>
   mutate(
-  educ = factor(educ)            # use for categorical question
+  educ = factor(educ, levels = 1:7, ordered = FALSE)            # use for categorical question
   # q_b = as.numeric(q_a)       # use for numeric question
   ) |>
   drop_na(educ)
@@ -64,7 +64,7 @@ fisher_data <- fisher_data |>
 fisher_data |>
   mutate(Fisher_numeric = ifelse(Are_you_a_Rec_Fisher == "Recreational Fisher", 1, 0))
 
-# Set up model 
+# Set up model (can add in other predictors w/ +)
 ord_full <- clm(inter_zoning ~ educ, data = fisher_data, link = "logit")
 
 # Test for violation of proportional odds
@@ -106,7 +106,7 @@ pairs(educ_probs)
 ## Plot probability of each rating with confidence intervals
 
 ```{r}
-emmip(ord_educ, educ ~ inter_zoning, mode = "prob", dodge = .5, CIs = TRUE) +
+emmip(ord_educ, educ ~ inter_zoning, mode = "prob", dodge = 1.5, CIs = TRUE) +
   labs(title = str_wrap("Predicted Probability of MPA Support Rating by Education Level", width = 30),
        x = "Rating (1-10)", y = "Predicted Probability")
 ```
@@ -119,7 +119,7 @@ educ_cumm <- emmeans(ord_educ, ~ educ | cut, mode = "cum.prob")
 summary(educ_cumm)
 pairs(educ_cumm)
 
-emmip(ord_educ, educ ~ cut, mode = "cum.prob", dodge = .5, CIs = TRUE) +
+emmip(ord_educ, educ ~ cut, mode = "cum.prob", dodge = 1.5, CIs = TRUE) +
   labs(title = str_wrap("Cumulative Probability (rating is equal to or less than X) by Education Level", width = 30),
        x = "Rating Threshold", y = "Cumulative Probability")
 ```
