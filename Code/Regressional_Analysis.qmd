@@ -7,7 +7,7 @@ editor: visual
 
 # Introduction
 
-This file is used to conduct ordinal regressional analysis on the survey responses of Recreational fishers from the SELTMP in 2025
+This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between support for MPAs against responses to other survey questions and demographics
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
@@ -43,79 +43,97 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
 ```
 
 ```{r}
-# Filter Data 
-MPAs_data <- raw_data |>
-  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+# Filter Data for only Rec Fishers
+fisher_data <- raw_data |>
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y") |>
+  mutate(inter_zoning = factor(inter_zoning, ordered = TRUE))
+
+# Set up variable to run regression against
+fisher_data <- fisher_data |>
   mutate(
-    Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                   "Y" = "Recreational Fisher",
-                                   "N" = "Non-Fisher"),
-    inter_zoning = factor(inter_zoning, ordered = TRUE)
-  )
+  educ = factor(educ)            # use for categorical question
+  # q_b = as.numeric(q_a)       # use for numeric question
+  ) |>
+  drop_na(educ)
 ```
 
 ## Test the proportional odds assumption
 
 ```{r}
 # Change column to to numerical binary
-MPAs_data <- MPAs_data |>
+fisher_data |>
   mutate(Fisher_numeric = ifelse(Are_you_a_Rec_Fisher == "Recreational Fisher", 1, 0))
 
-# Run test
-plot.xmean.ordinaly(inter_zoning ~ Fisher_numeric, data = MPAs_data, cr = TRUE)
+# Set up model 
+ord_full <- clm(inter_zoning ~ educ, data = fisher_data, link = "logit")
+
+# Test for violation of proportional odds
+nominal_test(ord_full)
+
+# Plot results
+plot.xmean.ordinaly(inter_zoning ~ educ, data = fisher_data, cr = TRUE)
 ```
 
 ## Run ordinal regression model
 
 ```{r}
-ord_model <- clm(inter_zoning ~ Are_you_a_Rec_Fisher, data = MPAs_data, link = "logit")
-summary(ord_model)
+# One predictor at a time 
+ord_educ <- clm(inter_zoning ~ educ, data = fisher_data, link = "logit")
+summary(ord_educ)
+
+# Multiple predictors together
+#ord_full <- clm(inter_zoning ~ q_a + q_b + q_c, data = fisher_data, link = "logit")
+#summary(ord_full)
+
+# Odds ratios with 95% CIs
+exp(cbind(OR = coef(ord_full), confint(ord_full)))
+
+# Test whether each predictor improves the model overall
+#drop1(ord_full, test = "Chisq")
+
+# Compare models
+#anova(ord_educ, ord_full)
 ```
 
 ## Predicted probability of each rating, by fisher status
 
 ```{r}
-# see how both fisher status affect ratings and asymp integer (if 1 is included, likely not significant)
-basic_probs <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | inter_zoning, mode = "prob")
-summary(basic_probs)
+# see how education level affects ratings and asymp integer (if 1 is included, likely not significant)
+educ_probs <- emmeans(ord_educ, ~ educ | inter_zoning, mode = "prob")
+summary(educ_probs)
+pairs(educ_probs)
 ```
-
-```{r}
-# see p values and difference in estimates (effect of non fisher status on rating)
-basic_probs |> pairs()
-```
-
 ## Plot probability of each rating with confidence intervals
 
 ```{r}
-emmip(ord_model, Are_you_a_Rec_Fisher ~ inter_zoning, mode = "prob", dodge = .5, CIs = TRUE) +
-  labs(title = str_wrap("Predicted Probability of each MPA Support Rating by Fisher Status" , width = 30),
+emmip(ord_educ, educ ~ inter_zoning, mode = "prob", dodge = .5, CIs = TRUE) +
+  labs(title = str_wrap("Predicted Probability of MPA Support Rating by Education Level", width = 30),
        x = "Rating (1-10)", y = "Predicted Probability")
 ```
 
 ## Cumulative probability
 
 ```{r}
-# Switch to cumulative mode
-emm_cum <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | cut, mode = "cum.prob")
-summary(emm_cum)
+# Cumulative probability of ratings by education level
+educ_cumm <- emmeans(ord_educ, ~ educ | cut, mode = "cum.prob")
+summary(educ_cumm)
+pairs(educ_cumm)
 
-# Plot Results
-emmip(ord_model, Are_you_a_Rec_Fisher ~ cut, mode = "cum.prob", CIs = TRUE) +
-       labs(title = str_wrap("Cumulative Probability (rating is equal to or less than X) by Fisher Status" , width = 30),
-       x = "Rating Threshold", y = "Probability") 
+emmip(ord_educ, educ ~ cut, mode = "cum.prob", dodge = .5, CIs = TRUE) +
+  labs(title = str_wrap("Cumulative Probability (rating is equal to or less than X) by Education Level", width = 30),
+       x = "Rating Threshold", y = "Cumulative Probability")
 ```
 
 ## Exceedance probability
 
 ```{r}
-# Swtich to exceedance mode
-emm_exc <- emmeans(ord_model, ~ Are_you_a_Rec_Fisher | cut, mode = "exc.prob")
-summary(emm_exc)
+# Exceedance probability of ratings by education level
+educ_ex <- emmeans(ord_educ, ~ educ | cut, mode = "exc.prob")
+summary(educ_ex)
+pairs(educ_ex)
 
-# Plot results
-emmip(ord_model, Are_you_a_Rec_Fisher ~ cut, mode = "exc.prob", CIs = TRUE) +
-       labs(title = str_wrap("Exceedance Probability (rating is greater than X) by Fisher Status" , width = 30), 
-       x = "Rating (1-10)", y = "Probability") 
+emmip(ord_educ, educ ~ cut, mode = "exc.prob", dodge = .5, CIs = TRUE) +
+  labs(title = str_wrap("Exceedance Probability of MPA Support Rating by Education Level", width = 30),
+       x = "Rating Threshold", y = "Exceedance Probability")
 ```
 
