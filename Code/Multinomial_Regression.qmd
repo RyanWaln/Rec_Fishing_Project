@@ -1,0 +1,84 @@
+---
+title: "Multinomial_Regression"
+author: "Ryan Waln"
+format: html
+editor: visual
+---
+# Introduction
+
+This file is used to conduct multinomial regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r}
+# Packages
+library("gert")
+library("usethis")
+library("here")
+library("tidyverse")
+library("readxl")
+library("emmeans")
+library("nnet")
+```
+
+```{r}
+# Import Raw Data sheet
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+
+##glimpse(raw_data)
+```
+
+```{r}
+emm_options(df = Inf) #Force every summary/test/CI below to use df = Inf (normal distribution)
+
+# Filter data for fisher status
+fisher_data <- raw_data |>
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y")  |>
+    mutate(inter_zoning = factor(inter_zoning, ordered = FALSE))  #Set to false for multinomial regression
+
+# Set up variable to run regression against
+fisher_data <- fisher_data |>
+  mutate(
+  educ = factor(educ, levels = 1:7, ordered = FALSE)            # use for categorical question
+  # q_b = as.numeric(q_a)       # use for numeric question
+  ) |>
+  drop_na(educ)
+```
+  
+## Run multinomial logistic regression model  
+```{r}
+multi_model <- multinom(inter_zoning ~ educ, data = fisher_data)
+summary(multi_model)
+
+# Since multinom() doesn't report p-values, will need to compute them manually
+z_vals <- summary(multi_model)$coefficients / summary(multi_model)$standard.errors
+p_vals <- 2 * (1 - pnorm(abs(z_vals)))
+p_vals
+```
+
+## Predict probability of each rating, by fisher status
+```{r}
+emm_prob_nom <- emmeans(multi_model, ~ educ | inter_zoning, mode = "prob")
+summary(emm_prob_nom)
+```
+
+## Plot probability of each rating with confidence intervals
+```{r}
+emmip(multi_model, educ ~ inter_zoning, mode = "prob", dodge = 1.5, CIs = TRUE) +
+       labs(title = str_wrap("Predicted Probability of Each MPA Support Rating by Education Level)" , width = 30), 
+       x = "Rating (1-10)", y = "Predicted Probability") 
+```
+
+
+
+
