@@ -33,6 +33,7 @@ library("MASS")
 library("rcompanion")
 library("emmeans")
 library("rms")
+library("car")
 ```
 
 ```{r}
@@ -45,16 +46,7 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
 ```{r}
 # Filter Data for only Rec Fishers
 fisher_data <- raw_data |>
-  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y") |>
-  mutate(inter_zoning = factor(inter_zoning, ordered = TRUE))
-
-# Set up variable to run regression against
-fisher_data <- fisher_data |>
-  mutate(
-  educ = factor(educ, levels = 1:7, ordered = FALSE)            # use for categorical question
-  # q_a = as.numeric(q_a)                                       # use for numeric question
-  ) |>
-  drop_na(educ)
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y")
 ```
 
 ## Goodness of Fit
@@ -93,6 +85,19 @@ ggplot(data = fisher_data, aes(x = inter_zoning, y = educ)) +
 
 
 ## Test the proportional odds assumption
+
+```{r}
+# Set up first variable as factor
+fisher_data <- fisher_data |>
+ mutate(inter_zoning = factor(inter_zoning, ordered = TRUE)) |>
+
+# Set up variable to run regression against
+  mutate(educ = factor(educ, levels = 1:7, ordered = FALSE)     # use for categorical question
+  # q_a = as.numeric(q_a)                                       # use for numeric question
+  ) |>
+  drop_na(educ)
+```
+
 
 ```{r}
 # Change column to to numerical binary
