@@ -1,0 +1,138 @@
+---
+title: "RecFish_Ordinal_Regression"
+author: "Ryan Waln"
+format: html
+editor: visual
+---
+
+# Introduction
+
+This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between support for MPAs against responses to other survey questions and demographics
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r}
+# Packages
+library("gert")
+library("usethis")
+library("here")
+library("tidyverse")
+library("readxl")
+library("ordinal")
+library("MASS")
+library("rcompanion")
+library("emmeans")
+library("rms")
+```
+
+```{r}
+# Import Raw Data sheet
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+
+##glimpse(raw_data)
+```
+
+```{r}
+# Filter Data for only Rec Fishers
+fisher_data <- raw_data |>
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y") |>
+  mutate(inter_zoning = factor(inter_zoning, ordered = TRUE))
+
+# Set up variable to run regression against
+fisher_data <- fisher_data |>
+  mutate(
+  educ = factor(educ, levels = 1:7, ordered = FALSE)            # use for categorical question
+  # q_b = as.numeric(q_a)                                       # use for numeric question
+  ) |>
+  drop_na(educ)
+```
+
+## Test the proportional odds assumption
+
+```{r}
+# Change column to to numerical binary
+fisher_data |>
+  mutate(Fisher_numeric = ifelse(Are_you_a_Rec_Fisher == "Recreational Fisher", 1, 0))
+
+# Set up model (can add in other predictors w/ +)
+ord_full <- clm(inter_zoning ~ educ, data = fisher_data, link = "logit")
+
+# Test for violation of proportional odds
+nominal_test(ord_full)
+
+# Plot results
+plot.xmean.ordinaly(inter_zoning ~ educ, data = fisher_data, cr = TRUE)
+```
+
+## Run ordinal regression model
+
+```{r}
+# One predictor at a time 
+ord_educ <- clm(inter_zoning ~ educ, data = fisher_data, link = "logit")
+summary(ord_educ)
+
+# Multiple predictors together
+#ord_full <- clm(inter_zoning ~ q_a + q_b + q_c, data = fisher_data, link = "logit")
+#summary(ord_full)
+
+# Odds ratios with 95% CIs
+exp(cbind(OR = coef(ord_full), confint(ord_full)))
+
+# Test whether each predictor improves the model overall
+#drop1(ord_full, test = "Chisq")
+
+# Compare models
+#anova(ord_educ, ord_full)
+```
+
+## Predicted probability of each rating, by fisher status
+
+```{r}
+# see how education level affects ratings and asymp integer (if 1 is included, likely not significant)
+educ_probs <- emmeans(ord_educ, ~ educ | inter_zoning, mode = "prob")
+summary(educ_probs)
+pairs(educ_probs)
+```
+## Plot probability of each rating with confidence intervals
+
+```{r}
+emmip(ord_educ, educ ~ inter_zoning, mode = "prob", dodge = 1.5, CIs = TRUE) +
+  labs(title = str_wrap("Predicted Probability of MPA Support Rating by Education Level", width = 30),
+       x = "Rating (1-10)", y = "Predicted Probability")
+```
+
+## Cumulative probability
+
+```{r}
+# Cumulative probability of ratings by education level
+educ_cumm <- emmeans(ord_educ, ~ educ | cut, mode = "cum.prob")
+summary(educ_cumm)
+pairs(educ_cumm)
+
+emmip(ord_educ, educ ~ cut, mode = "cum.prob", dodge = 1.5, CIs = TRUE) +
+  labs(title = str_wrap("Cumulative Probability (rating is equal to or less than X) by Education Level", width = 30),
+       x = "Rating Threshold", y = "Cumulative Probability")
+```
+
+## Exceedance probability
+
+```{r}
+# Exceedance probability of ratings by education level
+educ_ex <- emmeans(ord_educ, ~ educ | cut, mode = "exc.prob")
+summary(educ_ex)
+pairs(educ_ex)
+
+emmip(ord_educ, educ ~ cut, mode = "exc.prob", dodge = .5, CIs = TRUE) +
+  labs(title = str_wrap("Exceedance Probability of MPA Support Rating by Education Level", width = 30),
+       x = "Rating Threshold", y = "Exceedance Probability")
+```
