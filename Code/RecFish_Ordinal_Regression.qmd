@@ -52,10 +52,45 @@ fisher_data <- raw_data |>
 fisher_data <- fisher_data |>
   mutate(
   educ = factor(educ, levels = 1:7, ordered = FALSE)            # use for categorical question
-  # q_b = as.numeric(q_a)                                       # use for numeric question
+  # q_a = as.numeric(q_a)                                       # use for numeric question
   ) |>
   drop_na(educ)
 ```
+
+## Goodness of Fit
+
+### Pearson's Test
+
+```{r}
+# Switch variables to numeric for test
+fisher_data$inter_zoning <- as.numeric(as.character(fisher_data$inter_zoning))
+fisher_data$educ         <- as.numeric(as.character(fisher_data$educ))
+
+cor.test(fisher_data$inter_zoning, fisher_data$educ)
+```
+### Alternative: Spearman's Test (rank based)
+```{r}
+cor.test(fisher_data$inter_zoning, fisher_data$educ, method = "spearman", exact = FALSE)
+```
+
+### Scatter plot
+
+```{r}
+# Help visualize trends based on responses
+ggplot(data = fisher_data, aes(x = inter_zoning, y = educ)) +
+  geom_jitter(width = 0.25, height = 0.25, alpha = 0.3, size = 1.5) +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(breaks = 1:7) +
+  labs(x = "Importance of marine park zoning (1-10)",
+       y = "Education level (1-7)") 
+```
+
+## Multicollinearity (VIF)
+
+```{r}
+
+```
+
 
 ## Test the proportional odds assumption
 
@@ -103,6 +138,7 @@ educ_probs <- emmeans(ord_educ, ~ educ | inter_zoning, mode = "prob")
 summary(educ_probs)
 pairs(educ_probs)
 ```
+
 ## Plot probability of each rating with confidence intervals
 
 ```{r}
