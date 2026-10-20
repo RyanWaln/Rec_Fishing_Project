@@ -130,10 +130,10 @@ fisher_data |>
   mutate(Fisher_numeric = ifelse(Are_you_a_Rec_Fisher == "Recreational Fisher", 1, 0))
 
 # Set up model (can add in other predictors w/ +)
-ord_full <- clm(inter_zoning ~ educ, data = fisher_data, link = "logit")
+ord_reg <- clm(inter_zoning ~ educ, data = fisher_data, link = "logit")
 
 # Test for violation of proportional odds
-nominal_test(ord_full)
+nominal_test(ord_reg)
 
 # Plot results
 plot.xmean.ordinaly(inter_zoning ~ educ, data = fisher_data, cr = TRUE)
@@ -141,23 +141,34 @@ plot.xmean.ordinaly(inter_zoning ~ educ, data = fisher_data, cr = TRUE)
 
 ## Run ordinal regression model
 
+### One Predictor
 ```{r}
-# One predictor at a time 
-ord_educ <- clm(inter_zoning ~ educ, data = fisher_data, link = "logit")
+# Set up dependent and predictor variables
+clm_data <- fisher_data |>
+  select(inter_zoning, educ, q14)|>
+  na.omit()
+
+# Outcome must be an ordered factor; predictors can be numeric or factor/categorical
+clm_data <- clm_data |>
+  mutate(inter_zoning = factor(inter_zoning, ordered = TRUE),
+         educ = as.numeric(as.character(educ)),
+         across(all_of(q14), ~ as.numeric(as.character(.x))))
+
+# Sample Size
+nrow(clm_data)
+
+# One predictor
+ord_educ <- clm(inter_zoning ~ educ, data = clm_data, link = "logit")
 summary(ord_educ)
-
-# Multiple predictors together
-ord_full <- clm(inter_zoning ~ educ + GBRbp_advocacyfish + GBRbp_rubbish + GBRbp_app + GBRbp_report, data = fisher_data, link = "logit")
-summary(ord_full)
-
-# Odds ratios with 95% CIs
-exp(cbind(OR = coef(ord_full), confint(ord_full)))
-
-# Test whether each predictor improves the model overall
-drop1(ord_full, test = "Chisq")
-
-# Compare models
-anova(ord_educ, ord_full)
 ```
+
+### Multiple Predictors
+```{r}
+# Multiple predictors
+ord_full <- clm(inter_zoning ~ educ + GBRbp_advocacyfish + GBRbp_rubbish + GBRbp_app + GBRbp_report,
+                data = clm_data, link = "logit")
+summary(ord_full)
+```
+
 
 
