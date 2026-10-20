@@ -145,14 +145,13 @@ plot.xmean.ordinaly(inter_zoning ~ educ, data = fisher_data, cr = TRUE)
 ```{r}
 # Set up dependent and predictor variables
 clm_data <- fisher_data |>
-  select(inter_zoning, educ, q14)|>
+  select(inter_zoning, educ)|>
   na.omit()
 
 # Outcome must be an ordered factor; predictors can be numeric or factor/categorical
 clm_data <- clm_data |>
   mutate(inter_zoning = factor(inter_zoning, ordered = TRUE),
-         educ = as.numeric(as.character(educ)),
-         across(all_of(q14), ~ as.numeric(as.character(.x))))
+         educ = as.numeric(as.character(educ)))
 
 # Sample Size
 nrow(clm_data)
@@ -164,11 +163,28 @@ summary(ord_educ)
 
 ### Multiple Predictors
 ```{r}
+# Set up dependent and predictor variables
+q14 <- c("GBRbp_advocacyfish", "GBRbp_rubbish", "GBRbp_app", "GBRbp_report")
+
+clm_data <- fisher_data |>
+  select(inter_zoning, educ, q14)|>
+  na.omit()
+
+# Outcome must be an ordered factor; predictors can be numeric or factor/categorical
+clm_data <- clm_data |>
+  mutate(inter_zoning = factor(inter_zoning, ordered = TRUE),
+         educ = as.numeric(as.character(educ)),
+         across(all_of(q14), ~ as.numeric(as.character(.x))))
+
+# Sample Size
+nrow(clm_data)
 # Multiple predictors
 ord_full <- clm(inter_zoning ~ educ + GBRbp_advocacyfish + GBRbp_rubbish + GBRbp_app + GBRbp_report,
                 data = clm_data, link = "logit")
 summary(ord_full)
 ```
+
+
 
 
 
