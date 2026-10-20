@@ -26,6 +26,7 @@ objects()
 ```{r}
 # Packages
 library(tidyverse)
+library(readxl)
 library(ordinal)   # clm(), nominal_test()
 library(MASS)      # polr() if using Brant
 library(brant)     # Brant test for proportional odds
@@ -48,8 +49,8 @@ fisher_data <- raw_data |>
 ```
 
 ```{r}
-# Set up variables as factors 
-"dat <- fisher_data %>%
+# Option A: Set up variables as factors 
+dat <- fisher_data %>%
   transmute(
     inter_zoning = as.integer(inter_zoning),
     educ = as.integer(educ)
@@ -57,10 +58,25 @@ fisher_data <- raw_data |>
   filter(!is.na(inter_zoning), !is.na(educ)) %>%
   mutate(
     inter_zoning = factor(inter_zoning, ordered = TRUE, levels = 1:10),
-    educ = factor(educ, ordered = FALSE))"
+    educ = factor(educ, ordered = FALSE))
 
-# Switch education to numeric:
- dat <- dat %>% mutate(educ = as.numeric(as.character(educ)))
+# Check response distribution
+table(dat$inter_zoning)
+```
+
+```{r}
+# Option B: Set up variables as numeric
+dat <- fisher_data %>%
+  transmute(
+    inter_zoning = as.integer(inter_zoning),
+    educ = as.integer(educ)
+  ) %>%
+  filter(!is.na(inter_zoning), !is.na(educ)) %>%
+  mutate(
+    inter_zoning = factor(inter_zoning, ordered = TRUE, levels = 1:10),
+    educ = as.numeric(as.character(educ)))
+
+fisher_data <- fisher_data %>% mutate(educ = as.numeric(as.character(educ)))
 
 # Check response distribution
 table(dat$inter_zoning)
@@ -70,12 +86,7 @@ table(dat$inter_zoning)
 
 ```{r}
 # Model 1: education as a single predictor
-
-# For categorical education:
-#m_ord <- clm(inter_zoning ~ educ, data = dat, link = "logit")
-
-# For a numeric education:
- m_ord <- clm(inter_zoning ~ educ, data = dat, link = "logit")
+m_ord <- clm(inter_zoning ~ educ, data = dat, link = "logit")
 
 summary(m_ord)
 
