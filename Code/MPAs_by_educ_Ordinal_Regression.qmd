@@ -1,0 +1,262 @@
+---
+title: "MPAs_by_educ_Ordinal_Regression"
+format: html
+editor: visual
+---
+
+# Introduction
+
+This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between support for MPAs against responses to other survey questions and demographics
+Ordinal regression workflow for survey response data
+Outcome: ordered survey item (e.g., 1:10)
+Predictor(s): education or demographics
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r}
+# Packages
+library(tidyverse)
+library(ordinal)   # clm(), nominal_test()
+library(MASS)      # polr() if using Brant
+library(brant)     # Brant test for proportional odds
+library(car)       # optional, for model comparisons and diagnostics
+library(emmeans)   # optional, for marginal means if needed
+```
+
+# 1. Prepare data
+```{r}
+# Import Raw Data sheet
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+
+##glimpse(raw_data)
+```
+
+```{r}
+# Filter Data for only Rec Fishers
+fisher_data <- raw_data |>
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y")
+```
+
+```{r}
+# Set up variables as factors 
+"dat <- fisher_data %>%
+  transmute(
+    inter_zoning = as.integer(inter_zoning),
+    educ = as.integer(educ)
+  ) %>%
+  filter(!is.na(inter_zoning), !is.na(educ)) %>%
+  mutate(
+    inter_zoning = factor(inter_zoning, ordered = TRUE, levels = 1:10),
+    educ = factor(educ, ordered = FALSE))"
+
+# Switch education to numeric:
+ dat <- dat %>% mutate(educ = as.numeric(as.character(educ)))
+
+# Check response distribution
+table(dat$inter_zoning)
+```
+
+# 2. Ordered logit model (proportional odds model)
+
+```{r}
+# Model 1: education as a single predictor
+
+# For categorical education:
+#m_ord <- clm(inter_zoning ~ educ, data = dat, link = "logit")
+
+# For a numeric education:
+ m_ord <- clm(inter_zoning ~ educ, data = dat, link = "logit")
+
+summary(m_ord)
+
+# To examine multiple predictors:
+# m_ord_full <- clm(inter_zoning ~ educ + age_group + gender, data = dat, link = "logit")
+# summary(m_ord_full)
+```
+
+# 3. Check proportional odds / parallel slopes assumption
+```{r}
+# Option A: nominal_test() from ordinal package
+# This is a standard check for parallel slopes in clm()
+nominal_test(m_ord)
+
+# If it is significant, the proportional odds assumption is likely violated.
+
+# Option B: Brant test (if using MASS::polr)
+# This is often used when fitting a standard ordered logit/proportional odds model
+# in a more classical framework.
+m_p <- MASS::polr(inter_zoning ~ educ, data = dat, Hess = TRUE)
+brant(m_p)
+
+# Note:
+# - If you use clm(), the nominal_test() is usually the better direct check.
+# - If you use polr(), brant() is a common choice.
+```
+
+
+
+# ------------------------------------------------------------
+# 4. LR test for overall model significance
+# ------------------------------------------------------------
+
+# Null model: intercept only
+m_null <- clm(inter_zoning ~ 1, data = dat, link = "logit")
+
+# Log-likelihoods
+ll_null <- as.numeric(logLik(m_null))
+ll_model <- as.numeric(logLik(m_ord))
+
+# LR statistic
+lr_stat <- 2 * (ll_model - ll_null)
+
+# Degrees of freedom difference
+df_diff <- attr(logLik(m_ord), "df") - attr(logLik(m_null), "df")
+
+# p-value
+p_value <- pchisq(lr_stat, df = df_diff, lower.tail = FALSE)
+
+# Report
+data.frame(
+  Model = "Ordered logit vs intercept only",
+  LR = lr_stat,
+  df = df_diff,
+  p_value = p_value
+)
+
+# Alternative: compare nested models with anova() if supported
+# anova(m_null, m_ord)
+
+# ------------------------------------------------------------
+# 5. AIC/BIC for model comparison
+# ------------------------------------------------------------
+
+AIC(m_ord)
+BIC(m_ord)
+
+# compare with null model
+AIC(m_null)
+BIC(m_null)
+
+# ------------------------------------------------------------
+# 6. Predicted category distribution
+# ------------------------------------------------------------
+
+# Predicted probabilities per category for each observation
+pred_prob <- predict(m_ord, newdata = dat, type = "prob")
+
+# First few rows
+head(pred_prob)
+
+# Predicted class (most likely category)
+pred_class <- predict(m_ord, newdata = dat, type = "class")
+
+# Observed vs predicted table
+obs_pred_tab <- table(
+  Observed = dat$inter_zoning,
+  Predicted = pred_class
+)
+
+obs_pred_tab
+
+# Row-wise proportions of predicted categories
+round(prop.table(obs_pred_tab, margin = 1), 3)
+
+# Optional: summary of predicted probabilities by observed group
+# This can be used to inspect calibration
+dat_pred <- dat %>%
+  mutate(
+    predicted_class = pred_class
+  ) %>%
+  cbind(pred_prob)
+
+head(dat_pred)
+
+# ------------------------------------------------------------
+# 7. If proportional odds assumption is violated:
+#    Fit a generalized ordered logit model
+# ------------------------------------------------------------
+
+# The generalized ordered logit model allows the effect of a predictor
+# to vary across the cutpoints (i.e., non-parallel slopes).
+# Here, educ is allowed to have a different effect across thresholds:
+m_gen <- clm(
+  inter_zoning ~ educ,
+  data = dat,
+  link = "logit",
+  nominal = ~ educ
+)
+
+summary(m_gen)
+
+# Test whether the unrestricted (generalized) model is significantly better:
+ll_ord <- as.numeric(logLik(m_ord))
+ll_gen <- as.numeric(logLik(m_gen))
+
+lr_gen <- 2 * (ll_gen - ll_ord)
+df_gen <- attr(logLik(m_gen), "df") - attr(logLik(m_ord), "df")
+p_gen <- pchisq(lr_gen, df = df_gen, lower.tail = FALSE)
+
+data.frame(
+  Model = "Generalized ordered logit vs ordered logit",
+  LR = lr_gen,
+  df = df_gen,
+  p_value = p_gen
+)
+
+# An additional assumption check for a generalized model:
+# nominal_test() tells you whether the non-parallel slope terms are needed
+nominal_test(m_gen)
+
+# If multiple predictors:
+# m_gen_full <- clm(inter_zoning ~ educ + age_group + gender,
+#                  data = dat, link = "logit",
+#                  nominal = ~ educ + age_group)
+
+# summary(m_gen_full)
+# nominal_test(m_gen_full)
+
+# ------------------------------------------------------------
+# 8. Alternative model if you want education as numeric rather than categorical
+# ------------------------------------------------------------
+
+# If education is truly ordinal but treated as numeric:
+dat_num <- fisher_data %>%
+  transmute(
+    inter_zoning = as.integer(inter_zoning),
+    educ_num = as.numeric(as.character(educ))
+  ) %>%
+  filter(!is.na(inter_zoning), !is.na(educ_num)) %>%
+  mutate(inter_zoning = factor(inter_zoning, ordered = TRUE, levels = 1:10))
+
+m_ord_num <- clm(inter_zoning ~ educ_num, data = dat_num, link = "logit")
+
+summary(m_ord_num)
+nominal_test(m_ord_num)
+
+# LR test vs null
+m_null_num <- clm(inter_zoning ~ 1, data = dat_num, link = "logit")
+ll_null_num <- as.numeric(logLik(m_null_num))
+ll_ord_num <- as.numeric(logLik(m_ord_num))
+lr_num <- 2 * (ll_ord_num - ll_null_num)
+df_num <- attr(logLik(m_ord_num), "df") - attr(logLik(m_null_num), "df")
+p_num <- pchisq(lr_num, df = df_num, lower.tail = FALSE)
+
+data.frame(
+  Model = "Ordered logit with numeric education",
+  LR = lr_num,
+  df = df_num,
+  p_value = p_num
+)
+
+AIC(m_ord_num)
+BIC(m_ord_num)
