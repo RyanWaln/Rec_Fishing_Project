@@ -80,12 +80,19 @@ ggplot(data = fisher_data, aes(x = inter_zoning, y = educ)) +
 ### Multicollinearity (VIF)
 
 ```{r}
-vif_data <- fisher_data |>
-  
-  #Transform variables to numeric for VIF test
-  transmute(
+# VIF test needs multiple variables
+
+# Can add in multiple predictors under one variable   
+q14 <- c("GBRbp_advocacyfish", "GBRbp_rubbish", "GBRbp_app", "GBRbp_report")
+
+# Q14 has a "9" response for "not applicable" that needs to be converted to NA 
+fisher_data[q14] <- lapply(fisher_data[q14], function(x) ifelse(x == 9, NA, x))
+
+# Transform variables to numeric for VIF test
+vif_data <- fisher_data |> 
+  transmute( 
     inter_zoning = as.numeric(as.character(inter_zoning)),
-    educ         = as.numeric(as.character(educ)),
+    educ = as.numeric(as.character(educ)),
     across(all_of(q14), ~ as.numeric(as.character(.x)))
   ) |>
   
@@ -106,19 +113,19 @@ rms::vif(m_vif)
 ### Test the proportional odds assumption
 
 ```{r}
-# Set up first variable as factor
+# Set up dependent variable as factor or numerical
 fisher_data <- fisher_data |>
  mutate(inter_zoning = factor(inter_zoning, ordered = TRUE)) |>
 
-# Set up variable to run regression against
-  mutate(educ = factor(educ, levels = 1:7, ordered = FALSE)     # use for categorical question
-  # q_a = as.numeric(q_a)                                       # use for numeric question
+# Set up predictor variable(s) to run regression against
+  mutate(educ = factor(educ, levels = 1:7, ordered = FALSE)      # use for categorical question
+# mutate(a = numeric(a))      # use for numeric question
   ) |>
   drop_na(educ)
 ```
 
 ```{r}
-# Change column to to numerical binary
+# Change column to to numerical binary for test
 fisher_data |>
   mutate(Fisher_numeric = ifelse(Are_you_a_Rec_Fisher == "Recreational Fisher", 1, 0))
 
@@ -140,58 +147,17 @@ ord_educ <- clm(inter_zoning ~ educ, data = fisher_data, link = "logit")
 summary(ord_educ)
 
 # Multiple predictors together
-#ord_full <- clm(inter_zoning ~ q_a + q_b + q_c, data = fisher_data, link = "logit")
-#summary(ord_full)
+ord_full <- clm(inter_zoning ~ educ + GBRbp_advocacyfish + GBRbp_rubbish + GBRbp_app + GBRbp_report, data = fisher_data, link = "logit")
+summary(ord_full)
 
 # Odds ratios with 95% CIs
 exp(cbind(OR = coef(ord_full), confint(ord_full)))
 
 # Test whether each predictor improves the model overall
-#drop1(ord_full, test = "Chisq")
+drop1(ord_full, test = "Chisq")
 
 # Compare models
-#anova(ord_educ, ord_full)
+anova(ord_educ, ord_full)
 ```
 
-### Predicted probability of each rating, by fisher status
 
-```{r}
-# see how education level affects ratings and asymp integer (if 1 is included, likely not significant)
-educ_probs <- emmeans(ord_educ, ~ educ | inter_zoning, mode = "prob")
-summary(educ_probs)
-pairs(educ_probs)
-```
-
-### Plot probability of each rating with confidence intervals
-
-```{r}
-emmip(ord_educ, educ ~ inter_zoning, mode = "prob", dodge = 1.5, CIs = TRUE) +
-  labs(title = str_wrap("Predicted Probability of MPA Support Rating by Education Level", width = 30),
-       x = "Rating (1-10)", y = "Predicted Probability")
-```
-
-### Cumulative probability
-
-```{r}
-# Cumulative probability of ratings by education level
-educ_cumm <- emmeans(ord_educ, ~ educ | cut, mode = "cum.prob")
-summary(educ_cumm)
-pairs(educ_cumm)
-
-emmip(ord_educ, educ ~ cut, mode = "cum.prob", dodge = 1.5, CIs = TRUE) +
-  labs(title = str_wrap("Cumulative Probability (rating is equal to or less than X) by Education Level", width = 30),
-       x = "Rating Threshold", y = "Cumulative Probability")
-```
-
-### Exceedance probability
-
-```{r}
-# Exceedance probability of ratings by education level
-educ_ex <- emmeans(ord_educ, ~ educ | cut, mode = "exc.prob")
-summary(educ_ex)
-pairs(educ_ex)
-
-emmip(ord_educ, educ ~ cut, mode = "exc.prob", dodge = .5, CIs = TRUE) +
-  labs(title = str_wrap("Exceedance Probability of MPA Support Rating by Education Level", width = 30),
-       x = "Rating Threshold", y = "Exceedance Probability")
-```
