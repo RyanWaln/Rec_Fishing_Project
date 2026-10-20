@@ -58,7 +58,9 @@ fisher_data$educ         <- as.numeric(as.character(fisher_data$educ))
 
 cor.test(fisher_data$inter_zoning, fisher_data$educ)
 ```
+
 ### Alternative: Spearman's Test (rank based)
+
 ```{r}
 cor.test(fisher_data$inter_zoning, fisher_data$educ, method = "spearman", exact = FALSE)
 ```
@@ -78,24 +80,27 @@ ggplot(data = fisher_data, aes(x = inter_zoning, y = educ)) +
 ### Multicollinearity (VIF)
 
 ```{r}
-# set up variables
-q14 <- c("GBRbp_advocacyfish", "GBRbp_rubbish", "GBRbp_app", "GBRbp_report")
+vif_data <- fisher_data |>
+  
+  #Transform variables to numeric for VIF test
+  transmute(
+    inter_zoning = as.numeric(as.character(inter_zoning)),
+    educ         = as.numeric(as.character(educ)),
+    across(all_of(q14), ~ as.numeric(as.character(.x)))
+  ) |>
+  
+  # Omit Na Values
+  na.omit()
 
-# ensure NA responses are counted as NA
-fisher_data[q14] <- lapply(fisher_data[q14], function(x) ifelse(x == 9, NA, x))
+# list how many respondents are actually usable
+nrow(vif_data)
 
-# Set up predictor variables and dependent variable
-vif_vars <- c("inter_zoning", q14)
-
-# Get rid of NA values
-vif_data <- as.data.frame(fisher_data[, vif_vars]) |> na.omit()
-nrow(vif_data)   # list how many respondents are actually usable
-
-# Calculate VIF (> 5 is questionable, > 10 is a problem)
-m_vif <- ols(inter_zoning ~ GBRbp_advocacyfish + GBRbp_rubbish + GBRbp_app + GBRbp_report,
+# Run test (dependent variable first, then predictors)
+m_vif <- ols(inter_zoning ~ educ + GBRbp_advocacyfish + GBRbp_rubbish +
+               GBRbp_app + GBRbp_report,
              data = vif_data)
 
-rms::vif(m_vif)  #list VIF values
+rms::vif(m_vif)   
 ```
 
 ### Test the proportional odds assumption
