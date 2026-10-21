@@ -50,7 +50,7 @@ fisher_data <- raw_data |>
 
 ```{r}
 # Option A: Set up variables as factors 
-dat <- fisher_data %>%
+data <- fisher_data %>%
   transmute(
     inter_zoning = as.integer(inter_zoning),
     educ = as.integer(educ)
@@ -61,12 +61,12 @@ dat <- fisher_data %>%
     educ = factor(educ, ordered = FALSE))
 
 # Check response distribution
-table(dat$inter_zoning)
+table(data$inter_zoning)
 ```
 
 ```{r}
 # Option B: Set up variables as numeric
-dat <- fisher_data %>%
+data <- fisher_data %>%
   transmute(
     inter_zoning = as.integer(inter_zoning),
     educ = as.integer(educ)
@@ -79,19 +79,19 @@ dat <- fisher_data %>%
 fisher_data <- fisher_data %>% mutate(educ = as.numeric(as.character(educ)))
 
 # Check response distribution
-table(dat$inter_zoning)
+table(data$inter_zoning)
 ```
 
 # 2. Ordered logit model (proportional odds model)
 
 ```{r}
 # Model 1: education as a single predictor
-m_ord <- clm(inter_zoning ~ educ, data = dat, link = "logit")
+m_ord <- clm(inter_zoning ~ educ, data = data, link = "logit")
 
 summary(m_ord)
 
 # To examine multiple predictors:
-# m_ord_full <- clm(inter_zoning ~ educ + age_group + gender, data = dat, link = "logit")
+# m_ord_full <- clm(inter_zoning ~ educ + age_group + gender, data = data, link = "logit")
 # summary(m_ord_full)
 ```
 
@@ -106,7 +106,7 @@ nominal_test(m_ord)
 
 ```{r}
 # Option B: Brant test from MASS::polr
-m_p <- MASS::polr(inter_zoning ~ educ, data = dat, Hess = TRUE)
+m_p <- MASS::polr(inter_zoning ~ educ, data = data, Hess = TRUE)
 brant(m_p)
 
 # Note:
@@ -119,7 +119,7 @@ brant(m_p)
 
 ```{r}
 # Null model: intercept only
-m_null <- clm(inter_zoning ~ 1, data = dat, link = "logit")
+m_null <- clm(inter_zoning ~ 1, data = data, link = "logit")
 
 # Log-likelihoods
 ll_null <- as.numeric(logLik(m_null))
@@ -141,9 +141,6 @@ data.frame(
   df = df_diff,
   p_value = p_value
 )
-
-# Alternative: compare nested models with anova() if supported
-# anova(m_null, m_ord)
 ```
 
 # 5. AIC/BIC for model comparison
@@ -161,24 +158,37 @@ BIC(m_null)
 # - BIC is more useful for large sample sizes, but penalizes having more parameters. Focused on theory and explanation
 ```
 
-# 6. If proportional odds assumption is violated: Generalized ordered logit model
+# 6. If proportional odds assumption is violated: Generalized ordered logit model 
+(allows the effect of a predictor to vary across the cutpoints/thresholds (i.e., non-parallel slopes))
 
 ```{r}
-# The generalized ordered logit model allows the effect of a predictor
-# to vary across the cutpoints (i.e., non-parallel slopes).
-# Here, educ is allowed to have a different effect across thresholds:
-m_gen <- clm(
-  inter_zoning ~ educ,
-  data = dat,
-  link = "logit",
-  nominal = ~ educ
-)
-
-summary(m_gen)
+# For factor type predictors (run earlier code chunks)
+  m_gen <- clm(inter_zoning ~ educ, data = dat, link = "logit", nominal = ~ educ)
+  summary(m_gen)
+  
+# If multiple predictors:
+# m_gen_full <- 
+# clm(inter_zoning ~ educ + age_group + gender, data = dat, link = "logit",
+# nominal = ~ educ + age_group)
+# summary(m_gen_full)
 ```
 
 ```{r}
-# Test whether the unrestricted (generalized) model is significantly better:
+# For numeric type predictors (run earlier code chunks)
+m_gen <- clm(inter_zoning ~ educ, data = data, link = "logit")
+summary(m_gen)
+
+# If multiple predictors:
+# m_gen_full <- clm(inter_zoning ~ educ + age_group + gender, data = dat, link = "logit")
+# summary(m_gen_full)
+
+
+```
+
+# 7. Test assumptions & Compare proportional odds model to generalized model
+
+```{r}
+# Test whether the unrestricted (generalized) model is significantly better w/LR test:
 ll_ord <- as.numeric(logLik(m_ord))
 ll_gen <- as.numeric(logLik(m_gen))
 
@@ -193,53 +203,19 @@ data.frame(
   p_value = p_gen
 )
 
-# An additional assumption check for a generalized model:
 # nominal_test() tells you whether the non-parallel slope terms are needed
 nominal_test(m_gen)
 
-# If multiple predictors:
-# m_gen_full <- clm(inter_zoning ~ educ + age_group + gender,
-#                  data = dat, link = "logit",
-#                  nominal = ~ educ + age_group)
+
+# Compare to AIC and BIC values in section 5
+AIC(m_ord_num)
+BIC(m_ord_num)
 
 # summary(m_gen_full)
 # nominal_test(m_gen_full)
 ```
 
-# 7. Alternative model for numeric data rather than categorical
 
-```{r}
-# If education may need to be classified as numeric to avoid producing results for each educ level:
-dat_num <- fisher_data %>%
-  transmute(
-    inter_zoning = as.integer(inter_zoning),
-    educ_num = as.numeric(as.character(educ))
-  ) %>%
-  filter(!is.na(inter_zoning), !is.na(educ_num)) %>%
-  mutate(inter_zoning = factor(inter_zoning, ordered = TRUE, levels = 1:10))
 
-m_ord_num <- clm(inter_zoning ~ educ_num, data = dat_num, link = "logit")
 
-summary(m_ord_num)
-
-nominal_test(m_ord_num)
-
-# LR test vs null
-m_null_num <- clm(inter_zoning ~ 1, data = dat_num, link = "logit")
-ll_null_num <- as.numeric(logLik(m_null_num))
-ll_ord_num <- as.numeric(logLik(m_ord_num))
-lr_num <- 2 * (ll_ord_num - ll_null_num)
-df_num <- attr(logLik(m_ord_num), "df") - attr(logLik(m_null_num), "df")
-p_num <- pchisq(lr_num, df = df_num, lower.tail = FALSE)
-
-data.frame(
-  Model = "Ordered logit with numeric education",
-  LR = lr_num,
-  df = df_num,
-  p_value = p_num
-)
-
-AIC(m_ord_num)
-BIC(m_ord_num)
-```
 
