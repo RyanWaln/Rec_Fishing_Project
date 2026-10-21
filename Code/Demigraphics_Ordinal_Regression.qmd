@@ -1,0 +1,233 @@
+---
+title: "MPAs_by_educ_Ordinal_Regression"
+format: html
+editor: visual
+---
+
+# Introduction
+
+This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between support for MPAs against responses to other survey questions and demographics
+Ordinal regression workflow for survey response data
+Outcome: ordered survey item (e.g., 1:10)
+Predictor(s): education or demographics
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r}
+# Packages
+library(tidyverse)
+library(readxl)
+library(ordinal)   # clm() for models and nominal_test()
+library(MASS)      # polr() for Brant test
+library(brant)     # Brant test for proportional odds
+library(car)       # Model comparisons and diagnostics
+library(emmeans)   # Marginal means if needed
+```
+
+# 1. Prepare data
+```{r}
+# Import Raw Data sheet
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+
+#glimpse(raw_data)
+```
+
+```{r}
+# Filter Data for only Rec Fishers
+fisher_data <- raw_data |>
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y")
+```
+
+```{r}
+# Option A: Set up predictor variables as factors 
+data <- fisher_data %>%
+  transmute(
+    inter_zoning = as.integer(inter_zoning),
+    educ = as.integer(educ)
+  ) %>%
+  filter(!is.na(inter_zoning), !is.na(educ)) %>%
+  mutate(
+    inter_zoning = factor(inter_zoning, ordered = TRUE, levels = 1:10),
+    educ = factor(educ, ordered = FALSE))
+
+# Check response distribution
+table(data$inter_zoning)
+```
+
+```{r}
+# Option B: Set up predictor variables as numeric
+data <- fisher_data %>%
+  transmute(
+    inter_zoning = as.integer(inter_zoning),
+    educ = as.integer(educ)
+  ) %>%
+  filter(!is.na(inter_zoning), !is.na(educ)) %>%
+  mutate(
+    inter_zoning = factor(inter_zoning, ordered = TRUE, levels = 1:10),
+    educ = as.numeric(as.character(educ)))
+
+fisher_data <- fisher_data %>% mutate(educ = as.numeric(as.character(educ)))
+
+# Check response distribution
+table(data$inter_zoning)
+```
+
+# 2. Ordered logit model (proportional odds model)
+
+```{r}
+# Model 1: education as a single predictor
+m_ord <- clm(inter_zoning ~ educ, data = data, link = "logit")
+summary(m_ord)
+
+# To examine multiple predictors:
+#m_ord_full <- clm(inter_zoning ~ educ + age_group + gender, data = data, link = "logit")
+#summary(m_ord_full)
+```
+
+# 3. Check proportional odds / parallel slopes assumption
+```{r}
+# Option A: nominal_test() from ordinal package
+# This is the standard check for parallel slopes in clm()
+nominal_test(m_ord)
+
+# If it is significant, the proportional odds assumption is likely violated.
+```
+
+```{r}
+# Option B: Brant test from MASS::polr
+m_p <- MASS::polr(inter_zoning ~ educ, data = data, Hess = TRUE)
+brant(m_p)
+
+# Note:
+# - If using clm(), the nominal_test() is usually the better direct check.
+# - If using polr(), use brant()
+```
+
+
+# 4. LR test for overall model significance
+
+```{r}
+# Null model: intercept only
+m_null <- clm(inter_zoning ~ 1, data = data, link = "logit")
+
+# Log-likelihoods
+ll_null <- as.numeric(logLik(m_null))
+ll_model <- as.numeric(logLik(m_ord))
+
+# LR statistic
+lr_stat <- 2 * (ll_model - ll_null)
+
+# Degrees of freedom difference
+df_diff <- attr(logLik(m_ord), "df") - attr(logLik(m_null), "df")
+
+# p-value
+p_value <- pchisq(lr_stat, df = df_diff, lower.tail = FALSE)
+
+# Report (if significant the model fits the data better than the null hypothesis)
+data.frame(
+  Model = "Ordered logit vs intercept only",
+  LR = lr_stat,
+  df = df_diff,
+  p_value = p_value
+)
+```
+
+# 5. AIC/BIC for model comparison
+
+```{r}
+AIC(m_ord)
+BIC(m_ord)
+
+# compare with null model
+AIC(m_null)
+BIC(m_null)
+
+# Note: Model with lower score is better 
+# - AIC is more useful for small sample sizes and complex models. Focused on prediction
+# - BIC is more useful for large sample sizes, but penalizes having more parameters. Focused on theory 
+```
+
+# 6. If proportional odds assumption is violated: Generalized ordered logit model 
+(allows the effect of a predictor to vary across the cutpoints/thresholds (i.e., non-parallel slopes))
+
+```{r}
+# For factor type predictors (run earlier code chunks to ensure predictors are factors)
+  m_gen <- clm(inter_zoning ~ educ, data = data, link = "logit", nominal = ~ educ)
+  summary(m_gen)
+  
+# If multiple predictors:
+# m_gen_full <- clm(inter_zoning ~ educ + age_group + gender, data = dat, link = "logit",
+# nominal = ~ educ + age_group)
+# summary(m_gen_full)
+```
+
+```{r}
+# For numeric type predictors (run earlier code chunks to ensure predictors are numerical)
+m_gen <- clm(inter_zoning ~ educ, data = data, link = "logit", nominal = ~ educ)
+summary(m_gen)
+
+# If multiple predictors:
+# m_gen_full <- clm(inter_zoning ~ educ + age_group + gender, data = dat, link = "logit")
+# summary(m_gen_full)
+```
+
+# 7. Compare proportional odds model to generalized model
+
+```{r}
+# Test whether the unrestricted (generalized) model is significantly better w/LR test:
+ll_ord <- as.numeric(logLik(m_ord))
+ll_gen <- as.numeric(logLik(m_gen))
+
+lr_gen <- 2 * (ll_gen - ll_ord)
+df_gen <- attr(logLik(m_gen), "df") - attr(logLik(m_ord), "df")
+p_gen <- pchisq(lr_gen, df = df_gen, lower.tail = FALSE)
+
+data.frame(
+  Model = "Generalized ordered logit vs ordered logit",
+  LR = lr_gen,
+  df = df_gen,
+  p_value = p_gen
+)
+```
+
+# 8. Test assumptions 
+
+```{r}
+# Use LR test to compare to null model:
+ll_null <- as.numeric(logLik(m_null))
+ll_gen <- as.numeric(logLik(m_gen))
+
+lr_gen <- 2 * (ll_gen - ll_null)
+df_gen <- attr(logLik(m_gen), "df") - attr(logLik(m_null), "df")
+p_gen <- pchisq(lr_gen, df = df_gen, lower.tail = FALSE)
+
+data.frame(
+  Model = "Generalized ordered logit vs ordered logit",
+  LR = lr_gen,
+  df = df_gen,
+  p_value = p_gen
+)
+```
+
+```{r}
+# nominal_test() to determine if non-parallel slope terms are needed
+nominal_test(m_gen)
+
+# Compare AIC and BIC values
+AIC(m_gen)
+BIC(m_gen)
+AIC(m_null)
+BIC(m_null)
+```
+
+
