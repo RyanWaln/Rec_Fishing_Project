@@ -25,11 +25,11 @@ objects()
 # Packages
 library(tidyverse)
 library(readxl)
-library(ordinal)   # clm(), nominal_test()
-library(MASS)      # polr()
-library(brant)     # Brant test
-library(car)       # diagnostics / model comparisons
-library(emmeans)   # optional marginal means
+library(ordinal)   # clm() for models and nominal_test()
+library(MASS)      # polr() for Brant test
+library(brant)     # Brant test for proportional odds
+library(car)       # Model comparisons and diagnostics
+library(emmeans)   # Marginal means if needed
 ```
 
 # 1. Prepare data
@@ -49,19 +49,21 @@ fisher_data <- raw_data |>
 # 2. Choose outcome and predictor questions
 
 ```{r}
-# Example: specify a single pair of questions
+# Specify a single pair of questions
 outcome_var <- "inter_zoning"
-predictor_var <- "GBRbp_advocacyfish"
+predictor_var <- "GBRbp_report"
+
+# Option A: treat predictor as numeric
 
 # Keep only necessary columns
-data <- survey_data %>%
+data <- fisher_data %>%
   transmute(
     outcome = as.numeric(as.character(.data[[outcome_var]])),
     predictor = as.numeric(as.character(.data[[predictor_var]]))
   ) %>%
   filter(!is.na(outcome), !is.na(predictor)) %>%
   mutate(
-    outcome = factor(outcome, ordered = TRUE, levels = 1:10),
+    outcome = factor(outcome, ordered = TRUE, levels = 1:10),  # Note: outcome is best treated as factor
     predictor = as.numeric(predictor)
   )
 
@@ -71,8 +73,8 @@ table(data$predictor)
 ```
 
 ```{r}
-# Optional: if you want to treat the predictor as a factor instead of numeric:
-data <- survey_data %>%
+# Option B: treat predictor as factor
+data <- fisher_data %>%
   transmute(
     outcome = as.numeric(as.character(.data[[outcome_var]])),
     predictor = as.numeric(as.character(.data[[predictor_var]]))
@@ -80,9 +82,10 @@ data <- survey_data %>%
   filter(!is.na(outcome), !is.na(predictor)) %>%
   mutate(
     outcome = factor(outcome, ordered = TRUE, levels = 1:10),
-    predictor = factor(predictor, ordered = FALSE)
+    predictor = factor(predictor, ordered = FALSE)   
   )
 
+table(data$outcome)
 table(data$predictor)
 ```
 
@@ -147,39 +150,18 @@ AIC(m_null)
 BIC(m_null)
 ```
 
-# 7. Predicted category distribution
-
-```{r}
-# Predicted probabilities for each response category
-pred_prob <- predict(m_ord, newdata = data, type = "prob")
-
-head(pred_prob)
-
-# Most likely predicted category
-pred_class <- predict(m_ord, newdata = data, type = "class")
-
-# Cross-tab of observed vs predicted
-obs_pred_tab <- table(
-  Observed = data$outcome,
-  Predicted = pred_class
-)
-
-obs_pred_tab
-
-# Proportion of predicted responses within each observed category
-round(prop.table(obs_pred_tab, margin = 1), 3)
-```
-
-# 8. If the proportional odds assumption is violated: generalized ordered logit
+# 7. If the proportional odds assumption is violated: generalized ordered logit
 
 ```{r}
 # IMPORTANT: for a generalized ordered logit, the predictor is usually best treated as a factor with a manageable number of levels.
 
+#SAME PROBELM WHERE FACTORS CREATE CONFUSING RESULTS
+
 # Create a version with predictor as factor if needed
-data_gen <- survey_data %>%
-  transmute(
-    outcome = as.numeric(as.character(.data[[outcome_var]])),
-    predictor = as.numeric(as.character(.data[[predictor_var]]))
+data_gen <- data %>%
+  mutate(
+    outcome = as.numeric(as.character(outcome)),
+    predictor = as.numeric(as.character(predictor))
   ) %>%
   filter(!is.na(outcome), !is.na(predictor)) %>%
   mutate(
@@ -193,7 +175,7 @@ table(data_gen$predictor)
 
 ```{r}
 # If some predictor categories are sparse, collapse them
-data_gen <- data_gen %>%
+data_gen <- data %>%
   mutate(
     predictor = case_when(
       predictor %in% c("1", "2") ~ "Low",
@@ -241,6 +223,8 @@ nominal_test(m_gen)
 # Compare AIC/BIC for the generalized model
 AIC(m_gen)
 BIC(m_gen)
+AIC(m_ord)
+BIC(m_ord)
 ```
 
 # 11. Run loop across multiple survey question pairs
@@ -260,7 +244,7 @@ predictor_list <- c(
 results <- tibble()
 
 for (pred in predictor_list) {
-  temp <- survey_data %>%
+  temp <- data %>%
     transmute(
       outcome = as.numeric(as.character(.data[[outcome_var]])),
       predictor = as.numeric(as.character(.data[[pred]]))
