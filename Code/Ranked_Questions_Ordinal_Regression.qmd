@@ -7,7 +7,7 @@ editor: visual
 
 # Introduction
 
-This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between responses to different ranked 1-10 questions, such as support for MPAs, against wether the respondent would be likely to report suspicious activity
+This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between responses to different ranked 1-10 questions, such as support for MPAs, against whether the respondent would be likely to report suspicious activity
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
@@ -21,3 +21,302 @@ rm(list=ls())
 objects()
 ```
 
+```{r}
+# Packages
+library(tidyverse)
+library(readxl)
+library(ordinal)   # clm(), nominal_test()
+library(MASS)      # polr()
+library(brant)     # Brant test
+library(car)       # diagnostics / model comparisons
+library(emmeans)   # optional marginal means
+```
+
+# 1. Prepare data
+```{r}
+# Import Raw Data sheet
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+
+#glimpse(raw_data)
+```
+
+```{r}
+# Filter Data for only Rec Fishers
+fisher_data <- raw_data |>
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y")
+```
+
+# 2. Choose outcome and predictor questions
+
+```{r}
+# Example: specify a single pair of questions
+outcome_var <- "inter_zoning"
+predictor_var <- "GBRbp_advocacyfish"
+
+# Keep only necessary columns
+data <- survey_data %>%
+  transmute(
+    outcome = as.numeric(as.character(.data[[outcome_var]])),
+    predictor = as.numeric(as.character(.data[[predictor_var]]))
+  ) %>%
+  filter(!is.na(outcome), !is.na(predictor)) %>%
+  mutate(
+    outcome = factor(outcome, ordered = TRUE, levels = 1:10),
+    predictor = as.numeric(predictor)
+  )
+
+# Check response distribution
+table(data$outcome)
+table(data$predictor)
+```
+
+```{r}
+# Optional: if you want to treat the predictor as a factor instead of numeric:
+data <- survey_data %>%
+  transmute(
+    outcome = as.numeric(as.character(.data[[outcome_var]])),
+    predictor = as.numeric(as.character(.data[[predictor_var]]))
+  ) %>%
+  filter(!is.na(outcome), !is.na(predictor)) %>%
+  mutate(
+    outcome = factor(outcome, ordered = TRUE, levels = 1:10),
+    predictor = factor(predictor, ordered = FALSE)
+  )
+
+table(data$predictor)
+```
+
+# 3. Fit ordered logit model
+
+```{r}
+# Ordered logit (set predictor to factor or numerical with chunks in section 2)
+m_ord <- clm(outcome ~ predictor, data = data, link = "logit")
+summary(m_ord)
+```
+
+# 4. Check proportional odds / parallel slopes assumption
+
+```{r}
+# Option A: nominal_test() from ordinal package
+nominal_test(m_ord)
+
+# If p < 0.05, the proportional odds assumption is likely violated
+```
+
+```{r}
+# Option B: Brant test using MASS::polr
+m_p <- MASS::polr(outcome ~ predictor, data = data, Hess = TRUE)
+brant(m_p)
+```
+
+# 5. LR test for overall model significance
+
+```{r}
+# Null model
+m_null <- clm(outcome ~ 1, data = data, link = "logit")
+
+# Log-likelihoods
+ll_null <- as.numeric(logLik(m_null))
+ll_model <- as.numeric(logLik(m_ord))
+
+# LR statistic
+lr_stat <- 2 * (ll_model - ll_null)
+
+# DF difference
+df_diff <- attr(logLik(m_ord), "df") - attr(logLik(m_null), "df")
+
+# p-value
+p_value <- pchisq(lr_stat, df = df_diff, lower.tail = FALSE)
+
+# Report
+data.frame(
+  Model = "Ordered logit model vs intercept-only",
+  LR = lr_stat,
+  df = df_diff,
+  p_value = p_value
+)
+```
+
+# 6. AIC and BIC
+
+```{r}
+AIC(m_ord)
+BIC(m_ord)
+
+AIC(m_null)
+BIC(m_null)
+```
+
+# 7. Predicted category distribution
+
+```{r}
+# Predicted probabilities for each response category
+pred_prob <- predict(m_ord, newdata = data, type = "prob")
+
+head(pred_prob)
+
+# Most likely predicted category
+pred_class <- predict(m_ord, newdata = data, type = "class")
+
+# Cross-tab of observed vs predicted
+obs_pred_tab <- table(
+  Observed = data$outcome,
+  Predicted = pred_class
+)
+
+obs_pred_tab
+
+# Proportion of predicted responses within each observed category
+round(prop.table(obs_pred_tab, margin = 1), 3)
+```
+
+# 8. If the proportional odds assumption is violated: generalized ordered logit
+
+```{r}
+# IMPORTANT: for a generalized ordered logit, the predictor is usually best treated as a factor with a manageable number of levels.
+
+# Create a version with predictor as factor if needed
+data_gen <- survey_data %>%
+  transmute(
+    outcome = as.numeric(as.character(.data[[outcome_var]])),
+    predictor = as.numeric(as.character(.data[[predictor_var]]))
+  ) %>%
+  filter(!is.na(outcome), !is.na(predictor)) %>%
+  mutate(
+    outcome = factor(outcome, ordered = TRUE, levels = 1:10),
+    predictor = factor(predictor, ordered = FALSE)
+  )
+
+# Check counts by predictor category
+table(data_gen$predictor)
+```
+
+```{r}
+# If some predictor categories are sparse, collapse them
+data_gen <- data_gen %>%
+  mutate(
+    predictor = case_when(
+      predictor %in% c("1", "2") ~ "Low",
+      predictor %in% c("3", "4", "5") ~ "Medium",
+      predictor %in% c("6", "7", "8") ~ "High",
+      predictor %in% c("9", "10") ~ "Very High",
+      TRUE ~ NA_character_
+    ) %>% factor(levels = c("Low", "Medium", "High", "Very High"))
+  ) %>%
+  filter(!is.na(predictor))
+
+table(data_gen$predictor)
+```
+
+```{r}
+# Fit the model
+m_gen <- clm(outcome ~ predictor, data = data_gen, link = "logit", nominal = ~ predictor)
+summary(m_gen)
+```
+
+# 9. Compare ordered logit to generalized ordered logit
+
+```{r}
+ll_ord <- as.numeric(logLik(m_ord))
+ll_gen <- as.numeric(logLik(m_gen))
+
+lr_gen <- 2 * (ll_gen - ll_ord)
+df_gen <- attr(logLik(m_gen), "df") - attr(logLik(m_ord), "df")
+p_gen <- pchisq(lr_gen, df = df_gen, lower.tail = FALSE)
+
+data.frame(
+  Model = "Generalized ordered logit vs ordered logit",
+  LR = lr_gen,
+  df = df_gen,
+  p_value = p_gen
+)
+```
+
+# 10. Assumption checks for generalized model
+
+```{r}
+# Check whether non-parallel slopes are needed
+nominal_test(m_gen)
+
+# Compare AIC/BIC for the generalized model
+AIC(m_gen)
+BIC(m_gen)
+```
+
+# 11. Run loop across multiple survey question pairs
+
+```{r}
+# List of survey variables to test as predictors
+predictor_list <- c(
+  "GBRbp_advocacyfish",
+  "GBRbp_rubbish",
+  "GBRbp_app",
+  "GBRbp_report",
+  "reef_health",
+  "trust_managers"
+)
+
+# Create a results table
+results <- tibble()
+
+for (pred in predictor_list) {
+  temp <- survey_data %>%
+    transmute(
+      outcome = as.numeric(as.character(.data[[outcome_var]])),
+      predictor = as.numeric(as.character(.data[[pred]]))
+    ) %>%
+    filter(!is.na(outcome), !is.na(predictor)) %>%
+    mutate(
+      outcome = factor(outcome, ordered = TRUE, levels = 1:10),
+      predictor = as.numeric(predictor)
+    )
+  
+  # Fit model
+  m <- clm(outcome ~ predictor, data = temp, link = "logit")
+  
+  # Null model
+  m0 <- clm(outcome ~ 1, data = temp, link = "logit")
+  
+  # LR test
+  ll0 <- as.numeric(logLik(m0))
+  llm <- as.numeric(logLik(m))
+  lr <- 2 * (llm - ll0)
+  df <- attr(logLik(m), "df") - attr(logLik(m0), "df")
+  p <- pchisq(lr, df = df, lower.tail = FALSE)
+  
+  # Parallel slopes check
+  p_parallel <- tryCatch(
+    nominal_test(m)$p.value[1],
+    error = function(e) NA_real_
+  )
+  
+  # Save results
+  results <- bind_rows(
+    results,
+    tibble(
+      outcome = outcome_var,
+      predictor = pred,
+      LR = lr,
+      df = df,
+      p_value = p,
+      parallel_slopes_p = p_parallel,
+      AIC = AIC(m),
+      BIC = BIC(m)
+    )
+  )
+}
+
+results
+```
+
+# 12. Interpretation
+
+For each question pair:
+
+- If the ordered logit model is significant, then the predictor question has a statistically significant    association with the outcome question.
+
+- If the proportional odds test is significant, then the standard ordered logit may be inappropriate and a   generalized ordered logit should be considered.
+
+- AIC/BIC help compare model fit and complexity.
+
+- Predicted category distribution helps assess whether the model is doing a reasonable job at predicting    likely response levels.

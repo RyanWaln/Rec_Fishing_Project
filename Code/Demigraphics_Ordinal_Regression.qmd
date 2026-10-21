@@ -1,15 +1,14 @@
 ---
 title: "MPAs_by_educ_Ordinal_Regression"
+author: "Ryan Waln"
 format: html
 editor: visual
 ---
 
 # Introduction
 
-This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between responses to ranked 1-10 questions, such as support for MPAs, against demographic information on the respondants such as education level
+This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between responses to ranked 1-10 questions, such as support for MPAs, against demographic information on the respondents such as education level
 
-Outcome: ordered survey item (e.g., 1:10)
-Predictor(s): education 
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
