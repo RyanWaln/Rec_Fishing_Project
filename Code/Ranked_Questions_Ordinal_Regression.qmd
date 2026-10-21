@@ -33,6 +33,7 @@ library(emmeans)   # Marginal means if needed
 ```
 
 # 1. Prepare data
+
 ```{r}
 # Import Raw Data sheet
 raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
@@ -49,10 +50,12 @@ fisher_data <- raw_data |>
 # 2. Choose outcome and predictor questions
 
 ```{r}
-# Specify a single pair of questions
+# Specify a single pair of questions  (add in code to filter 9s as NA values for q14)
 outcome_var <- "inter_zoning"
 predictor_var <- "GBRbp_report"
+```
 
+```{r}
 # Option A: treat predictor as numeric
 
 # Keep only necessary columns
@@ -297,10 +300,10 @@ results
 
 For each question pair:
 
-- If the ordered logit model is significant, then the predictor question has a statistically significant    association with the outcome question.
+- If the ordered logit model is significant, then the predictor question has a statistically significant association with the outcome question.
 
-- If the proportional odds test is significant, then the standard ordered logit may be inappropriate and a   generalized ordered logit should be considered.
+- If the proportional odds test is significant, then the standard ordered logit may be inappropriate and a generalized ordered logit should be considered.
 
 - AIC/BIC help compare model fit and complexity.
 
-- Predicted category distribution helps assess whether the model is doing a reasonable job at predicting    likely response levels.
+- Predicted category distribution helps assess whether the model is doing a reasonable job at predicting likely response levels.
