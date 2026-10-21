@@ -6,10 +6,10 @@ editor: visual
 
 # Introduction
 
-This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between support for MPAs against responses to other survey questions and demographics
-Ordinal regression workflow for survey response data
+This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between responses to ranked 1-10 questions, such as support for MPAs, against demographic information on the respondants such as education level
+
 Outcome: ordered survey item (e.g., 1:10)
-Predictor(s): education or demographics
+Predictor(s): education 
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping

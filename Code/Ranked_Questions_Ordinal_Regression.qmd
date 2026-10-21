@@ -1,0 +1,23 @@
+---
+title: "Ranked_Questions_Ordinal_Regression"
+author: "Ryan Waln"
+format: html
+editor: visual
+---
+
+# Introduction
+
+This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between responses to different ranked 1-10 questions, such as support for MPAs, against wether the respondent would be likely to report suspicious activity
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
