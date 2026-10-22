@@ -6,10 +6,7 @@ editor: visual
 
 # Introduction
 
-This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between support for MPAs against responses to other survey questions and demographics
-Ordinal regression workflow for survey response data
-Outcome: ordered survey item (e.g., 1:10)
-Predictor(s): education or demographics
+This file is used to conduct ordinal regression analysis on the survey responses of Recreational fishers from the SELTMP in 2025. Regressions test trends between support for MPAs against responses to other survey questions and demographics Ordinal regression workflow for survey response data Outcome: ordered survey item (e.g., 1:10) Predictor(s): education or demographics
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
@@ -35,6 +32,7 @@ library(emmeans)   # Marginal means if needed
 ```
 
 # 1. Prepare data
+
 ```{r}
 # Import Raw Data sheet
 raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
@@ -44,8 +42,8 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
 
 ```{r}
 # Filter Data for only Rec Fishers
-fisher_data <- raw_data |>
-  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y")
+fisher_data <- raw_data |> filter(Are_you_a_Rec_Fisher == 1)
+nrow(fisher_data)
 ```
 
 ```{r}
@@ -95,6 +93,7 @@ summary(m_ord)
 ```
 
 # 3. Check proportional odds / parallel slopes assumption
+
 ```{r}
 # Option A: nominal_test() from ordinal package
 # This is the standard check for parallel slopes in clm()
@@ -112,7 +111,6 @@ brant(m_p)
 # - If using clm(), the nominal_test() is usually the better direct check.
 # - If using polr(), use brant()
 ```
-
 
 # 4. LR test for overall model significance
 
@@ -157,7 +155,8 @@ BIC(m_null)
 # - BIC is more useful for large sample sizes, but penalizes having more parameters. Focused on theory 
 ```
 
-# 6. If proportional odds assumption is violated: Generalized ordered logit model 
+# 6. If proportional odds assumption is violated: Generalized ordered logit model
+
 (allows the effect of a predictor to vary across the cutpoints/thresholds (i.e., non-parallel slopes))
 
 ```{r}
@@ -200,7 +199,7 @@ data.frame(
 )
 ```
 
-# 8. Test assumptions 
+# 8. Test assumptions
 
 ```{r}
 # Use LR test to compare to null model:
@@ -229,5 +228,3 @@ BIC(m_gen)
 AIC(m_null)
 BIC(m_null)
 ```
-
-
