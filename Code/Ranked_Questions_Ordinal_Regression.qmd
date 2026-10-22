@@ -36,7 +36,7 @@ library(emmeans)   # Marginal means if needed
 
 ```{r}
 # Import Raw Data sheet
-raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Oct-22-2026.xlsx"), sheet = "Raw_Data")
 
 #glimpse(raw_data)
 ```
@@ -44,7 +44,7 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
 ```{r}
 # Filter Data for only Rec Fishers
 fisher_data <- raw_data |>
-  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y")
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "1")
 ```
 
 # 2. Choose outcome and predictor questions
