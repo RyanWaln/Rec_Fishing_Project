@@ -158,7 +158,7 @@ BIC(m_null)
 ```{r}
 # IMPORTANT: for a generalized ordered logit, the predictor is usually best treated as a factor with a manageable number of levels.
 
-#SAME PROBELM WHERE FACTORS CREATE CONFUSING RESULTS
+#SAME PROBELM WHERE FACTORS CREATE CONFUSING RESULTS 
 
 # Create a version with predictor as factor if needed
 data_gen <- data %>%
@@ -177,7 +177,8 @@ table(data_gen$predictor)
 ```
 
 ```{r}
-# If some predictor categories are sparse, collapse them
+# If some predictor categories are sparse, collapse them (use if factor preditor has too many levels)
+# COME BACK TO LATER TO FIX FACTOR TYPE PREDICTORS
 data_gen <- data %>%
   mutate(
     predictor = case_when(
@@ -198,6 +199,10 @@ table(data_gen$predictor)
 m_gen <- clm(outcome ~ predictor, data = data_gen, link = "logit", nominal = ~ predictor)
 summary(m_gen)
 ```
+```{r}
+# CREATE CHUNCKS LATER TO SET UP NUMERICAL PREDICTORS AND MODEL 
+```
+
 
 # 9. Compare ordered logit to generalized ordered logit
 
@@ -233,6 +238,8 @@ BIC(m_ord)
 # 11. Run loop across multiple survey question pairs
 
 ```{r}
+#FIX LOOP LATER TO SAVE TIME
+
 # List of survey variables to test as predictors
 predictor_list <- c(
   "GBRbp_advocacyfish",

@@ -36,7 +36,7 @@ library(emmeans)   # Marginal means if needed
 
 ```{r}
 # Import Raw Data sheet
-raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Sept-22-2026.xlsx"), sheet = "Raw_Data")
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Oct-22-2026.xlsx"), sheet = "Raw_Data")
 
 #glimpse(raw_data)
 ```
@@ -161,7 +161,18 @@ BIC(m_null)
 (allows the effect of a predictor to vary across the cutpoints/thresholds (i.e., non-parallel slopes))
 
 ```{r}
-# Note: run earlier code chunks to ensure predictors are factors or numerical
+# Option A: run earlier code chunks to ensure predictors numerical
+  m_gen <- clm(inter_zoning ~ educ, data = data, link = "logit")
+  summary(m_gen)
+  
+# If multiple predictors:
+# m_gen_full <- clm(inter_zoning ~ educ + age_group + gender, data = dat, link = "logit",
+# nominal = ~ educ + age_group)
+# summary(m_gen_full)
+```
+```{r}
+# Option B: run earlier code chunks to ensure predictors are factors 
+# (WILL HAVE TO FIX THIS LATER BY COLLAPSING DATA INTO FEWER CATEGORIES)
   m_gen <- clm(inter_zoning ~ educ, data = data, link = "logit", nominal = ~ educ)
   summary(m_gen)
   
@@ -170,7 +181,6 @@ BIC(m_null)
 # nominal = ~ educ + age_group)
 # summary(m_gen_full)
 ```
-
 
 # 7. Compare proportional odds model to generalized model
 
