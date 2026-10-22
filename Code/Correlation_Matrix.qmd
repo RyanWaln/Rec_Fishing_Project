@@ -271,9 +271,8 @@ writexl::write_xlsx(
 
 - Pearson vs Spearman: the items are ordinal rating scales (1-5 or 1-10) with many tied values and ceiling effects, so Spearman is the more defensible measure. Pearson is included for comparison; large differences between the two panels suggest skewed or non-linear relationships.
 
-- Missing data: each pair uses every respondent who answered both items (pairwise deletion), so the sample size varies between pairs. The `n` matrices in the Excel file show this. 
+- Missing data: each pair uses every respondent who answered both items (pairwise deletion), so the sample size varies between pairs. The `n` matrices in the Excel file show this.
 
 - Multiple testing: with roughly 4,000 pairs per method, about 200 would be "significant" at p \< 0.05 by chance alone. Stars and filters use adjusted p-values (`adjust_method`); the raw p-values are in the Excel file.
 
 - Direction of items: some items are negatively worded (e.g. `pers_diff`, `sad`, `reef_fatigue`) and are not reverse-coded, so their correlations point in the opposite direction to what the other items suggest.
-
