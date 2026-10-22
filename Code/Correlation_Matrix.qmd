@@ -1,0 +1,48 @@
+---
+title: "Correlation_Matrix"
+author: "Ryan Waln"
+format: html
+editor: visual
+---
+
+# Introduction
+
+This file is used to conduct basic correlation analysis on recreational fishers in the 2025 SELTMP data. Pearson's and Spearman's Analysis are conducted between 
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r}
+# Packages
+library(tidyverse)
+library(readxl)
+library(ordinal)   # clm() for models and nominal_test()
+library(MASS)      # polr() for Brant test
+library(brant)     # Brant test for proportional odds
+library(car)       # Model comparisons and diagnostics
+library(emmeans)   # Marginal means if needed
+```
+
+# 1. Prepare data
+
+```{r}
+# Import Raw Data sheet
+raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Oct-22-2026.xlsx"), sheet = "Raw_Data")
+
+#glimpse(raw_data)
+```
+
+```{r}
+# Filter Data for only Rec Fishers
+fisher_data <- raw_data |>
+  filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "1")
+```
