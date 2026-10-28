@@ -7,15 +7,13 @@ editor: visual
 
 # Introduction
 
-This file is used to conduct basic correlation analysis on recreational fishers in the 2025 SELTMP data. Pearson's and Spearman's correlations are calculated as matrices between the items in Questions 14, 19, 21, 23, 35, 29, 17, 15 and 24.
+This file is used to conduct basic correlation analysis on recreational fishers in the 2025 SELTMP data. Spearman's correlations are calculated as matrices between the items in Questions 14, 19, 21, 23, 35, 29, 17, 15 and 24.
 
-The output is organised in three levels:
+The output is organised as follows:
 
-1.  Question-level overview: one summary matrix showing how strongly each question is related to every other question.
+1.  Within-question matrices: item-by-item matrices for each question
 
-2.  Within-question matrices: item-by-item matrices for each question (Pearson on the left, Spearman on the right).
-
-3.  Between-question matrices: item-by-item matrices for every pair of questions, saved as images, plus a table of the strongest correlations.
+2.  Between-question matrices: item-by-item matrices for every pair of questions, saved as images, plus a table of the strongest correlations.
 
 All matrices are also exported to one Excel file.
 
@@ -41,7 +39,6 @@ library(here)
 
 ```{r}
 # Settings
-adjust_method     <- "BH"   # multiple-testing adjustment: "BH" (false discovery rate)
 show_cross_plots  <- TRUE  # TRUE prints all 36 between-question matrices in the document
 out_dir           <- here::here("Output")
 dir.create(file.path(out_dir, "heatmaps"), recursive = TRUE, showWarnings = FALSE)
@@ -87,7 +84,7 @@ q_vars <- map(questions, \(q) {
 
 # Lookup table: variable -> question -> question text
 var_key <- tibble(variable = unlist(q_vars, use.names = FALSE),
-                  question = rep(names(q_vars), lengths(q_vars))) |>
+                 question = rep(names(q_vars), lengths(q_vars))) |>
   left_join(var_info |> select(variable = `Variable short name`, label = Label),
             by = "variable")
 
@@ -107,60 +104,56 @@ summary(colSums(!is.na(fisher_num)))
 # 2. Calculate correlation matrices
 
 ```{r}
-# Pearson / Spearman matrices: r, p, n, plus multiple-testing adjusted p-values
-run_cor <- function(data, method) {
-  res <- Hmisc::rcorr(as.matrix(data), type = method)   # pairwise deletion
-  up  <- upper.tri(res$r)
-  p_adj <- matrix(NA_real_, nrow(res$r), ncol(res$r), dimnames = dimnames(res$r))
-  p_adj[up] <- p.adjust(res$P[up], method = adjust_method)   # adjust across all unique pairs
-  p_adj[lower.tri(p_adj)] <- t(p_adj)[lower.tri(p_adj)]      # mirror to lower triangle
-  res$p_adj <- p_adj
-  res
+# Spearman matrix: r, p, n
+run_cor <- function(data) {
+  Hmisc::rcorr(as.matrix(data), type = "spearman")   # pairwise deletion
 }
 
 # Convert the matrices to one long table (one row per pair of variables)
-make_long <- function(res, method) {
+make_long <- function(res) {
   mat_long <- function(m, nm) as.data.frame(as.table(m), responseName = nm, stringsAsFactors = FALSE)
   mat_long(res$r, "r") |>
-    left_join(mat_long(res$P, "p"),         by = c("Var1", "Var2")) |>
-    left_join(mat_long(res$p_adj, "p_adj"), by = c("Var1", "Var2")) |>
-    left_join(mat_long(res$n, "n"),         by = c("Var1", "Var2")) |>
+    left_join(mat_long(res$P, "p"), by = c("Var1", "Var2")) |>
+    left_join(mat_long(res$n, "n"), by = c("Var1", "Var2")) |>
     rename(var1 = Var1, var2 = Var2) |>
-    mutate(method = method)
+    mutate(method = "Spearman")
 }
 
-results <- list(Pearson  = run_cor(fisher_num, "pearson"),
-                Spearman = run_cor(fisher_num, "spearman"))
+results <- run_cor(fisher_num)
 
 vars <- unlist(q_vars, use.names = FALSE)
 
-cor_all <- bind_rows(imap(results, make_long)) |>
-  mutate(unique_pair = match(var1, vars) < match(var2, vars)) |>    # TRUE for one copy of each pair
+cor_all <- make_long(results) |>
+  mutate(unique_pair = match(var1, vars) < match(var2, vars)) |>
   left_join(var_key |> select(var1 = variable, q1 = question), by = "var1") |>
   left_join(var_key |> select(var2 = variable, q2 = question), by = "var2")
 ```
 
 ```{r}
-# Heatmap function: Pearson (left) and Spearman (right) for any set of rows / columns
+# Heatmap function: Spearman for any set of rows / columns
 plot_cor <- function(rows, cols = rows, title = NULL, labels = TRUE) {
   d <- cor_all |>
     filter(var1 %in% rows, var2 %in% cols) |>
-    mutate(label = if_else(var1 == var2, "",
-                           paste0(sprintf("%.2f", r),
-                                  if_else(!is.na(p_adj) & p_adj < 0.05, "*", ""))),
-           r     = if_else(var1 == var2, NA_real_, r),
-           var1   = factor(var1, levels = rev(rows)),
-           var2   = factor(var2, levels = cols),
-           method = factor(method, levels = c("Pearson", "Spearman")))
+    mutate(
+      sig_star = case_when(
+        is.na(p) ~ "",
+        p < 0.01 ~ "**",
+        p < 0.05 ~ "*",
+        TRUE ~ ""
+      ),
+      label = if_else(var1 == var2, "", paste0(sprintf("%.2f", r), sig_star)),
+      r = if_else(var1 == var2, NA_real_, r),
+      var1 = factor(var1, levels = rev(rows)),
+      var2 = factor(var2, levels = cols)
+    )
 
   p <- ggplot(d, aes(var2, var1, fill = r)) +
     geom_tile(colour = "white") +
     scale_fill_gradient2(low = "#B2182B", mid = "white", high = "#2166AC",
-                         midpoint = 0, limits = c(-1, 1), na.value = "grey90", name = "r") +
-    facet_wrap(~ method) +
+                        midpoint = 0, limits = c(-1, 1), na.value = "grey90", name = "r") +
     coord_fixed() +
     labs(title = title, x = NULL, y = NULL,
-         caption = paste0("* = significant after ", adjust_method, " adjustment (adjusted p < 0.05)")) +
+         caption = "* = p < 0.05; ** = p < 0.01") +
     theme_minimal(base_size = 10) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           panel.grid = element_blank())
@@ -170,41 +163,14 @@ plot_cor <- function(rows, cols = rows, title = NULL, labels = TRUE) {
 }
 ```
 
-# 3. Question-level overview
-
-Average absolute correlation between all items of one question and all items of another (the diagonal is the average within a question). Darker = stronger overall relationship.
-
-```{r}
-#| fig-width: 12
-#| fig-height: 6
-
-q_summary <- cor_all |>
-  filter(var1 != var2) |>
-  group_by(method, q1, q2) |>
-  summarise(mean_abs_r = mean(abs(r), na.rm = TRUE), .groups = "drop") |>
-  mutate(q1 = factor(q1, levels = rev(names(q_vars))),
-         q2 = factor(q2, levels = names(q_vars)),
-         method = factor(method, levels = c("Pearson", "Spearman")))
-
-ggplot(q_summary, aes(q2, q1, fill = mean_abs_r)) +
-  geom_tile(colour = "white") +
-  geom_text(aes(label = sprintf("%.2f", mean_abs_r)), size = 3) +
-  scale_fill_gradient(low = "white", high = "#2166AC", limits = c(0, NA), name = "mean |r|") +
-  facet_wrap(~ method) +
-  coord_fixed() +
-  labs(title = "Average absolute correlation between questions", x = NULL, y = NULL) +
-  theme_minimal(base_size = 10) +
-  theme(panel.grid = element_blank())
-```
-
-# 4. Within-question matrices
+# 3. Within-question matrices
 
 ```{r}
 #| fig-width: 13
 #| fig-height: 7
 
 for (q in names(q_vars)) {
-  p <- plot_cor(q_vars[[q]], title = paste(q, "- correlations between items"))
+  p <- plot_cor(q_vars[[q]], title = paste(q, "- Spearman correlations between items"))
   ggsave(file.path(out_dir, "heatmaps", paste0(q, "_within.png")), p,
          width = 4 + 0.8 * length(q_vars[[q]]), height = 2.5 + 0.4 * length(q_vars[[q]]),
          limitsize = FALSE)
@@ -212,7 +178,7 @@ for (q in names(q_vars)) {
 }
 ```
 
-# 5. Between-question matrices
+# 4. Between-question matrices
 
 One matrix per pair of questions (items of the first question down the side, items of the second across the top). All plots are saved to `Output/heatmaps/`; set `show_cross_plots <- TRUE` in the settings to print them here as well.
 
@@ -239,31 +205,26 @@ Top 25 item pairs from different questions, for each method, among those signifi
 
 ```{r}
 top_pairs <- cor_all |>
-  filter(unique_pair, q1 != q2, !is.na(p_adj), p_adj < 0.05) |>
-  group_by(method) |>
+  filter(unique_pair, q1 != q2, !is.na(p), p < 0.05) |>
   slice_max(abs(r), n = 25) |>
-  ungroup() |>
-  arrange(method, desc(abs(r))) |>
-  select(method, var1, q1, var2, q2, r, p_adj, n)
+  arrange(desc(abs(r))) |>
+  select(method, var1, q1, var2, q2, r, p, n)
 
 knitr::kable(top_pairs, digits = 3)
 ```
 
-# 6. Export all matrices to Excel
+# 5. Export all matrices to Excel
 
 ```{r}
 mat_sheet <- function(m) as_tibble(m, rownames = "variable")
 
 writexl::write_xlsx(
   list(Variable_key    = var_key,
-       Pearson_r       = mat_sheet(results$Pearson$r),
-       Pearson_p_adj   = mat_sheet(results$Pearson$p_adj),
-       Pearson_n       = mat_sheet(results$Pearson$n),
-       Spearman_r      = mat_sheet(results$Spearman$r),
-       Spearman_p_adj  = mat_sheet(results$Spearman$p_adj),
-       Spearman_n      = mat_sheet(results$Spearman$n),
+       Spearman_r      = mat_sheet(results$r),
+       Spearman_p      = mat_sheet(results$P),
+       Spearman_n      = mat_sheet(results$n),
        All_pairs       = cor_all |> filter(unique_pair) |>
-                           select(method, var1, q1, var2, q2, r, p, p_adj, n)),
+                           select(method, var1, q1, var2, q2, r, p, n)),
   path = file.path(out_dir, "Correlation_matrices.xlsx"))
 ```
 
