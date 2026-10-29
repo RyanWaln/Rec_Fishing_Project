@@ -56,12 +56,11 @@ raw_data <- raw_data |>
 # Histogram for encouraging responsible fishing practices
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(GBRbp_advocacyfish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(GBRbp_advocacyfish), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -105,10 +104,9 @@ raw_data <- raw_data |>
 # Histogram for reporting sightings on Eye of the Reef App
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(GBRbp_app), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(GBRbp_app), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -140,10 +138,9 @@ raw_data <- raw_data |>
 # Histogram for reporting suspicious activities to authorities
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(GBRbp_report), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(GBRbp_report), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -177,10 +174,9 @@ raw_data <- raw_data |>
 # Histogram for value of biodiversity the GBR provides
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_biodiversity), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_biodiversity), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -202,10 +198,9 @@ raw_data <- raw_data |>
 # Histogram for value of GBR existing despite no personal benefits
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_exist), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_exist), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -227,10 +222,9 @@ raw_data <- raw_data |>
 # Histogram for value of passing down traditions related to GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_bequest), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_bequest), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -252,10 +246,9 @@ raw_data <- raw_data |>
 # Histogram for value of Tourism
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_icon), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_icon), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -277,10 +270,9 @@ raw_data <- raw_data |>
 # Histogram for value of World Heritage Status
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_recognition), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_recognition), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -302,10 +294,9 @@ raw_data <- raw_data |>
 # Histogram for value of GBR providing Seafood
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_provision), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_provision), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -327,10 +318,9 @@ raw_data <- raw_data |>
 # Histogram for value of educational opportunities from GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_science), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_science), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -352,10 +342,9 @@ raw_data <- raw_data |>
 # Histogram for value of Traditional Owner Heritage
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_indigenous), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_indigenous), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -377,10 +366,9 @@ raw_data <- raw_data |>
 # Histogram for value of Maritime Heritage
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_heritage), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_heritage), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -402,10 +390,9 @@ raw_data <- raw_data |>
 # Histogram for value of GBR Spiritual/Artistic Inspiration
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_spiritual), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_spiritual), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -427,10 +414,9 @@ raw_data <- raw_data |>
 # Histogram for value of GBR supporting local economy
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_economy), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_economy), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -452,10 +438,9 @@ raw_data <- raw_data |>
 # Histogram for value of GBR providing social opportunities 
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_social), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_social), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -477,10 +462,9 @@ raw_data <- raw_data |>
 # Histogram for value of GBR Recreation
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_recreation), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_recreation), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -502,10 +486,9 @@ raw_data <- raw_data |>
 # Histogram for value of GBR providing opportunities to be in nature
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(values_ture), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(values_ture), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -553,12 +536,11 @@ raw_data <- raw_data |>
 # Histogram for rating of CoTS as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_cots), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_cots), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -607,12 +589,11 @@ raw_data <- raw_data |>
 # Histogram for rating of illegal fishing as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_fishing), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_fishing), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -659,12 +640,11 @@ raw_data <- raw_data |>
 # Histogram for rating of terrestrial runoff as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_runoff), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_runoff), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -711,12 +691,11 @@ raw_data <- raw_data |>
 # Histogram for rating of rubbish and debris as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_rubbish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_rubbish), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -763,12 +742,11 @@ raw_data <- raw_data |>
 # Histogram for rating of Climate Change as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_cc), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_cc), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -815,12 +793,11 @@ raw_data <- raw_data |>
 # Histogram for rating of Tourism as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_tourism), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_tourism), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -867,12 +844,11 @@ raw_data <- raw_data |>
 # Histogram for rating of Coastal Development as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_devt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_devt), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -919,12 +895,11 @@ raw_data <- raw_data |>
 # Histogram for rating of Ports and shipping as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_ports), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_ports), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -971,12 +946,11 @@ raw_data <- raw_data |>
 # Histogram for rating of mining as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_mining), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_mining), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -1023,12 +997,11 @@ raw_data <- raw_data |>
 # Histogram for rating of population growth as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_popn), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_popn), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -1075,12 +1048,11 @@ raw_data <- raw_data |>
 # Histogram for rating of governance as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_mgmt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_mgmt), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -1127,12 +1099,11 @@ raw_data <- raw_data |>
 # Histogram for rating of severe weather as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_weather), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_weather), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -1179,12 +1150,11 @@ raw_data <- raw_data |>
 # Histogram for rating of marine heatwaves as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_heatwaves), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_heatwaves), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -1231,12 +1201,11 @@ raw_data <- raw_data |>
 # Histogram for rating of coral bleaching as threat to GBR
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(threat_bleaching), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(threat_bleaching), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
  # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -1282,12 +1251,11 @@ raw_data <- raw_data |>
 # Histogram for Support of MPAs
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(inter_zoning), Are_you_a_Rec_Fisher == "Y") |>
   
   # Mutate data to add labels to fisher status for graphs
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   # Add loop to count sample size for each fisher status group and add to facet label
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
@@ -1323,10 +1291,9 @@ raw_data <- raw_data |>
 # Histogram for Support of Fish Closures
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(inter_fishclosures), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(inter_fishclosures), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1348,10 +1315,9 @@ raw_data <- raw_data |>
 # Histogram for Support of Increased Poaching Enforcement
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(inter_illfish), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(inter_illfish), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1369,15 +1335,13 @@ raw_data <- raw_data |>
   ) 
 ```
 
-
 ```{r}
 # Histogram for Support of Responsible In-Water Recreation
 
   # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(inter_rec), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(inter_rec), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1395,17 +1359,15 @@ raw_data <- raw_data |>
   )
 ```
 
-
 ### Question 21
 
 ```{r}
 # Histogram for Belief that most people try to reduce impacts
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(desc_norm), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(desc_norm), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1427,10 +1389,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that local areas have responsibility to reduce impact
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(shared_resp), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(shared_resp), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1452,10 +1413,9 @@ raw_data <- raw_data |>
 # Histogram for Belief in moral obligation to reduce impact
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(moral_oblig), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(moral_oblig), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1477,10 +1437,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that one can't make a personal difference in improving the GBR's health
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(pers_diff), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(pers_diff), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1502,10 +1461,9 @@ raw_data <- raw_data |>
 # Histogram for Belief in good understanding of things one can do to help the GBR
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(procedural_knowl), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(procedural_knowl), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1527,10 +1485,9 @@ raw_data <- raw_data |>
 # Histogram for claim that one would change their daily life if it helped the GBR
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(general_motivation), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(general_motivation), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1552,10 +1509,9 @@ raw_data <- raw_data |>
 # Histogram for support of current management rules on use and access to GBR
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(support_rules), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(support_rules), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1577,10 +1533,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that society has a moral obligation to protect the GBR
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(society_oblig), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(society_oblig), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1602,10 +1557,9 @@ raw_data <- raw_data |>
 # Histogram for Belief in social expectation to reduce impacts in local area
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(injunc_norm), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(injunc_norm), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1627,10 +1581,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that caring for the GBR is part of identity
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(steward_identity), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(steward_identity), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1652,10 +1605,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that actions taken to help GBR are recognized by management
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(steward_respect), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(steward_respect), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1679,10 +1631,9 @@ raw_data <- raw_data |>
 # Histogram for Understanding how GBR is Managed
 
  # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(dm_understanding), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(dm_understanding), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1704,10 +1655,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that GBR is Managed Fairly
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(dm_procfair), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(dm_procfair), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1729,10 +1679,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that GBR Management Costs are Fairly Distributed
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(dm_distfair), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(dm_distfair), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1754,10 +1703,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that GBR Management Respects all Stakeholder Groups
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(dm_equity), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(dm_equity), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1779,10 +1727,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that GBRMPA is Trustworthy
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_dm), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_dm), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1804,10 +1751,9 @@ raw_data <- raw_data |>
 # Histogram for Satisfaction in GBR Management
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(sat_mgmt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(sat_mgmt), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1829,10 +1775,9 @@ raw_data <- raw_data |>
 # Histogram for Personal Benefit from GBR Management
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(benefit_mgmt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(benefit_mgmt), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1854,10 +1799,9 @@ raw_data <- raw_data |>
 # Histogram for Belief that GBR Management is well Recognized
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(pride_mgmt), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(pride_mgmt), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1881,10 +1825,9 @@ raw_data <- raw_data |>
 # Histogram for trust in Australian Government over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_ausgov), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1906,10 +1849,9 @@ raw_data <- raw_data |>
 # Histogram for trust in The Reef Trust over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_reeftrust), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_reeftrust), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1931,10 +1873,9 @@ raw_data <- raw_data |>
 # Histogram for trust in The Queensland Government over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_qldgov), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_qldgov), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1956,10 +1897,9 @@ raw_data <- raw_data |>
 # Histogram for trust in The Queensland Reef Water Quality Program over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_rwqp), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_rwqp), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -1981,10 +1921,9 @@ raw_data <- raw_data |>
 # Histogram for trust in My local council over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_council), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_council), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2006,10 +1945,9 @@ raw_data <- raw_data |>
 # Histogram for trust in My close friends & family
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_family), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_family), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2031,10 +1969,9 @@ raw_data <- raw_data |>
 # Histogram for trust in My work colleagues
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_colleagues), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_colleagues), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2056,10 +1993,9 @@ raw_data <- raw_data |>
 # Histogram for trust in The Great Barrier Reef Marine Park Authority
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_gbrmpa), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_gbrmpa), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2081,10 +2017,9 @@ raw_data <- raw_data |>
 # Histogram for trust in Scientists 
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_science), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_science), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2106,10 +2041,9 @@ raw_data <- raw_data |>
 # Histogram for trust in NGOs
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_ausngo), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_ausngo), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2131,10 +2065,9 @@ raw_data <- raw_data |>
 # Histogram for trust in Newspaper journalists over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_paper), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_paper), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2156,10 +2089,9 @@ raw_data <- raw_data |>
 # Histogram for trust in Television news journalists over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_tv), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_tv), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2181,10 +2113,9 @@ raw_data <- raw_data |>
 # Histogram for trust in Citizen science and community groups in the GBR (e.g. Reef Check, Coral Watch) over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_citizen), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_citizen), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2206,10 +2137,9 @@ raw_data <- raw_data |>
 # Histogram for trust in Social media commentators over the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_socials), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_socials), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2233,10 +2163,9 @@ raw_data <- raw_data |>
 # Histogram for hope towards the future of the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(hope), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(hope), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2258,10 +2187,9 @@ raw_data <- raw_data |>
 # Histogram for sadness on GBR outlook
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(sad), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(sad), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2283,10 +2211,9 @@ raw_data <- raw_data |>
 # Histogram for rating of beauty of the GBR
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(aesthetics), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(aesthetics), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2308,10 +2235,9 @@ raw_data <- raw_data |>
 # Histogram for ratings of GBR health
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(GBRh_overall), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(GBRh_overall), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2333,10 +2259,9 @@ raw_data <- raw_data |>
 # Histogram for trust in science of GBR health
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(trust_reefscience), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(trust_reefscience), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
@@ -2358,10 +2283,9 @@ raw_data <- raw_data |>
 # Histogram for tiredness of GBR degradation stories
 
 # Filter NA values and sort by fisher status
-  raw_data |> filter(!is.na(reef_fatigue), Are_you_a_Rec_Fisher %in% c("Y", "N")) |>
+  raw_data |> filter(!is.na(reef_fatigue), Are_you_a_Rec_Fisher == "Y") |>
   mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
-                                        "Y" = "Recreational Fisher",
-                                        "N" = "Non-Fisher")) |>
+                                        "Y" = "Recreational Fisher")) |>
   group_by(Are_you_a_Rec_Fisher) |>
   mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
   ungroup() |>
