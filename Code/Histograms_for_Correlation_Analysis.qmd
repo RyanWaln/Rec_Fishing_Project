@@ -1819,6 +1819,152 @@ raw_data <- raw_data |>
   ) 
 ```
 
+### Question 24
+
+```{r}
+# Histogram for loving to live near GBR
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(attach_love), Are_you_a_Rec_Fisher == "Y") |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = attach_love)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label) +
+  labs(
+    title = str_wrap("We would like to know how you feel living as a resident in the GBR region, please rate your level of agreement with the following statement: I love that I live near the GBR", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for the GBR means a lot to me
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(attach_meaning), Are_you_a_Rec_Fisher == "Y") |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = attach_meaning)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label) +
+  labs(
+    title = str_wrap("We would like to know how you feel living as a resident in the GBR region, please rate your level of agreement with the following statement: The GBR means a lot to me", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for GBR is an important part of why I choose to live in the region
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(attach_GBR), Are_you_a_Rec_Fisher == "Y") |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = attach_GBR)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label) +
+  labs(
+    title = str_wrap("We would like to know how you feel living as a resident in the GBR region, please rate your level of agreement with the following statement: The GBR is an important part of why I choose to live in the region", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for living close to the GBR is important to me because of my lifestyle 
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(attach_depend), Are_you_a_Rec_Fisher == "Y") |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = attach_depend)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label) +
+  labs(
+    title = str_wrap("We would like to know how you feel living as a resident in the GBR region, please rate your level of agreement with the following statement: Living close to the GBR is important to me because of my lifestyle", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for the GBR is part of my identity
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(place_identity), Are_you_a_Rec_Fisher == "Y") |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = place_identity)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label) +
+  labs(
+    title = str_wrap("We would like to know how you feel living as a resident in the GBR region, please rate your level of agreement with the following statement: The GBR is part of my identity", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for the I feel proud that the GBR is a World Heritage Area
+
+ # Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(pride), Are_you_a_Rec_Fisher == "Y") |>
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher")) |>
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+  # Plot Data
+  ggplot(aes(x = pride)) +
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, fill = "steelblue", color = "white") +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  facet_wrap(~ group_label) +
+  labs(
+    title = str_wrap("We would like to know how you feel living as a resident in the GBR region, please rate your level of agreement with the following statement: I feel proud that the GBR is a World Heritage Area", width = 70),
+    x = "Rating (1-10)",
+    y = "Percentage of Respondents"
+  )
+```
+
 ### Question 29
 
 ```{r}
