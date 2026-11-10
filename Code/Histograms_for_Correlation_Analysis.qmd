@@ -39,6 +39,106 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
 
 # Histograms for distribution of responses
 
+### Question 8
+
+```{r}
+# Histogram for shore fishing
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(rec_fishingonshore), Are_you_a_Rec_Fisher == "Y") |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher")) |>
+  # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+ # Plot Data
+  ggplot(aes(x = rec_fishingonshore, fill = factor(rec_fishingonshore))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:7) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 6),
+    labels = c(
+      "1 = Not at all",
+      "2 = Once or twice",
+      "3 = Every few months",
+      "4 = Aproximatley monthly", 
+      "5 = Aproximatley fortnightly", 
+      "6 = Aproximatley weekly", 
+      "7 = More than once a week")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label) +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("When visiting the GBR in the past 12 months, how often did you participate in the following activity: Fishing from the shore (e.g., at a beach, jetty, creek)", width = 70),
+    x = "Responses",
+    y = "Percentage of Respondents"
+  ) 
+```
+
+```{r}
+# Histogram for boat fishing
+
+# Filter NA values and sort by fisher status
+  raw_data |> filter(!is.na(rec_fishingoffshore), Are_you_a_Rec_Fisher == "Y") |>
+  
+  # Mutate data to add labels to fisher status for graphs
+  mutate(Are_you_a_Rec_Fisher = recode(Are_you_a_Rec_Fisher,
+                                        "Y" = "Recreational Fisher")) |>
+  # Add loop to count sample size for each fisher status group and add to facet label
+  group_by(Are_you_a_Rec_Fisher) |>
+  mutate(group_label = paste0(Are_you_a_Rec_Fisher, " (n = ", n(), ")")) |>
+  ungroup() |>
+
+ # Plot Data
+  ggplot(aes(x = rec_fishingoffshore, fill = factor(rec_fishingoffshore))) +
+  
+  # Set spacing and color scheme
+  geom_histogram(aes(y = after_stat(count / sum(count) * 100)), binwidth = 1, boundary = 0.5, color = "white") +
+  
+  # Set axis breaks to match the rating scale
+  scale_x_continuous(breaks = 1:7) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  
+    
+  # Create Legend for Responses
+  scale_fill_manual(
+    name = "Rating",
+    values = rep("steelblue", 6),
+    labels = c(
+      "1 = Not at all",
+      "2 = Once or twice",
+      "3 = Every few months",
+      "4 = Aproximatley monthly", 
+      "5 = Aproximatley fortnightly", 
+      "6 = Aproximatley weekly", 
+      "7 = More than once a week")) +
+  
+# Facet wrap to separate by fisher status and set free y-axis scaling
+  facet_wrap(~ group_label) +
+  
+ # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
+  labs(
+    title = str_wrap("When visiting the GBR in the past 12 months, how often did you participate in the following activity: Fishing from the shore (e.g., at a beach, jetty, creek)", width = 70),
+    x = "Responses",
+    y = "Percentage of Respondents"
+  ) 
+```
+
 ### Question 14
 
 ```{r}

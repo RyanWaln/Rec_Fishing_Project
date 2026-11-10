@@ -273,5 +273,4 @@ writexl::write_xlsx(
 
 - Spearman's correlation is used because the question responses and fishing-frequency measures are ordinal.
 - Each item pair uses every respondent who answered both items (pairwise deletion), so the sample size varies between pairs.
-- P-values and significance stars are unadjusted. Because many item pairs are tested, some p-values below 0.05 may occur by chance.
-- A positive correlation means higher responses to a question item tend to be associated with more frequent fishing; a negative correlation means they tend to be associated with less frequent fishing. Consider each item's wording when interpreting direction.
+- A positive correlation means higher responses to a question item tend to be associated with more frequent fishing; a negative correlation means they tend to be associated with less frequent fishing.
