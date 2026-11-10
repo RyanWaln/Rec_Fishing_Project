@@ -194,7 +194,7 @@ plot_cor <- function(rows, cols = frequency_vars, title = NULL, labels = TRUE) {
       title = title,
       x = NULL,
       y = NULL,
-      caption = "* = p < 0.05; ** = p < 0.01 (unadjusted)"
+      caption = "* = p < 0.05; ** = p < 0.01"
     ) +
     theme_minimal(base_size = 10) +
     theme(
@@ -207,9 +207,7 @@ plot_cor <- function(rows, cols = frequency_vars, title = NULL, labels = TRUE) {
 }
 ```
 
-# 3. Question-by-frequency matrices
-
-One matrix per question, with question items down the side and fishing-frequency variables across the top. All plots are saved to `Output/heatmaps/`.
+# 3. Generate matrices figures
 
 ```{r}
 #| fig-width: 10
@@ -222,7 +220,7 @@ for (q in names(q_vars)) {
   )
 
   ggsave(
-    file.path(out_dir, "heatmaps", paste0(q, "_fishing_frequency.png")),
+    file.path(out_dir, "fishing_frequency", paste0(q, "_fishing_frequency.png")),
     p,
     width = 8,
     height = max(3, 2.5 + 0.4 * length(q_vars[[q]])),
