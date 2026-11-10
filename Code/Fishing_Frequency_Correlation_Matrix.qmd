@@ -76,7 +76,7 @@ q_vars <- map(questions, \(q) {
   set_names(paste0("Q", questions))
 
 # Fishing-frequency variables
-frequency_vars <- c("rec_fishingoffshore", "rec_fishingonshore")
+frequency_vars <- c("fishing_on_boat", "fishing_on_shore")
 
 # Check that the fishing-frequency variables are present in Raw_Data
 missing_frequency_vars <- setdiff(frequency_vars, names(raw_data))

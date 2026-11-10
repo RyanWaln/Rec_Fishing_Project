@@ -69,7 +69,7 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 6),
+    values = rep("steelblue", 7),
     labels = c(
       "1 = Not at all",
       "2 = Once or twice",
@@ -118,7 +118,7 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
   # Create Legend for Responses
   scale_fill_manual(
     name = "Rating",
-    values = rep("steelblue", 6),
+    values = rep("steelblue", 7),
     labels = c(
       "1 = Not at all",
       "2 = Once or twice",
@@ -133,7 +133,7 @@ raw_data <- read_excel(here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFi
   
  # Edit in Long Title for exact question wording, Axis Labels, Theme, etc
   labs(
-    title = str_wrap("When visiting the GBR in the past 12 months, how often did you participate in the following activity: Fishing from the shore (e.g., at a beach, jetty, creek)", width = 70),
+    title = str_wrap("When visiting the GBR in the past 12 months, how often did you participate in the following activity: Fishing from a boat (away from shore)", width = 70),
     x = "Responses",
     y = "Percentage of Respondents"
   ) 
