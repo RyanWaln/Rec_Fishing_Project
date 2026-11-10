@@ -15,7 +15,7 @@ The output is organised as follows:
 
 2.  Between-question matrices: item-by-item matrices for every pair of questions, saved as images, plus a table of the strongest correlations.
 
-All matrices are also exported to one Excel file.
+The output also includes a table of the strongest correlations and an Excel file containing the correlation, p-value, and sample-size matrices. 
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping

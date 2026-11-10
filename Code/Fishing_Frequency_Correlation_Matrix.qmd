@@ -1,0 +1,280 @@
+---
+title: "Fishing_Frequency_Correlation_Matrix"
+author: "Ryan Waln"
+format: html
+editor: visual
+---
+
+# Introduction
+
+This file is used to conduct basic correlation analysis on recreational fishers in the 2025 SELTMP data.
+Spearman correlation matrice between items in Question 8 (the frequency of recreational fishing) and Questions 14, 15, 17, 19, 21, 23, 24, 29, 35.  
+
+The output includes one item-by-frequency matrix for each question, a table of the strongest correlations, and an Excel file containing the correlation, p-value, and sample-size matrices. 
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+  echo = TRUE,
+  include = TRUE,
+  message = FALSE,
+  warning = FALSE
+)
+
+rm(list = ls())
+objects()
+```
+
+```{r}
+# Packages
+library(tidyverse)
+library(readxl)
+library(here)
+# Hmisc (rcorr) and writexl are called with :: so they don't mask tidyverse functions
+```
+
+```{r}
+# Settings
+show_frequency_plots <- TRUE  # TRUE prints all question-by-frequency matrices
+out_dir <- here::here("Output")
+dir.create(file.path(out_dir, "heatmaps"), recursive = TRUE, showWarnings = FALSE)
+```
+
+# 1. Prepare data
+
+```{r}
+# Import Raw Data sheet and the variable dictionary
+data_file <- here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Nov-3-2026.xlsx")
+
+raw_data <- read_excel(data_file, sheet = "Raw_Data")
+var_info <- read_excel(data_file, sheet = "Variable Information")
+
+#glimpse(raw_data)
+```
+
+```{r}
+# Filter data for only Rec Fishers
+fisher_data <- raw_data |>
+  filter(Are_you_a_Rec_Fisher == 1)
+
+nrow(fisher_data)
+```
+
+# Select variables and set all as numeric
+
+```{r}
+# Find the variables belonging to each question using the "Variable Information" sheet
+questions <- c(14, 19, 21, 23, 35, 29, 17, 15, 24)
+
+q_vars <- map(questions, \(q) {
+  var_info |>
+    filter(str_detect(Variable, paste0("^q", q, "_"))) |>
+    mutate(num = as.integer(str_extract(Variable, "\\d+$"))) |>
+    arrange(num) |>
+    pull(`Variable short name`) |>
+    intersect(names(raw_data))  # drops items that are not in Raw_Data
+}) |>
+  set_names(paste0("Q", questions))
+
+# Fishing-frequency variables
+frequency_vars <- c("rec_fishingoffshore", "rec_fishingonshore")
+
+# Check that the fishing-frequency variables are present in Raw_Data
+missing_frequency_vars <- setdiff(frequency_vars, names(raw_data))
+if (length(missing_frequency_vars) > 0) {
+  stop(
+    "These fishing-frequency variables were not found in Raw_Data: ",
+    paste(missing_frequency_vars, collapse = ", ")
+  )
+}
+
+# Lookup table: variable -> question -> question text
+var_key <- tibble(
+  variable = unlist(q_vars, use.names = FALSE),
+  question = rep(names(q_vars), lengths(q_vars))
+) |>
+  left_join(
+    var_info |> select(variable = `Variable short name`, label = Label),
+    by = "variable"
+  )
+
+# Add the fishing-frequency variables to the lookup table
+frequency_key <- tibble(
+  variable = frequency_vars,
+  question = "Fishing frequency"
+) |>
+  left_join(
+    var_info |> select(variable = `Variable short name`, label = Label),
+    by = "variable"
+  )
+
+var_key <- bind_rows(var_key, frequency_key)
+
+lengths(q_vars)  # number of items per question
+```
+
+```{r}
+# Numeric data frame used for all correlations
+vars <- c(unlist(q_vars, use.names = FALSE), frequency_vars)
+
+fisher_num <- fisher_data |>
+  select(all_of(vars)) |>
+  mutate(across(everything(), \(x) as.numeric(as.character(x))))
+
+# Respondents available per item (correlations use pairwise deletion)
+summary(colSums(!is.na(fisher_num)))
+```
+
+# 2. Calculate correlation matrices
+
+```{r}
+# Spearman matrix: r, p, n
+run_cor <- function(data) {
+  Hmisc::rcorr(as.matrix(data), type = "spearman")  # pairwise deletion
+}
+
+# Convert the matrices to one long table (one row per pair of variables)
+make_long <- function(res) {
+  mat_long <- function(m, nm) {
+    as.data.frame(as.table(m), responseName = nm, stringsAsFactors = FALSE)
+  }
+
+  mat_long(res$r, "r") |>
+    left_join(mat_long(res$P, "p"), by = c("Var1", "Var2")) |>
+    left_join(mat_long(res$n, "n"), by = c("Var1", "Var2")) |>
+    rename(var1 = Var1, var2 = Var2) |>
+    mutate(method = "Spearman")
+}
+
+results <- run_cor(fisher_num)
+
+# Keep only question-item by fishing-frequency correlations
+cor_all <- make_long(results) |>
+  filter(var1 %in% unlist(q_vars, use.names = FALSE),
+         var2 %in% frequency_vars) |>
+  left_join(
+    var_key |> select(var1 = variable, q1 = question),
+    by = "var1"
+  ) |>
+  left_join(
+    var_key |> select(var2 = variable, q2 = question),
+    by = "var2"
+  )
+```
+
+```{r}
+# Heatmap function: Spearman correlations between question items and frequency variables
+plot_cor <- function(rows, cols = frequency_vars, title = NULL, labels = TRUE) {
+  d <- cor_all |>
+    filter(var1 %in% rows, var2 %in% cols) |>
+    mutate(
+      sig_star = case_when(
+        is.na(p) ~ "",
+        p < 0.01 ~ "**",
+        p < 0.05 ~ "*",
+        TRUE ~ ""
+      ),
+      label = if_else(is.na(r), "", paste0(sprintf("%.2f", r), sig_star)),
+      var1 = factor(var1, levels = rev(rows)),
+      var2 = factor(var2, levels = cols)
+    )
+
+  p <- ggplot(d, aes(var2, var1, fill = r)) +
+    geom_tile(colour = "white") +
+    scale_fill_gradient2(
+      low = "#B2182B",
+      mid = "white",
+      high = "#2166AC",
+      midpoint = 0,
+      limits = c(-1, 1),
+      na.value = "grey90",
+      name = "r"
+    ) +
+    coord_fixed() +
+    labs(
+      title = title,
+      x = NULL,
+      y = NULL,
+      caption = "* = p < 0.05; ** = p < 0.01 (unadjusted)"
+    ) +
+    theme_minimal(base_size = 10) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.grid = element_blank()
+    )
+
+  if (labels) p <- p + geom_text(aes(label = label), size = 2.3)
+  p
+}
+```
+
+# 3. Question-by-frequency matrices
+
+One matrix per question, with question items down the side and fishing-frequency variables across the top. All plots are saved to `Output/heatmaps/`.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 8
+
+for (q in names(q_vars)) {
+  p <- plot_cor(
+    q_vars[[q]],
+    title = paste(q, "vs fishing frequency")
+  )
+
+  ggsave(
+    file.path(out_dir, "heatmaps", paste0(q, "_fishing_frequency.png")),
+    p,
+    width = 8,
+    height = max(3, 2.5 + 0.4 * length(q_vars[[q]])),
+    limitsize = FALSE
+  )
+
+  if (show_frequency_plots) print(p)
+}
+```
+
+## Strongest correlations with fishing frequency
+
+Top 25 item pairs with raw p-values below 0.05.
+
+```{r}
+top_pairs <- cor_all |>
+  filter(!is.na(p), p < 0.05) |>
+  slice_max(abs(r), n = 25) |>
+  arrange(desc(abs(r))) |>
+  select(method, var1, q1, var2, q2, r, p, n)
+
+knitr::kable(top_pairs, digits = 3)
+```
+
+# 4. Export results to Excel
+
+```{r}
+mat_sheet <- function(m) as_tibble(m, rownames = "variable")
+
+writexl::write_xlsx(
+  list(
+    Variable_key = var_key,
+    Spearman_r = mat_sheet(
+      results$r[unlist(q_vars, use.names = FALSE), frequency_vars, drop = FALSE]
+    ),
+    Spearman_p = mat_sheet(
+      results$P[unlist(q_vars, use.names = FALSE), frequency_vars, drop = FALSE]
+    ),
+    Spearman_n = mat_sheet(
+      results$n[unlist(q_vars, use.names = FALSE), frequency_vars, drop = FALSE]
+    ),
+    All_pairs = cor_all |>
+      select(method, var1, q1, var2, q2, r, p, n)
+  ),
+  path = file.path(out_dir, "Fishing_frequency_correlations.xlsx")
+)
+```
+
+# Notes on interpretation
+
+- Spearman's correlation is used because the question responses and fishing-frequency measures are ordinal.
+- Each item pair uses every respondent who answered both items (pairwise deletion), so the sample size varies between pairs.
+- P-values and significance stars are unadjusted. Because many item pairs are tested, some p-values below 0.05 may occur by chance.
+- A positive correlation means higher responses to a question item tend to be associated with more frequent fishing; a negative correlation means they tend to be associated with less frequent fishing. Consider each item's wording when interpreting direction.
