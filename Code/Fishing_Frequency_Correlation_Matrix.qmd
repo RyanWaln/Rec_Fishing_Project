@@ -210,8 +210,8 @@ plot_cor <- function(rows, cols = frequency_vars, title = NULL, labels = TRUE) {
 # 3. Generate matrices figures
 
 ```{r}
-#| fig-width: 10
-#| fig-height: 8
+#| fig-width: 12
+#| fig-height: 6
 
 for (q in names(q_vars)) {
   p <- plot_cor(
