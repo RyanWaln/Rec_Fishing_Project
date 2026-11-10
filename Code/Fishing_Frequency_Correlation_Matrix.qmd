@@ -7,10 +7,9 @@ editor: visual
 
 # Introduction
 
-This file is used to conduct basic correlation analysis on recreational fishers in the 2025 SELTMP data.
-Spearman correlation matrice between items in Question 8 (the frequency of recreational fishing) and Questions 14, 15, 17, 19, 21, 23, 24, 29, 35.  
+This file is used to conduct basic correlation analysis on recreational fishers in the 2025 SELTMP data. Spearman's correlation matrices between items in Question 8 (the frequency of recreational fishing) and Questions 14, 15, 17, 19, 21, 23, 24, 29, 35.
 
-The output includes one item-by-frequency matrix for each question, a table of the strongest correlations, and an Excel file containing the correlation, p-value, and sample-size matrices. 
+The output includes one item-by-frequency matrix for each question, a table of the strongest correlations, and an Excel file containing the correlation, p-value, and sample-size matrices.
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
