@@ -1,0 +1,32 @@
+---
+title: "RecFish_Kmeans_Cluster_Analysis"
+format: html
+editor: visual
+---
+
+# Introduction
+
+This file runs an exploratory K-means cluster analysis on recreational fishers in the 2025 SELTMP data. Editing `selected_vars` allows the testing of different survey response columns for the analysis. The code compares solutions with 3, 4, and 5 clusters using average silhouette width, then exports respondent assignments, cluster profiles, and selection metrics.
+
+K-means works with numeric data and is sensitive to variable choice, missing-data handling, and scaling. Treat the results as candidate audience segments to evaluate—not as proof that the clusters are meaningful or stable.
+
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+# R Setup & housekeeping
+knitr::opts_chunk$set(
+	echo = TRUE,
+	include = TRUE,
+	message = FALSE,
+	warning = FALSE)
+
+rm(list=ls())
+objects()
+```
+
+```{r}
+# Load packages
+library(tidyverse)
+library(readxl)
+library(here)
+```
+
