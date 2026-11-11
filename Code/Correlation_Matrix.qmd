@@ -58,8 +58,6 @@ var_info <- read_excel(data_file, sheet = "Variable Information")
 
 ```{r}
 # Filter Data for only Rec Fishers
-# (the previous is.na(inter_zoning) filter is removed: correlations below use pairwise
-#  deletion, so each pair keeps every respondent who answered both items)
 fisher_data <- raw_data |>
   filter(Are_you_a_Rec_Fisher == 1)
 
