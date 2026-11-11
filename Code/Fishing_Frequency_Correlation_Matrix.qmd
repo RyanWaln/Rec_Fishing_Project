@@ -162,7 +162,8 @@ cor_all <- make_long(results) |>
 ```
 
 ```{r}
-# Heatmap function: Spearman correlations between question items and frequency variables
+# Heatmap function: question items across the x-axis,
+# fishing-frequency variables on the y-axis
 plot_cor <- function(rows, cols = frequency_vars, title = NULL, labels = TRUE) {
   d <- cor_all |>
     filter(var1 %in% rows, var2 %in% cols) |>
@@ -174,11 +175,11 @@ plot_cor <- function(rows, cols = frequency_vars, title = NULL, labels = TRUE) {
         TRUE ~ ""
       ),
       label = if_else(is.na(r), "", paste0(sprintf("%.2f", r), sig_star)),
-      var1 = factor(var1, levels = rev(rows)),
-      var2 = factor(var2, levels = cols)
+      var1 = factor(var1, levels = rows),
+      var2 = factor(var2, levels = rev(cols))
     )
 
-  p <- ggplot(d, aes(var2, var1, fill = r)) +
+  p <- ggplot(d, aes(x = var1, y = var2, fill = r)) +
     geom_tile(colour = "white") +
     scale_fill_gradient2(
       low = "#B2182B",
@@ -222,8 +223,8 @@ for (q in names(q_vars)) {
   ggsave(
     file.path(out_dir, "fishing_frequency", paste0(q, "_fishing_frequency.png")),
     p,
-    width = 8,
-    height = max(3, 2.5 + 0.4 * length(q_vars[[q]])),
+    width = max(8, 3 + 0.8 * length(q_vars[[q]])),
+    height = 4,
     limitsize = FALSE
   )
 
