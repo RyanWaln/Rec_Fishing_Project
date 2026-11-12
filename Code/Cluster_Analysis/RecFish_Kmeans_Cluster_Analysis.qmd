@@ -8,7 +8,7 @@ editor: visual
 
 This file runs an exploratory K-means cluster analysis on recreational fishers in the 2025 SELTMP data. Editing `selected_vars` allows the testing of different survey response columns for the analysis. The code compares solutions with 3, 4, and 5 clusters using average silhouette width, then exports respondent assignments, cluster profiles, and selection metrics.
 
-K-means works with numeric data and is sensitive to variable choice, missing data, and scaling. All results are exploratory, resulting clusters are not necessarily meaningful or significant. 
+K-means works with numeric data and is sensitive to variable choice, missing data, and scaling. All results are exploratory, resulting clusters are not necessarily meaningful or significant.
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # R Setup & housekeeping
@@ -29,42 +29,34 @@ library(readxl)
 library(here)
 ```
 
+# 1. Prepare data
+
 ```{r}
-# Import data
-data_file <- here::here("Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Nov-3-2026.xlsx")
-out_dir <- here::here("Output")   #set output destination
-dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
-
+# Import Data
+data_file <- readxl::read_xlsx(
+  "C:/FILES/CSIRO_Internship/Rec_Fishing_Project/Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Nov-3-2026.xlsx")
 # Choose variables based on their response-column names from the Raw_Data sheet.
-selected_vars <- c("age", "", "")
+selected_vars <- c("age", "trust_science", "trust_GBRMPA")
 
-# Set the candidate number of clusters to compare.
+# Set the number of clusters to compare.
 k_candidates <- 3:5
 
 # Set a random seed so results can be reproduced.
 set.seed(2026)
 ```
 
-# 1. Prepare data
-
 ```{r}
-# Import respondent data and the variable dictionary.
-raw_data <- read_excel(data_file, sheet = "Raw_Data")
-var_info <- read_excel(data_file, sheet = "Variable Information")
+# Import specific excel sheets
+data_path <- "C:/FILES/CSIRO_Internship/Rec_Fishing_Project/Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Nov-3-2026.xlsx"
+raw_data <- readxl::read_excel(data_path, sheet = "Raw_Data")
+var_info <- readxl::read_excel(data_path, sheet = "Variable Information")
 
-# Check that all chosen columns exist in the workbook.
-missing_vars <- setdiff(selected_vars, names(raw_data))
-if (length(missing_vars) > 0) {
-  stop("These selected_vars were not found in Raw_Data: ",
-       paste(missing_vars, collapse = ", "))
-}
-
-# Keep recreational fishers and add a row number to identify each source record.
+# Filter for only recreational fishers and add a row number to identify each source record.
 fisher_data <- raw_data |>
   filter(Are_you_a_Rec_Fisher == 1) |>
   mutate(source_row = row_number())
 
-# Convert selected response columns to numbers; non-numeric entries become missing.
+# Convert all selected variables to numbers;(non-numeric entries become missing).
 cluster_data <- fisher_data |>
   select(source_row, all_of(selected_vars)) |>
   mutate(across(all_of(selected_vars),
@@ -101,3 +93,81 @@ tibble(
   selected_variables = paste(usable_vars, collapse = ", ")
 )
 ```
+
+# 2. Compare cluster solutions
+
+```{r}
+# Keep only cluster counts that are possible for the available respondents.
+k_candidates <- k_candidates[k_candidates >= 2 & k_candidates < nrow(x_scaled)]
+
+# Stop if none of the requested cluster counts can be tested.
+if (length(k_candidates) == 0) {
+  stop("There are too few respondents to fit the requested cluster counts.")
+}
+
+# Fit each candidate solution and calculate its average silhouette width.
+cluster_fits <- lapply(k_candidates, function(k) {
+  fit <- kmeans(x_scaled, centers = k, nstart = 25, iter.max = 100)
+  sil <- cluster::silhouette(fit$cluster, dist(x_scaled))
+
+  list(
+    k = k,
+    fit = fit,
+    avg_silhouette = mean(sil[, "sil_width"])
+  )
+})
+
+# Summarize the separation and within-cluster variation for each solution.
+selection_metrics <- tibble(
+  clusters = vapply(cluster_fits, function(x) x$k, integer(1)),
+  average_silhouette = vapply(cluster_fits, function(x) x$avg_silhouette, numeric(1)),
+  total_withinss = vapply(cluster_fits, function(x) x$fit$tot.withinss, numeric(1))
+) |>
+  arrange(desc(average_silhouette))
+
+# Select the candidate with the highest average silhouette width.
+best_k <- selection_metrics$clusters[[1]]
+best_fit <- cluster_fits[[which(k_candidates == best_k)]]$fit
+
+# Display the comparison and selected number of clusters.
+selection_metrics
+
+# Note: 
+# average silhouette ranges from -1 to 1 with positive values indicating data points are far away from each cluster
+# values near zero indicate they are on the boarder between clusters and 
+# negative values indicate they are closer to a neighboring cluster than their own
+
+# Large drops in the value of total withinss as you add more clusters suggest you have found a distinct cluster 
+# Diminishing returns (small drops) as you add more clusters suggest they may be arbitrary rather than distinct
+
+```
+
+# 3. Describe and export clusters
+
+```{r}
+# Add each respondent's assigned cluster to the selected response data.
+cluster_assignments <- cluster_data |>
+  mutate(cluster = factor(best_fit$cluster))
+
+# Calculate each cluster's size and mean responses on the original scales.
+cluster_profiles <- cluster_assignments |>
+  group_by(cluster) |>
+  summarise(
+    respondents = n(),
+    across(all_of(usable_vars), mean),
+    .groups = "drop"
+  ) |>
+  mutate(percent_of_sample = respondents / sum(respondents) * 100)
+
+# Match selected columns to their labels in the variable dictionary.
+variable_key <- tibble(variable = usable_vars) |>
+  left_join(
+    var_info |> select(variable = `Variable short name`, label = Label),
+    by = "variable"
+  )
+
+# Show cluster sizes, percentages, and mean responses.
+cluster_profiles
+```
+
+
