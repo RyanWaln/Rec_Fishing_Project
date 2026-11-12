@@ -16,6 +16,8 @@
 *.bmp
 *.svg
 *.tiff
+*.csv
+*.xlsx
 
 # Folders to ignore
 archive/
