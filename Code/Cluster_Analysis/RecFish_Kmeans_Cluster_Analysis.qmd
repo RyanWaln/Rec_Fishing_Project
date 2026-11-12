@@ -36,7 +36,7 @@ library(here)
 data_file <- readxl::read_xlsx(
   "C:/FILES/CSIRO_Internship/Rec_Fishing_Project/Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Nov-3-2026.xlsx")
 # Choose variables based on their response-column names from the Raw_Data sheet.
-selected_vars <- c("age", "trust_science", "trust_GBRMPA")
+selected_vars <- c("age", "trust_science", "trust_GBRMPA", "fishing_on_boat", "fishing_on_shore")
 
 # Set the number of clusters to compare.
 k_candidates <- 3:5
@@ -142,15 +142,18 @@ selection_metrics
 
 ```
 
-# 3. Describe and export clusters
+# 3. Describe clusters
 
 ```{r}
+# Pull the 3-cluster solution from the fits calculated in section 2.
+fit_k3 <- cluster_fits[[which(k_candidates == 3)]]$fit
+
 # Add each respondent's assigned cluster to the selected response data.
-cluster_assignments <- cluster_data |>
-  mutate(cluster = factor(best_fit$cluster))
+cluster_assignments_k3 <- cluster_data |>
+  mutate(cluster = factor(fit_k3$cluster))
 
 # Calculate each cluster's size and mean responses on the original scales.
-cluster_profiles <- cluster_assignments |>
+cluster_profiles_k3 <- cluster_assignments_k3 |>
   group_by(cluster) |>
   summarise(
     respondents = n(),
@@ -159,15 +162,78 @@ cluster_profiles <- cluster_assignments |>
   ) |>
   mutate(percent_of_sample = respondents / sum(respondents) * 100)
 
-# Match selected columns to their labels in the variable dictionary.
-variable_key <- tibble(variable = usable_vars) |>
-  left_join(
-    var_info |> select(variable = `Variable short name`, label = Label),
-    by = "variable"
-  )
+# Show cluster sizes, percentages, and mean responses.
+cluster_profiles_k3
+```
+```{r}
+# Pull the 4-cluster solution from the fits calculated in section 2.
+fit_k4 <- cluster_fits[[which(k_candidates == 4)]]$fit
+
+# Add each respondent's assigned cluster to the selected response data.
+cluster_assignments_k4 <- cluster_data |>
+  mutate(cluster = factor(fit_k4$cluster))
+
+# Calculate each cluster's size and mean responses on the original scales.
+cluster_profiles_k4 <- cluster_assignments_k4 |>
+  group_by(cluster) |>
+  summarise(
+    respondents = n(),
+    across(all_of(usable_vars), mean),
+    .groups = "drop"
+  ) |>
+  mutate(percent_of_sample = respondents / sum(respondents) * 100)
 
 # Show cluster sizes, percentages, and mean responses.
-cluster_profiles
+cluster_profiles_k4
+```
+```{r}
+# Pull the 5-cluster solution from the fits calculated in section 2.
+fit_k5 <- cluster_fits[[which(k_candidates == 5)]]$fit
+
+# Add each respondent's assigned cluster to the selected response data.
+cluster_assignments_k5 <- cluster_data |>
+  mutate(cluster = factor(fit_k5$cluster))
+
+# Calculate each cluster's size and mean responses on the original scales.
+cluster_profiles_k5 <- cluster_assignments_k5 |>
+  group_by(cluster) |>
+  summarise(
+    respondents = n(),
+    across(all_of(usable_vars), mean),
+    .groups = "drop"
+  ) |>
+  mutate(percent_of_sample = respondents / sum(respondents) * 100)
+
+# Show cluster sizes, percentages, and mean responses.
+cluster_profiles_k5
 ```
 
+```{r, fig.width=12, fig.height=4.5}
+# Project the standardized data onto its first two principal components.
+pca <- prcomp(x_scaled)
+pca_scores <- as_tibble(pca$x[, 1:2])
+var_explained <- round(summary(pca)$importance[2, 1:2] * 100, 1)
 
+# Combine the cluster assignments for every candidate solution into one table.
+cluster_plot_data <- bind_rows(lapply(cluster_fits, function(x) {
+  pca_scores |>
+    mutate(
+      cluster = factor(x$fit$cluster),
+      solution = paste(x$k, "clusters")
+    )
+}))
+
+# Plot respondents in PCA space, one panel per solution.
+ggplot(cluster_plot_data, aes(PC1, PC2, colour = cluster, fill = cluster)) +
+  geom_point(alpha = 0.6, size = 1.6) +
+  stat_ellipse(geom = "polygon", alpha = 0.12, level = 0.8, colour = NA) +
+  facet_wrap(~ solution) +
+  labs(
+    title = "K-means cluster solutions",
+    x = paste0("PC1 (", var_explained[1], "% of variance)"),
+    y = paste0("PC2 (", var_explained[2], "% of variance)"),
+    colour = "Cluster", fill = "Cluster"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "bottom")
+```
