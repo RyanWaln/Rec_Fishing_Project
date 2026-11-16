@@ -18,6 +18,7 @@
 *.tiff
 *.csv
 *.xlsx
+*.xlsm
 
 # Folders to ignore
 archive/
