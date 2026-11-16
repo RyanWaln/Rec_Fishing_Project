@@ -27,6 +27,7 @@ objects()
 library(tidyverse)
 library(readxl)
 library(here)
+library(writexl)
 ```
 
 # 1. Prepare data
@@ -36,7 +37,7 @@ library(here)
 data_file <- readxl::read_xlsx(
   "C:/FILES/CSIRO_Internship/Rec_Fishing_Project/Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Nov-3-2026.xlsx")
 # Choose variables based on their response-column names from the Raw_Data sheet.
-selected_vars <- c("age", "trust_science", "trust_GBRMPA", "fishing_on_boat", "fishing_on_shore")
+selected_vars <- c("report_suspicious","responsible_fishing", "seasonal_fish_closures","MPA_zoning","enforcement_surveillance")
 
 # Set the number of clusters to compare.
 k_candidates <- 3:5
@@ -165,6 +166,7 @@ cluster_profiles_k3 <- cluster_assignments_k3 |>
 # Show cluster sizes, percentages, and mean responses.
 cluster_profiles_k3
 ```
+
 ```{r}
 # Pull the 4-cluster solution from the fits calculated in section 2.
 fit_k4 <- cluster_fits[[which(k_candidates == 4)]]$fit
@@ -186,6 +188,7 @@ cluster_profiles_k4 <- cluster_assignments_k4 |>
 # Show cluster sizes, percentages, and mean responses.
 cluster_profiles_k4
 ```
+
 ```{r}
 # Pull the 5-cluster solution from the fits calculated in section 2.
 fit_k5 <- cluster_fits[[which(k_candidates == 5)]]$fit
@@ -206,6 +209,18 @@ cluster_profiles_k5 <- cluster_assignments_k5 |>
 
 # Show cluster sizes, percentages, and mean responses.
 cluster_profiles_k5
+```
+
+```{r}
+# Export cluster profiles to an excel sheet
+writexl::write_xlsx(
+  list(
+    "3 clusters" = cluster_profiles_k3,
+    "4 clusters" = cluster_profiles_k4,
+    "5 clusters" = cluster_profiles_k5
+  ),
+  path = here::here("Cluster_Profiles.xlsx")
+)
 ```
 
 ```{r, fig.width=12, fig.height=4.5}
