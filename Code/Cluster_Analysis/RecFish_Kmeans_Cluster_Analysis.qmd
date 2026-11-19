@@ -37,7 +37,7 @@ library(writexl)
 data_file <- readxl::read_xlsx(
   "C:/FILES/CSIRO_Internship/Rec_Fishing_Project/Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Nov-3-2026.xlsx")
 # Choose variables based on their response-column names from the Raw_Data sheet.
-selected_vars <- c("report_suspicious","responsible_fishing", "seasonal_fish_closures","MPA_zoning","enforcement_surveillance")
+selected_vars <- c("understand_managment","trust_GBRMPA", "management_satisfaction")
 
 # Set the number of clusters to compare.
 k_candidates <- 3:5
@@ -138,7 +138,7 @@ selection_metrics
 # values near zero indicate they are on the boarder between clusters and 
 # negative values indicate they are closer to a neighboring cluster than their own
 
-# Large drops in the value of total withinss as you add more clusters suggest you have found a distinct cluster 
+# Large drops in the value of total within cluster sum of squares (withinss) as you add more clusters suggest you have found a distinct cluster 
 # Diminishing returns (small drops) as you add more clusters suggest they may be arbitrary rather than distinct
 
 ```
