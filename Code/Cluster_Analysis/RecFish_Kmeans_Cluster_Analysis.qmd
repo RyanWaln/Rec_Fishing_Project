@@ -28,6 +28,7 @@ library(tidyverse)
 library(readxl)
 library(here)
 library(writexl)
+library(fpc)
 ```
 
 # 1. Prepare data
@@ -37,7 +38,7 @@ library(writexl)
 data_file <- readxl::read_xlsx(
   "C:/FILES/CSIRO_Internship/Rec_Fishing_Project/Data/SELTMP-2025-GBR-surveydataset_v1-0_RecFishingCLUSTERS_RyanW-Nov-3-2026.xlsx")
 # Choose variables based on their response-column names from the Raw_Data sheet.
-selected_vars <- c("understand_managment","trust_GBRMPA", "management_satisfaction")
+selected_vars <- c("report_suspicious","responsible_fishing", "seasonal_fish_closures", "MPA_zoning", "enforcement_surveillance")
 
 # Set the number of clusters to compare.
 k_candidates <- 3:5
@@ -106,15 +107,23 @@ if (length(k_candidates) == 0) {
   stop("There are too few respondents to fit the requested cluster counts.")
 }
 
-# Fit each candidate solution and calculate its average silhouette width.
+# Calculate distances once for silhouette and Calinski-Harabasz calculations.
+distance_matrix <- dist(x_scaled)
+
+# Fit each candidate solution and calculate its average silhouette width and CH index.
 cluster_fits <- lapply(k_candidates, function(k) {
   fit <- kmeans(x_scaled, centers = k, nstart = 25, iter.max = 100)
-  sil <- cluster::silhouette(fit$cluster, dist(x_scaled))
+  sil <- cluster::silhouette(fit$cluster, distance_matrix)
+  ch_index <- fpc::cluster.stats(
+    d = distance_matrix,
+    clustering = fit$cluster
+  )$ch
 
   list(
     k = k,
     fit = fit,
-    avg_silhouette = mean(sil[, "sil_width"])
+    avg_silhouette = mean(sil[, "sil_width"]),
+    ch_index = ch_index
   )
 })
 
@@ -122,6 +131,7 @@ cluster_fits <- lapply(k_candidates, function(k) {
 selection_metrics <- tibble(
   clusters = vapply(cluster_fits, function(x) x$k, integer(1)),
   average_silhouette = vapply(cluster_fits, function(x) x$avg_silhouette, numeric(1)),
+  calinski_harabasz = vapply(cluster_fits, function(x) x$ch_index, numeric(1)),
   total_withinss = vapply(cluster_fits, function(x) x$fit$tot.withinss, numeric(1))
 ) |>
   arrange(desc(average_silhouette))
@@ -130,17 +140,18 @@ selection_metrics <- tibble(
 best_k <- selection_metrics$clusters[[1]]
 best_fit <- cluster_fits[[which(k_candidates == best_k)]]$fit
 
-# Display the comparison and selected number of clusters.
 selection_metrics
 
-# Note: 
-# average silhouette ranges from -1 to 1 with positive values indicating data points are far away from each cluster
-# values near zero indicate they are on the boarder between clusters and 
-# negative values indicate they are closer to a neighboring cluster than their own
+# Note:
+# Average silhouette ranges from -1 to 1. Positive values indicate better separation,
+# values near zero indicate points near cluster boundaries, and negative values indicate
+# possible misassignment.
 
-# Large drops in the value of total within cluster sum of squares (withinss) as you add more clusters suggest you have found a distinct cluster 
-# Diminishing returns (small drops) as you add more clusters suggest they may be arbitrary rather than distinct
+# The Calinski-Harabasz index compares between-cluster dispersion with within-cluster
+# dispersion. Larger values indicate well-separated, distinct clusters.
 
+# Large drops in total withinss as clusters are added suggest a distinct cluster.
+# Diminishing returns suggest additional clusters may be arbitrary.
 ```
 
 # 3. Describe clusters
