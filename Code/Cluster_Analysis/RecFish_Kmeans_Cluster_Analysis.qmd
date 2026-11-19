@@ -144,13 +144,13 @@ selection_metrics
 
 # Note:
 # Average silhouette ranges from -1 to 1. Positive values indicate better separation,
-# values near zero indicate points near cluster boundaries, and negative values indicate
-# possible misassignment.
+# values near zero indicate points are near cluster boundaries, and negative values indicate
+# points are closer to another cluster than their own.
 
 # The Calinski-Harabasz index compares between-cluster dispersion with within-cluster
-# dispersion. Larger values indicate well-separated, distinct clusters.
+# dispersion (Sum of Squares). The higher the value the more separated and distinct the clusters are.
 
-# Large drops in total withinss as clusters are added suggest a distinct cluster.
+# Large drops in total within sum of squares value indicates a distinct cluster.
 # Diminishing returns suggest additional clusters may be arbitrary.
 ```
 
